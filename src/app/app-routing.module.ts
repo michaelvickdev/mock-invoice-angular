@@ -1,10 +1,23 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
+import {MainComponent} from './main/main.component';
 
-const routes: Routes = [];
+const appRoutes: Routes = [
+    {path: '', component: MainComponent},
+
+];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+    imports: [
+        RouterModule.forRoot(
+            appRoutes,
+            {
+                initialNavigation: 'enabled'
+            }
+        ),
+    ],
+    exports: [
+        RouterModule
+    ]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
