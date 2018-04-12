@@ -5,7 +5,10 @@ import { MainComponent } from './main.component';
 const MainRoutes: Routes = [
   {
     path: '',
-    component: MainComponent
+    component: MainComponent,
+    children: [
+      { path: '', loadChildren: './home/home.module#HomeModule' },
+    ],
   },
 ];
 
