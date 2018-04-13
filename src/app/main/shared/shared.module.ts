@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule} from '@angular/forms';
-import {MatButtonModule, MatCheckboxModule, MatMenuModule, MatTabsModule} from '@angular/material';
+import { MatButtonModule, MatCheckboxModule, MatMenuModule, MatTabsModule } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { APP_DIRECTIVES } from './directives/index';
 

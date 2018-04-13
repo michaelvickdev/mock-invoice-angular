@@ -8,6 +8,8 @@ const MainRoutes: Routes = [
     component: MainComponent,
     children: [
       { path: 'invoices', loadChildren: './invoices/invoices.module#InvoicesModule' },
+      { path: 'customers', loadChildren: './customers/customers.module#CustomersModule' },
+      { path: 'products', loadChildren: './products/products.module#ProductsModule' },
       { path: '', redirectTo: '/invoices', pathMatch: 'full' },
     ],
   },
