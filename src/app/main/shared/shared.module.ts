@@ -9,7 +9,7 @@ import { APP_DIRECTIVES } from './directives/index';
 
 @NgModule({
   declarations: [
-    APP_DIRECTIVES,
+    APP_DIRECTIVES,git
   ],
   imports: [
     CommonModule,
