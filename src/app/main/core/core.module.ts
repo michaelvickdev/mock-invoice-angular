@@ -6,9 +6,9 @@ import { APP_SERVICE_PROVIDERS } from './services/index';
 @NgModule({
   declarations: [],
   imports: [
+    HttpClientModule
   ],
   providers: [
-    HttpClientModule,
     APP_SERVICE_PROVIDERS
   ]
 })
