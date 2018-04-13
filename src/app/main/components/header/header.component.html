@@ -1,3 +1,17 @@
-<header class="header">
-
+<header class="header" fxLayout="row" fxLayoutAlign="center start">
+  <div class="header-container" fxLayout="row" fxLayoutAlign="center center">
+    <div class="header-logo">Logo</div>
+    <nav class="nav">
+      <nav mat-tab-nav-bar>
+        <a mat-tab-link
+           *ngFor="let navItem of navItems"
+           [routerLink]="[navItem.path]"
+           routerLinkActive #rla="routerLinkActive"
+           [active]="rla.isActive"
+           [routerLinkActiveOptions]="{ exact: true }">
+          {{navItem.label}}
+        </a>
+      </nav>
+    </nav>
+  </div>
 </header>

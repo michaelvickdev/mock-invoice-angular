@@ -7,5 +7,17 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
-  ngOnInit() {}
+
+  navItems: {
+    path: string,
+    label: string
+  }[];
+
+  ngOnInit() {
+    this.navItems = [
+      { path: '/products', label: 'Products' },
+      { path: '/customers', label: 'Customers'},
+      { path: '/invoices', label: 'Invoices'},
+    ];
+  }
 }

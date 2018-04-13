@@ -7,7 +7,8 @@ const MainRoutes: Routes = [
     path: '',
     component: MainComponent,
     children: [
-      { path: '', loadChildren: './home/home.module#HomeModule' },
+      { path: 'invoices', loadChildren: './invoices/invoices.module#InvoicesModule' },
+      { path: '', redirectTo: '/invoices', pathMatch: 'full' },
     ],
   },
 ];
@@ -20,5 +21,5 @@ const MainRoutes: Routes = [
     RouterModule
   ],
 })
-export class MainRoutingModule {
-}
+export class MainRoutingModule {}
+
