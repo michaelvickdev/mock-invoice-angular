@@ -1,0 +1,53 @@
+/*BASIC STYLES*/
+* {
+  margin: 0;
+  padding: 0;
+  font: inherit;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  font-weight: normal;
+}
+
+a {
+  text-decoration: none;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
+*:focus, *:active, *:hover {
+  outline: none;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+}
+
+html {
+  cursor: default;
+}
+
+body {
+  font-size: 16px;
+  font-family: "Roboto", Helvetica, sans-serif;
+  font-weight: 400;
+  line-height: 1.42;
+  -webkit-font-smoothing: antialiased;
+}
+
+input {
+  line-height: 45px;
+  height: 45px;
+  font-size: 45px;
+}
+/*End of Basic Styles*/
