@@ -2,8 +2,15 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule} from '@angular/forms';
-import { MatButtonModule, MatCheckboxModule, MatMenuModule, MatTabsModule } from '@angular/material';
 import { RouterModule } from '@angular/router';
+import {
+  MatButtonModule,
+  MatCheckboxModule,
+  MatMenuModule,
+  MatTabsModule,
+  MatTableModule,
+} from '@angular/material';
+
 import { APP_DIRECTIVES } from './directives/index';
 
 @NgModule({
@@ -15,7 +22,8 @@ import { APP_DIRECTIVES } from './directives/index';
     MatButtonModule,
     MatCheckboxModule,
     MatTabsModule,
-    MatMenuModule
+    MatMenuModule,
+    MatTableModule
   ],
   exports: [
     CommonModule,
@@ -24,6 +32,7 @@ import { APP_DIRECTIVES } from './directives/index';
     MatButtonModule,
     MatCheckboxModule,
     MatTabsModule,
+    MatTableModule,
     RouterModule,
     APP_DIRECTIVES,
   ]

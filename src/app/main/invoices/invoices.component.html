@@ -1,3 +1,32 @@
 <main class="invoices-main">
+  <mat-table [dataSource]='invoicesList$ | async'>
 
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef> InvoiceID</mat-header-cell>
+      <mat-cell *matCellDef="let invoice"> {{invoice.id}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="customer_name">
+      <mat-header-cell *matHeaderCellDef> Customer Name</mat-header-cell>
+      <mat-cell *matCellDef="let invoice"> {{invoice.customer_name.name}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="discount">
+      <mat-header-cell *matHeaderCellDef> Discount (%)</mat-header-cell>
+      <mat-cell *matCellDef="let invoice"> {{invoice.discount}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="total">
+      <mat-header-cell *matHeaderCellDef> Total</mat-header-cell>
+      <mat-cell *matCellDef="let invoice"> {{invoice.total}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef> Actions</mat-header-cell>
+      <mat-cell *matCellDef="let invoice"> {{invoice.id}}</mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
+    <mat-row *matRowDef="let myRowData; columns: columnsToDisplay;"></mat-row>
+  </mat-table>
 </main>
