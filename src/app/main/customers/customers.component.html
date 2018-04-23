@@ -1,0 +1,27 @@
+<main class="customers-main">
+  <mat-table [dataSource]='customersList$ | async'>
+
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef> CustomerID</mat-header-cell>
+      <mat-cell *matCellDef="let customer">{{customer.id}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="customer_name">
+      <mat-header-cell *matHeaderCellDef> Customer Name </mat-header-cell>
+      <mat-cell *matCellDef="let customer"> {{customer.name}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="address">
+      <mat-header-cell *matHeaderCellDef> Address </mat-header-cell>
+      <mat-cell *matCellDef="let customer"> {{customer.address}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="phone">
+      <mat-header-cell *matHeaderCellDef> Phone </mat-header-cell>
+      <mat-cell *matCellDef="let customer"> {{customer.phone}}</mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
+    <mat-row *matRowDef="let myRowData; columns: columnsToDisplay;"></mat-row>
+  </mat-table>
+</main>

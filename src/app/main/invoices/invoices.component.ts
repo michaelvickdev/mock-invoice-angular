@@ -19,7 +19,6 @@ export class InvoicesComponent implements OnInit {
     private customersServices: CustomersService
   ) {
   }
-
   invoicesList$: Observable<any>;
   columnsToDisplay: Array<string>;
 
