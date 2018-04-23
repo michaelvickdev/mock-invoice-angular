@@ -1,8 +1,13 @@
 .header {
-  width: 70%;
+  width: 56.5%;
   margin: 0 auto;
   margin-top: 20px;
   &-container {
     width: 100%;
+  }
+  &-logo {
+    font-family: Cabin;
+    font-size: 24px;
+    color: #4e0bd3;
   }
 }

@@ -1,19 +1,19 @@
 <header class="header" fxLayout="row" fxLayoutAlign="center start">
   <div class="header-container" fxLayout="row" fxLayoutAlign="space-between center">
-    <a href="" class="header-logo" routerLink="/">Logo</a>
+    <a href="" class="header-logo" routerLink="/">2muchcoffee</a>
     <nav class="nav">
       <nav mat-tab-nav-bar>
         <a mat-tab-link
            *ngFor="let navItem of navItems"
            [routerLink]="[navItem.path]"
            routerLinkActive #rla="routerLinkActive"
-           [active]="rla.isActive"
+           [active]="rla.isActive"git status
            [routerLinkActiveOptions]="{ exact: true }">
           {{navItem.label}}
           <span *ngIf="navItem.label === 'Invoices'"> ({{invoicesTotalAmount}}) </span>
         </a>
       </nav>
     </nav>
-    <button mat-raised-button>New invoice</button>
+    <button mat-raised-button color="accent">New invoice</button>
   </div>
 </header>

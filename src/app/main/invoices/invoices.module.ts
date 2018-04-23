@@ -10,7 +10,7 @@ import { InvoicesRoutingModule } from './invoices-routing.module';
   imports: [
     SharedModule,
     InvoicesRoutingModule,
-    ]
+  ]
 })
 
 export class InvoicesModule {}
