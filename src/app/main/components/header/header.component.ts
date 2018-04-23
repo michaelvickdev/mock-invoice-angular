@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
+import { Subscription } from 'rxjs/Subscription';
+import 'rxjs/add/operator/map';
+
+import { InvoicesService } from '../../core/services/invoices.service';
+
 
 @Component({
   selector: 'app-header',
@@ -8,10 +13,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
 
+  invoicesTotalAmount: number;
+  invoicesAmount$: Subscription;
   navItems: {
     path: string,
     label: string
   }[];
+
+  constructor(
+    private invoicesServices: InvoicesService,
+  ) {}
+
 
   ngOnInit() {
     this.navItems = [
@@ -19,5 +31,8 @@ export class HeaderComponent implements OnInit {
       { path: '/customers', label: 'Customers'},
       { path: '/invoices', label: 'Invoices'},
     ];
+
+    this.invoicesAmount$ = this.invoicesServices.getInvoices()
+      .subscribe(invoices => this.invoicesTotalAmount = invoices.length);
   }
 }

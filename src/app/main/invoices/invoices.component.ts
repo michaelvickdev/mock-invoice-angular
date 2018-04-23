@@ -26,11 +26,11 @@ export class InvoicesComponent implements OnInit {
     this.columnsToDisplay = ['id', 'customer_name', 'discount', 'total', 'actions'];
 
     this.invoicesList$ = combineLatest(this.invoicesServices.getInvoices(), this.customersServices.getCustomers())
-    .map(([invoices, customers]) => {
-      return invoices.map(invoice => {
-        invoice.customer_name = customers.find(customer => invoice.customer_id === customer.id);
-        return invoice;
+      .map(([invoices, customers]) => {
+        return invoices.map(invoice => {
+          invoice.customer_name = customers.find(customer => invoice.customer_id === customer.id);
+            return invoice;
+        });
       });
-    });
   }
 }

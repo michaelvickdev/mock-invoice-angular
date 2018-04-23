@@ -10,6 +10,7 @@
            [active]="rla.isActive"
            [routerLinkActiveOptions]="{ exact: true }">
           {{navItem.label}}
+          <span *ngIf="navItem.label === 'Invoices'"> ({{invoicesTotalAmount}}) </span>
         </a>
       </nav>
     </nav>
