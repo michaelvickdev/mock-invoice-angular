@@ -11,6 +11,7 @@ const MainRoutes: Routes = [
       { path: 'invoices', loadChildren: './invoices/invoices.module#InvoicesModule' },
       { path: 'customers', loadChildren: './customers/customers.module#CustomersModule' },
       { path: 'products', loadChildren: './products/products.module#ProductsModule' },
+      { path: 'create-invoice', loadChildren: './create-invoice/create-invoice.module#CreateInvoiceModule' },
       { path: '', redirectTo: '/invoices', pathMatch: 'full' },
     ],
   },
