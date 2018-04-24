@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 
-import { CustomersService } from '../core/services/customers.service';
+import { CustomersService } from '../../core/services/customers.service';
 
 @Component({
   selector: 'app-customers',
