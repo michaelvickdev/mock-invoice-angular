@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/map';
 
-import { InvoicesService } from '../../core/services/invoices.service';
+import { InvoicesService } from '../services/invoices.service';
 
 
 
