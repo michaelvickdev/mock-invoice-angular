@@ -6,7 +6,6 @@ import 'rxjs/add/operator/map';
 import { InvoicesService } from '../services/invoices.service';
 
 
-
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
