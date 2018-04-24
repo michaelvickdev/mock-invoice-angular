@@ -6,7 +6,6 @@ import { HeaderModule } from './header/header.module';
 
 
 @NgModule({
-  declarations: [],
   imports: [
     HttpClientModule
   ],

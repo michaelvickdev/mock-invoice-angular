@@ -11,20 +11,19 @@ import { ProductsService } from '../core/services/products.service';
   styleUrls: ['./products.component.scss']
 })
 export class ProductsComponent implements OnInit {
-  
+
+  productsList$: Observable<any>;
+  columnsToDisplay: Array<string>;
+
   constructor(
     private productsServices: ProductsService
   ) {
   }
-  
-  productsList$: Observable<any>;
-  columnsToDisplay: Array<string>;
-  
+
   ngOnInit() {
     this.columnsToDisplay = ['id', 'product_name', 'price'];
-    
+
     this.productsList$ = this.productsServices.getProducts()
     .map(product => product);
   }
-
 }

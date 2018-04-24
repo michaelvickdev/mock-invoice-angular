@@ -13,13 +13,13 @@ import { CustomersService } from '../core/services/customers.service';
 
 export class CustomersComponent implements OnInit {
 
+  customersList$: Observable<any>;
+  columnsToDisplay: Array<string>;
+
   constructor(
     private customersServices: CustomersService
   ) {
   }
-
-  customersList$: Observable<any>;
-  columnsToDisplay: Array<string>;
 
   ngOnInit() {
     this.columnsToDisplay = ['id', 'customer_name', 'address', 'phone'];

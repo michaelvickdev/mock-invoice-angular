@@ -14,13 +14,14 @@ import { CustomersService } from '../core/services/customers.service';
 })
 export class InvoicesComponent implements OnInit {
 
+  invoicesList$: Observable<any>;
+  columnsToDisplay: Array<string>;
+
   constructor(
     private invoicesServices: InvoicesService,
     private customersServices: CustomersService
   ) {
   }
-  invoicesList$: Observable<any>;
-  columnsToDisplay: Array<string>;
 
   ngOnInit() {
     this.columnsToDisplay = ['id', 'customer_name', 'discount', 'total', 'actions'];
