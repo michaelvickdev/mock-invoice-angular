@@ -1,24 +1,31 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { MainComponent } from './main/main.component';
 
 const appRoutes: Routes = [
-    {path: '', component: MainComponent},
-
+  { path: '',
+    children: [
+      { path: '', redirectTo: '/invoices', pathMatch: 'full' },
+      { path: 'invoices', loadChildren: './invoices/invoices.module#InvoicesModule' },
+      { path: 'customers', loadChildren: './customers/customers.module#CustomersModule' },
+      { path: 'products', loadChildren: './products/products.module#ProductsModule' },
+      { path: 'create-invoice', loadChildren: './create-invoice/create-invoice.module#CreateInvoiceModule' },
+    ],
+  },
 ];
 
 @NgModule({
-    imports: [
-        RouterModule.forRoot(
-            appRoutes,
-            {
-                initialNavigation: 'enabled'
-            }
-        ),
-    ],
-    exports: [
-        RouterModule
-    ]
+  imports: [
+    RouterModule.forRoot(
+      appRoutes,
+      {
+        initialNavigation: 'enabled'
+      }
+    ),
+  ],
+  exports: [
+    RouterModule
+  ]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule {
+}

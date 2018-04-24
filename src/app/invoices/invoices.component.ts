@@ -4,8 +4,8 @@ import { Observable } from 'rxjs/Observable';
 import { combineLatest } from 'rxjs/observable/combineLatest';
 import 'rxjs/add/operator/map';
 
-import { InvoicesService } from '../../core/services/invoices.service';
-import { CustomersService } from '../../core/services/customers.service';
+import { InvoicesService } from '../core/services/invoices.service';
+import { CustomersService } from '../core/services/customers.service';
 
 @Component({
   selector: 'app-invoices',
