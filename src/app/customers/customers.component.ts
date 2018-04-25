@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
+import { map } from 'rxjs/operators';
 
 import { Customer } from '../core/interfaces/customer';
 import { CustomersService } from '../core/services/customers.service';
@@ -20,13 +20,13 @@ export class CustomersComponent implements OnInit {
 
   constructor(
     private customersServices: CustomersService
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
     this.columnsToDisplay = ['id', 'customer_name', 'address', 'phone'];
 
-    this.customersList$ = this.customersServices.getCustomers()
-      .map(customer => customer);
+    this.customersList$ = this.customersServices.customersList$.pipe(
+      map(customer => customer)
+    );
   }
 }

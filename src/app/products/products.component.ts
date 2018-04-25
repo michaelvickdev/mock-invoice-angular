@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
+import { map } from 'rxjs/operators';
 
 import { Product } from '../core/interfaces/product';
 import { ProductsService } from '../core/services/products.service';
@@ -12,6 +12,7 @@ import { ProductsService } from '../core/services/products.service';
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.scss']
 })
+
 export class ProductsComponent implements OnInit {
 
   productsList$: Observable<Product[]>;
@@ -19,13 +20,13 @@ export class ProductsComponent implements OnInit {
 
   constructor(
     private productsServices: ProductsService
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
     this.columnsToDisplay = ['id', 'product_name', 'price'];
 
-    this.productsList$ = this.productsServices.getProducts()
-    .map(product => product);
+    this.productsList$ = this.productsServices.productsList$.pipe(
+      map(product => product)
+    );
   }
 }

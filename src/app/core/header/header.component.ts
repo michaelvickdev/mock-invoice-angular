@@ -32,7 +32,7 @@ export class HeaderComponent implements OnInit {
       { path: '/invoices', label: 'Invoices'},
     ];
 
-    this.invoicesAmount$ = this.invoicesServices.getInvoices()
+    this.invoicesAmount$ = this.invoicesServices.invoicesList$
       .subscribe(invoices => this.invoicesTotalAmount = invoices.length);
   }
 }

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
 import { combineLatest } from 'rxjs/observable/combineLatest';
-import 'rxjs/add/operator/map';
+import { map } from 'rxjs/operators';
 
 import { Invoice } from '../core/interfaces/invoice';
 import { InvoicesService } from '../core/services/invoices.service';
@@ -22,18 +22,18 @@ export class InvoicesComponent implements OnInit {
   constructor(
     private invoicesServices: InvoicesService,
     private customersServices: CustomersService
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
     this.columnsToDisplay = ['id', 'customer_name', 'discount', 'total', 'actions'];
 
-    this.invoicesList$ = combineLatest(this.invoicesServices.getInvoices(), this.customersServices.getCustomers())
-      .map(([invoices, customers]) => {
+    this.invoicesList$ = combineLatest(this.invoicesServices.invoicesList$, this.customersServices.customersList$).pipe(
+      map(([invoices, customers]) => {
         return invoices.map(invoice => {
           invoice.customer = customers.find(customer => invoice.customer_id === customer.id);
             return invoice;
         });
-      });
+      })
+    );
   }
 }
