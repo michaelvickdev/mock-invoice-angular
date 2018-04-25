@@ -3,7 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 
+import { Customer } from '../core/interfaces/customer';
 import { CustomersService } from '../core/services/customers.service';
+
 
 @Component({
   selector: 'app-customers',
@@ -13,7 +15,7 @@ import { CustomersService } from '../core/services/customers.service';
 
 export class CustomersComponent implements OnInit {
 
-  customersList$: Observable<any>;
+  customersList$: Observable<Customer[]>;
   columnsToDisplay: Array<string>;
 
   constructor(

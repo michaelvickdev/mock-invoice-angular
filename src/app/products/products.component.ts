@@ -3,7 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 
+import { Product } from '../core/interfaces/product';
 import { ProductsService } from '../core/services/products.service';
+
 
 @Component({
   selector: 'app-products',
@@ -12,7 +14,7 @@ import { ProductsService } from '../core/services/products.service';
 })
 export class ProductsComponent implements OnInit {
 
-  productsList$: Observable<any>;
+  productsList$: Observable<Product[]>;
   columnsToDisplay: Array<string>;
 
   constructor(

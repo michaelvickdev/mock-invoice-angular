@@ -1,7 +1,8 @@
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 
-import { APP_SERVICE_PROVIDERS } from './services/index';
+import { APP_SERVICE_PROVIDERS } from './services/';
+import { APP_HTTP_INTERCEPTORS } from './interceptors';
 import { HeaderModule } from './header/header.module';
 
 
@@ -10,7 +11,8 @@ import { HeaderModule } from './header/header.module';
     HttpClientModule
   ],
   providers: [
-    APP_SERVICE_PROVIDERS
+    APP_SERVICE_PROVIDERS,
+    APP_HTTP_INTERCEPTORS
   ],
   exports: [
     HeaderModule

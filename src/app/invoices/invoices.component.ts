@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { combineLatest } from 'rxjs/observable/combineLatest';
 import 'rxjs/add/operator/map';
 
+import { Invoice } from '../core/interfaces/invoice';
 import { InvoicesService } from '../core/services/invoices.service';
 import { CustomersService } from '../core/services/customers.service';
 
@@ -15,7 +16,7 @@ import { CustomersService } from '../core/services/customers.service';
 })
 export class InvoicesComponent implements OnInit {
 
-  invoicesList$: Observable<any>;
+  invoicesList$: Observable<Invoice[]>;
   columnsToDisplay: Array<string>;
 
   constructor(
@@ -30,7 +31,7 @@ export class InvoicesComponent implements OnInit {
     this.invoicesList$ = combineLatest(this.invoicesServices.getInvoices(), this.customersServices.getCustomers())
       .map(([invoices, customers]) => {
         return invoices.map(invoice => {
-          invoice.customer_name = customers.find(customer => invoice.customer_id === customer.id);
+          invoice.customer = customers.find(customer => invoice.customer_id === customer.id);
             return invoice;
         });
       });
