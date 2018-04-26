@@ -16,7 +16,6 @@ import { HeaderModule } from './header/header.module';
     APP_RESOLVERS_PROVIDERS,
     APP_SERVICE_PROVIDERS,
     { provide: HTTP_INTERCEPTORS, useClass: UrlInterceptor, multi: true },
-
   ],
   exports: [
     HeaderModule

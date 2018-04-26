@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Subscription } from 'rxjs/Subscription';
-import 'rxjs/add/operator/map';
 
 import { InvoicesService } from '../services/invoices.service';
 
@@ -12,8 +11,9 @@ import { InvoicesService } from '../services/invoices.service';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
-
-  invoicesTotalAmount: number;
+  
+  hidden;
+  invoicesTotalAmount;
   invoicesAmount$: Subscription;
   navItems: {
     path: string,
@@ -32,7 +32,7 @@ export class HeaderComponent implements OnInit {
       { path: '/invoices', label: 'Invoices'},
     ];
 
-    this.invoicesAmount$ = this.invoicesServices.invoicesList$
+    this.invoicesAmount$ = this.invoicesServices.getInvoices()
       .subscribe(invoices => this.invoicesTotalAmount = invoices.length);
   }
 }

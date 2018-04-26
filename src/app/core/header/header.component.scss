@@ -10,4 +10,11 @@
     font-size: 24px;
     color: #4e0bd3;
   }
+  &-btn.hidden {
+    visibility: hidden;
+  }
+}
+
+.mat-ink-bar {
+  visibility: hidden!important;
 }

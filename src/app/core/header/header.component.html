@@ -7,13 +7,17 @@
            *ngFor="let navItem of navItems"
            [routerLink]="[navItem.path]"
            routerLinkActive #rla="routerLinkActive"
-           [active]="rla.isActive"git status
+           [active]="rla.isActive"
            [routerLinkActiveOptions]="{ exact: true }">
           {{navItem.label}}
           <span *ngIf="navItem.label === 'Invoices'"> ({{invoicesTotalAmount}}) </span>
         </a>
       </nav>
     </nav>
-    <button mat-raised-button color="accent">New invoice</button>
+    <button mat-raised-button color="accent" class="header-btn"
+      routerLink="/create-invoice"
+      routerLinkActive="hidden">
+      New invoice
+    </button>
   </div>
 </header>
