@@ -1,11 +1,6 @@
 <main class="products-main">
   <mat-table [dataSource]='productsList$ | async'>
 
-    <ng-container matColumnDef="id">
-      <mat-header-cell *matHeaderCellDef> Product ID</mat-header-cell>
-      <mat-cell *matCellDef="let product">{{product.id}}</mat-cell>
-    </ng-container>
-
     <ng-container matColumnDef="product_name">
       <mat-header-cell *matHeaderCellDef> Product Name </mat-header-cell>
       <mat-cell *matCellDef="let product"> {{product.name}}</mat-cell>
@@ -13,7 +8,7 @@
 
     <ng-container matColumnDef="price">
       <mat-header-cell *matHeaderCellDef> Price </mat-header-cell>
-      <mat-cell *matCellDef="let product"> {{product.price | number: '1.2-2'}}</mat-cell>
+      <mat-cell *matCellDef="let product"> {{product.price | currency}}</mat-cell>
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
