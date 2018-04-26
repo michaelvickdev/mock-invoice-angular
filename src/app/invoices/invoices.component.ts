@@ -7,6 +7,7 @@ import { map } from 'rxjs/operators';
 import { Invoice } from '../core/interfaces/invoice';
 import { InvoicesService } from '../core/services/invoices.service';
 import { CustomersService } from '../core/services/customers.service';
+import { HeaderService } from '../core/services/header.service';
 
 
 @Component({
@@ -21,7 +22,8 @@ export class InvoicesComponent implements OnInit {
 
   constructor(
     private invoicesServices: InvoicesService,
-    private customersServices: CustomersService
+    private customersServices: CustomersService,
+    private headerService: HeaderService,
   ) {}
 
   ngOnInit() {
@@ -35,5 +37,8 @@ export class InvoicesComponent implements OnInit {
         });
       })
     );
+  }
+  hideInkBar() {
+    this.headerService.hideInkBar();
   }
 }
