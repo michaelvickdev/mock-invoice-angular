@@ -25,8 +25,6 @@ export class ProductsComponent implements OnInit {
   ngOnInit() {
     this.columnsToDisplay = ['product_name', 'price'];
 
-    this.productsList$ = this.productsServices.productsList$.pipe(
-      map(product => product)
-    );
+    this.productsList$ = this.productsServices.productsList$;
   }
 }
