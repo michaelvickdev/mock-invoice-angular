@@ -1,0 +1,55 @@
+.view {
+  &-main {
+    padding: 20px 0;
+  }
+  &-container {
+    width: 80%;
+    padding: 10px;
+    border: 2px solid black;
+    margin: 0 auto;
+  }
+  &-title {
+    margin-bottom: 20px;
+  }
+  &-name {
+    display: inline-block;
+    width: 50%;
+    background-color: #5b91d3;
+    text-align: left;
+    color: #fff;
+    padding: 10px 20px;
+    margin-bottom: 20px;
+  }
+  &-products {
+    width: 50%;
+    display: flex;
+    justify-content: space-between;
+
+    &__list {
+      width: 100%;
+      display: flex;
+      margin-bottom: 20px;
+    }
+    &__item {
+      display: flex;
+      flex-direction: column;
+      flex: 0;
+      min-width: 20%;
+      margin-right: 10px;
+      &:last-child {
+        margin-right: 0;
+      }
+      &_flex {
+        flex: 1;
+      }
+    }
+    &__name {
+      text-align: center;
+      padding: 10px 0;
+      border: 1px solid black;
+    }
+  }
+}
+
+
+
