@@ -19,4 +19,7 @@ export class InvoicesService {
       shareReplay(1)
     );
   }
+  getInvoice(id) {
+    return this.httpClient.get<Invoice[]>(`invoices/${id}`);
+  }
 }
