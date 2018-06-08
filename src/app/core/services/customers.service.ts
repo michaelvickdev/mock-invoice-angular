@@ -19,4 +19,7 @@ export class CustomersService {
       shareReplay(1)
     );
   }
+  getCustomer(id) {
+      return this.httpClient.get<Customer[]>(`customers/${id}`);
+  }
 }
