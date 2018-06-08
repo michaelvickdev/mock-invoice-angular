@@ -25,7 +25,7 @@ const appRoutes: Routes = [
       { path: 'create-invoice',
         loadChildren: './create-invoice/create-invoice.module#CreateInvoiceModule',
       },
-      { path: 'view-invoice',
+      { path: 'view-invoice/:id',
         loadChildren: './view-invoice/view-invoice.module#ViewInvoiceModule',
       },
       { path: 'edit-invoice',

@@ -2,35 +2,34 @@ import { Injectable } from '@angular/core';
 import { HttpClient} from '@angular/common/http';
 
 import { Observable } from 'rxjs/Observable';
+import { ConnectableObservable } from 'rxjs/observable/ConnectableObservable';
 import { Subject } from 'rxjs/Subject';
-import { map } from 'rxjs/operators';
-import 'rxjs/add/operator/mergeAll';
+import { mergeScan} from 'rxjs/operators';
 import 'rxjs/add/operator/publishReplay';
-import 'rxjs/add/operator/shareReplay';
+import 'rxjs/add/observable/of';
 
 import { Product } from '../interfaces/product';
-import { ConnectableObservable } from 'rxjs/observable/ConnectableObservable';
 
 
 @Injectable()
 export class ProductsService {
-
-  productsList$: Observable<Product[]>;
-  productsStream$: ConnectableObservable<Product[]>;
+  productsList$: ConnectableObservable<Product[]>;
   passRequest: Subject<Observable<Product[]>>;
 
   constructor( private httpClient: HttpClient) {
     this.passRequest = new Subject();
-    this.productsStream$ = this.passRequest.mergeAll().publishReplay(1);
-    this.productsStream$.connect();
-
-    this.productsList$ = this.productsStream$.pipe(
-      map( product => product ),
-    );
-  }
+    this.productsList$ = this.passRequest.pipe(
+      mergeScan((acc) => acc ? Observable.of(acc) : this.getProductsRequest(), null)
+    ).publishReplay(1);
+    this.productsList$.connect();
+}
 
   getProducts() {
-    this.passRequest.next(this.httpClient.get<Product[]>('products'));
+    this.passRequest.next(null);
     return this.productsList$;
+  }
+
+  getProductsRequest() {
+    return this.httpClient.get<Product[]>('products');
   }
 }

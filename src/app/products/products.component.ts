@@ -23,7 +23,6 @@ export class ProductsComponent implements OnInit {
 
   ngOnInit() {
     this.columnsToDisplay = ['product_name', 'price'];
-
     this.productsList$ = this.productsServices.productsList$;
   }
 }
