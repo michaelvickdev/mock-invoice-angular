@@ -1,10 +1,12 @@
-import { AfterViewInit, Component, OnInit, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, OnInit, QueryList, Renderer2, ViewChildren } from '@angular/core';
 
-import { Subscription } from 'rxjs/Subscription';
 import { MatTabLink } from '@angular/material';
 
 import { InvoicesService } from '../services/invoices.service';
 import { HeaderService } from '../services/header.service';
+import { Observable } from 'rxjs/Observable';
+
+import { Invoice } from '../interfaces/invoice';
 
 
 @Component({
@@ -13,9 +15,8 @@ import { HeaderService } from '../services/header.service';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit, AfterViewInit {
-  
-  invoicesTotalAmount;
-  invoicesAmount$: Subscription;
+
+  invoicesAmount$: Observable<Invoice[]>;
   navItems: {
     path: string,
     label: string
@@ -23,7 +24,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   @ViewChildren(MatTabLink) inkBar: QueryList<any>;
 
   constructor(
-    private invoicesServices: InvoicesService,
+    private invoicesService: InvoicesService,
     private headerService: HeaderService,
     private renderer: Renderer2,
   ) {}
@@ -35,8 +36,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
       { path: '/invoices', label: 'Invoices'},
     ];
 
-    this.invoicesAmount$ = this.invoicesServices.getInvoices()
-      .subscribe(invoices => this.invoicesTotalAmount = invoices.length);
+    this.invoicesAmount$ = this.invoicesService.invoicesList$;
   }
 
   ngAfterViewInit() {
