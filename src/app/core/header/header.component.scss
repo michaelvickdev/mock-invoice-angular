@@ -14,4 +14,9 @@
   &-btn.hidden {
     visibility: hidden;
   }
+  & .mat-tab-link {
+    &:focus {
+      background-color: transparent;
+    }
+  }
 }
