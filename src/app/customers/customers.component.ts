@@ -25,8 +25,6 @@ export class CustomersComponent implements OnInit {
   ngOnInit() {
     this.columnsToDisplay = ['customer_name', 'address', 'phone'];
 
-    this.customersList$ = this.customersServices.customersList$.pipe(
-      map(customer => customer)
-    );
+    this.customersList$ = this.customersServices.customersList$;
   }
 }
