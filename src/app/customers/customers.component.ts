@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
-import { map } from 'rxjs/operators';
 
 import { Customer } from '../core/interfaces/customer';
 import { CustomersService } from '../core/services/customers.service';
