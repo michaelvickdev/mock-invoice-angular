@@ -27,7 +27,7 @@ export class InvoicesComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.columnsToDisplay = ['id', 'customer_name', 'discount', 'total', 'actions'];
+    this.columnsToDisplay = ['number', 'id', 'customer_name', 'discount', 'total', 'actions'];
 
     this.invoicesList$ = combineLatest(this.invoicesServices.invoicesList$, this.customersServices.customersList$).pipe(
       map(([invoices, customers]) => {

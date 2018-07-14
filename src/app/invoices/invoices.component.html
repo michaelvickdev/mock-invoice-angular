@@ -1,6 +1,11 @@
 <main class="invoices-main">
   <mat-table [dataSource]='invoicesList$ | async'>
 
+    <ng-container matColumnDef="number">
+      <mat-header-cell *matHeaderCellDef>Number</mat-header-cell>
+      <mat-cell *matCellDef="let invoice">{{(invoicesList$ | async).indexOf(invoice) + 1}}</mat-cell>
+    </ng-container>
+
     <ng-container matColumnDef="id">
       <mat-header-cell *matHeaderCellDef> InvoiceID</mat-header-cell>
       <mat-cell *matCellDef="let invoice">{{invoice.id}}</mat-cell>
