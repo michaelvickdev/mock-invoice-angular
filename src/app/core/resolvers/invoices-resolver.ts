@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 
 import { Observable } from 'rxjs/Observable';
+import { take } from 'rxjs/operators';
 
 import { Invoice } from '../interfaces/invoice';
 import { InvoicesService } from '../services/invoices.service';
@@ -15,10 +16,8 @@ export class InvoicesResolver implements Resolve<Invoice[]> {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<any>|Promise<any>|any {
-    if (this.invoicesService.invoicesList$) {
-      return this.invoicesService.invoicesList$;
-    } else {
-      this.invoicesService.getInvoices();
-    }
+      this.invoicesService.getInvoices().pipe(
+        take(1)
+      );
   }
 }
