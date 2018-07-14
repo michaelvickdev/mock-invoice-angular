@@ -25,7 +25,7 @@ export class ProductsService {
 }
 
   getProducts() {
-    this.passRequest.next(null);
+    this.passRequest.next();
     return this.productsList$;
   }
 
