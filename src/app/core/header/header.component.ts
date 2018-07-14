@@ -1,4 +1,10 @@
-import { AfterViewInit, Component, OnInit, QueryList, Renderer2, ViewChildren } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  OnInit,
+  QueryList,
+  ViewChildren,
+} from '@angular/core';
 
 import { MatTabLink } from '@angular/material';
 
@@ -19,15 +25,15 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   invoicesAmount$: Observable<Invoice[]>;
   navItems: {
     path: string,
-    label: string
+    label: string,
   }[];
   @ViewChildren(MatTabLink) inkBar: QueryList<any>;
 
   constructor(
     private invoicesService: InvoicesService,
     private headerService: HeaderService,
-    private renderer: Renderer2,
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this.navItems = [
