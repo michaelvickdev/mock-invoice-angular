@@ -1,0 +1,14 @@
+.invoices-main {
+  & .mat-table {
+    max-width: 74%;
+    @media only screen and (min-width: 1440px) {
+        max-width: 66%;
+    }
+  }
+  & .mat-header-cell, .mat-cell {
+    max-width: 155px;
+  }
+  & .actions {
+    max-width: 400px!important;
+  }
+}
