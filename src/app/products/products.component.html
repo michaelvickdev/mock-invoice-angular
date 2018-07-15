@@ -1,6 +1,11 @@
 <main class="products-main">
   <mat-table [dataSource]='productsList$ | async'>
 
+    <ng-container matColumnDef="number">
+      <mat-header-cell *matHeaderCellDef>Number</mat-header-cell>
+      <mat-cell *matCellDef="let invoice">{{(productsList$ | async).indexOf(invoice) + 1}}</mat-cell>
+    </ng-container>
+
     <ng-container matColumnDef="product_name">
       <mat-header-cell *matHeaderCellDef> Product Name </mat-header-cell>
       <mat-cell *matCellDef="let product"> {{product.name}}</mat-cell>
