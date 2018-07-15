@@ -18,12 +18,25 @@
   overflow: hidden;
 }
 
-.mat-table {
-  max-width: 80%;
-  width: 80%;
+.container {
+  max-width: 1440px;
   margin: 0 auto;
 }
 
-.mat-tab-nav-bar .mat-tab-link {
-  color: #fff;
+.numbers {
+  max-width: 50px!important;
+  text-align: center;
+}
+
+.mat {
+  &-table {
+    margin: 0 auto;
+  }
+  &-header-row, &-row {
+    padding: 0!important;
+    text-align: center;
+  }
+  &-tab-nav-bar .mat-tab-link {
+    color: #fff;
+  }
 }
