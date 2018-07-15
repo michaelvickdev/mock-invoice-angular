@@ -1,22 +1,24 @@
 <main class="products-main">
-  <mat-table [dataSource]='productsList$ | async'>
+  <div class="container">
+    <mat-table [dataSource]='productsList$ | async'>
 
-    <ng-container matColumnDef="number">
-      <mat-header-cell *matHeaderCellDef>Number</mat-header-cell>
-      <mat-cell *matCellDef="let invoice">{{(productsList$ | async).indexOf(invoice) + 1}}</mat-cell>
-    </ng-container>
+      <ng-container matColumnDef="number">
+        <mat-header-cell class="numbers" *matHeaderCellDef>Number</mat-header-cell>
+        <mat-cell class="numbers" *matCellDef="let invoice">{{(productsList$ | async).indexOf(invoice) + 1}}</mat-cell>
+      </ng-container>
 
-    <ng-container matColumnDef="product_name">
-      <mat-header-cell *matHeaderCellDef> Product Name </mat-header-cell>
-      <mat-cell *matCellDef="let product"> {{product.name}}</mat-cell>
-    </ng-container>
+      <ng-container matColumnDef="product_name">
+        <mat-header-cell *matHeaderCellDef> Product Name </mat-header-cell>
+        <mat-cell *matCellDef="let product"> {{product.name}}</mat-cell>
+      </ng-container>
 
-    <ng-container matColumnDef="price">
-      <mat-header-cell *matHeaderCellDef> Price </mat-header-cell>
-      <mat-cell *matCellDef="let product"> {{product.price | currency}}</mat-cell>
-    </ng-container>
+      <ng-container matColumnDef="price">
+        <mat-header-cell class="price" *matHeaderCellDef> Price </mat-header-cell>
+        <mat-cell class="price" *matCellDef="let product"> {{product.price | currency}}</mat-cell>
+      </ng-container>
 
-    <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
-    <mat-row *matRowDef="let myRowData; columns: columnsToDisplay;"></mat-row>
-  </mat-table>
+      <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
+      <mat-row  *matRowDef="let myRowData; columns: columnsToDisplay;"></mat-row>
+    </mat-table>
+  </div>
 </main>

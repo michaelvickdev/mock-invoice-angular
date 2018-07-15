@@ -1,48 +1,11 @@
-//.mat {
-//  &-table {
-//    border-left: 1px solid green;
-//    border-right: 1px solid green;
-//  }
-//
-//  &-row {
-//    min-height: 24px;
-//    border-bottom: none;
-//    padding: 0;
-//  }
-//
-//  &-cell {
-//    border: 1px solid black;
-//    min-height: 40px;
-//    color: black;
-//    text-align: center;
-//    font-size: 16px;
-//    padding: 0 10px;
-//  }
-//
-//  &-header {
-//    &-row {
-//      min-height: 40px;
-//      border-bottom: none;
-//      padding: 0;
-//    }
-//    &-cell {
-//      border: 1px solid black;
-//      min-height: 40px;
-//      line-height: 40px;
-//      font-size: 18px;
-//      background-color: black;
-//      color: black;
-//      text-align: center;
-//    }
-//  }
-//
-//  &-column {
-//    &-name {
-//      flex: 0 0 519px;
-//    }
-//
-//    &-price {
-//      flex: 0 0 120px;
-//    }
-//  }
-//}
+.products-main {
+  & .mat-table {
+    max-width: 45%;
+  }
+  & .mat-header-cell, .mat-cell {
+    max-width: 500px;
+  }
+  & .price {
+    max-width: 100px;
+  }
+}
