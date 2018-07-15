@@ -1,0 +1,14 @@
+.customers-main {
+  & .mat-table {
+    max-width: 66%;
+  }
+  & .mat-header-cell, .mat-cell {
+    max-width: 250px;
+  }
+  & .address {
+    max-width: 550px!important;
+  }
+  & .phone {
+    max-width: 100px;
+  }
+}
