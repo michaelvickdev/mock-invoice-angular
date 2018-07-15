@@ -22,7 +22,7 @@ export class CustomersComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.columnsToDisplay = ['customer_name', 'address', 'phone'];
+    this.columnsToDisplay = ['number', 'customer_name', 'address', 'phone'];
 
     this.customersList$ = this.customersServices.customersList$;
   }
