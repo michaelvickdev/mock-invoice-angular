@@ -1,7 +1,7 @@
 <main class="view-main">
     <div class="view-container">
-        <div class="view-title"> Invoice #</div>
-        <div class="view-name">Mark Benson</div>
+        <div class="view-title"> Invoice #{{ (invoice$ | async).id}}</div>
+        <div class="view-name" routerLink="/customers">{{ (invoice$ | async).customer.name }}</div>
         <div class="view-products">
             <ul class="view-products__list">
                 <li class="view-products__item view-products__item_flex">
@@ -16,13 +16,13 @@
             </ul>
             <div class="view-discount">
                 <div class="view-discount__title">Discount %</div>
-                <div class="view-discount__percent"></div>
+                <div class="view-discount__percent">{{ (invoice$ | async).discount }}</div>
             </div>
         </div>
         <div class="view-string"></div>
         <div class="view-total">
             <div class="view-total__title">TOTAL</div>
-            <div class="view-total__amount"></div>
+            <div class="view-total__amount">{{ (invoice$ | async).total * (1 - (invoice$ | async).discount / 100)}}</div>
         </div>
     </div>
 </main>

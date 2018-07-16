@@ -1,9 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router} from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+
+import { map, switchMap } from 'rxjs/operators';
 
 import { InvoicesService } from '../core/services/invoices.service';
 import { CustomersService } from '../core/services/customers.service';
 import { ProductsService } from '../core/services/products.service';
+import { Observable } from 'rxjs/Observable';
+
+import { Invoice } from '../core/interfaces/invoice';
 
 
 @Component({
@@ -12,6 +17,7 @@ import { ProductsService } from '../core/services/products.service';
   styleUrls: ['./view-invoice.component.scss']
 })
 export class ViewInvoiceComponent implements OnInit {
+  invoice$: Observable<Invoice>;
 
   constructor(
       private route: ActivatedRoute,
@@ -22,10 +28,17 @@ export class ViewInvoiceComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-
+    this.invoice$ = this.route.paramMap.pipe(
+      switchMap((params: ParamMap) => {
+        return this.invoicesService.invoicesList$.pipe(
+          map(invoices => {
+            return invoices.find(invoice => invoice.id === +params.get('id'));
+          }));
+      })
+    );
   }
 
   getCombinedData(id) {
-    this.invoicesService.getInvoice(id);
+    this.invoicesService.getInvoices();
   }
 }
