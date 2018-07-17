@@ -4,7 +4,7 @@
 
       <ng-container matColumnDef="number">
         <mat-header-cell class="numbers" *matHeaderCellDef>Number</mat-header-cell>
-        <mat-cell class="numbers" *matCellDef="let invoice">{{(productsList$ | async).indexOf(invoice) + 1}}</mat-cell>
+        <mat-cell class="numbers" *matCellDef="let product; let rowIndex = index">{{ rowIndex + 1 }}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="product_name">
