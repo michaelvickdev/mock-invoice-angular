@@ -4,7 +4,7 @@
 
       <ng-container matColumnDef="number">
         <mat-header-cell class="numbers" *matHeaderCellDef>Number</mat-header-cell>
-        <mat-cell class="numbers" *matCellDef="let invoice">{{(invoicesList$ | async).indexOf(invoice) + 1}}</mat-cell>
+        <mat-cell class="numbers" *matCellDef="let invoice; let rowIndex = index">{{rowIndex + 1}}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="id">
@@ -40,7 +40,7 @@
             routerLink="/edit-invoice">
             Edit
           </button>
-          <button mat-raised-button color="warn">Delete</button>
+          <button mat-raised-button color="warn" (click)="deleteInvoice(invoice.id)">Delete</button>
         </mat-cell>
       </ng-container>
 
