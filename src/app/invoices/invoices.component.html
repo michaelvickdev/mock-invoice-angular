@@ -1,6 +1,6 @@
 <main class="invoices-main">
   <div class="container">
-    <mat-table [dataSource]='invoicesList$ | async'>
+    <mat-table [dataSource]='invoicesCollection$ | async'>
 
       <ng-container matColumnDef="number">
         <mat-header-cell class="numbers" *matHeaderCellDef>Number</mat-header-cell>
