@@ -27,8 +27,8 @@ export class InvoicesComponent implements OnInit {
   columnsToDisplay: Array<string>;
 
   constructor(
-    private invoicesServices: InvoicesService,
-    private customersServices: CustomersService,
+    private invoicesService: InvoicesService,
+    private customersService: CustomersService,
     private headerService: HeaderService,
   ) {
   }
@@ -36,7 +36,7 @@ export class InvoicesComponent implements OnInit {
   ngOnInit() {
     this.columnsToDisplay = ['number', 'id', 'customer_name', 'discount', 'total', 'actions'];
 
-    this.invoicesListData$ = combineLatest(this.invoicesServices.invoicesList$, this.customersServices.customersList$).pipe(
+    this.invoicesListData$ = combineLatest(this.invoicesService.invoicesList$, this.customersService.customersList$).pipe(
       map(([invoices, customers]) => {
         return invoices.map(invoice => {
           invoice.customer = customers.find(customer => invoice.customer_id === customer.id);
@@ -46,7 +46,7 @@ export class InvoicesComponent implements OnInit {
     );
 
     this.deleteInvoice$ = this.deleteCurrentInvoice$.pipe(
-      switchMap(id => this.invoicesServices.deleteInvoice(id))
+      switchMap(id => this.invoicesService.deleteInvoice(id))
     );
 
     this.invoicesList$ = Observable.merge(
