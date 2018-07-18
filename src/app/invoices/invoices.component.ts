@@ -1,16 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
-import { combineLatest } from 'rxjs/observable/combineLatest';
-import { map, switchMap, mergeAll, tap } from 'rxjs/operators';
 
 import { Invoice } from '../core/interfaces/invoice';
 import { InvoicesService } from '../core/services/invoices.service';
 import { CustomersService } from '../core/services/customers.service';
 import { HeaderService } from '../core/services/header.service';
-import { Subject } from 'rxjs/Subject';
-import 'rxjs/add/observable/merge';
-
 
 
 @Component({
@@ -20,10 +15,7 @@ import 'rxjs/add/observable/merge';
 })
 export class InvoicesComponent implements OnInit {
 
-  invoicesList$;
-  deleteInvoice$;
-  invoicesListData$: Observable<Invoice[]>;
-  deleteCurrentInvoice$: Subject<number> = new Subject();
+  invoicesCollection$: Observable<Invoice[]>;
   columnsToDisplay: Array<string>;
 
   constructor(
@@ -36,29 +28,14 @@ export class InvoicesComponent implements OnInit {
   ngOnInit() {
     this.columnsToDisplay = ['number', 'id', 'customer_name', 'discount', 'total', 'actions'];
 
-    this.invoicesListData$ = combineLatest(this.invoicesService.invoicesList$, this.customersService.customersList$).pipe(
-      map(([invoices, customers]) => {
-        return invoices.map(invoice => {
-          invoice.customer = customers.find(customer => invoice.customer_id === customer.id);
-          return invoice;
-        });
-      }),
-    );
-
-    this.deleteInvoice$ = this.deleteCurrentInvoice$.pipe(
-      switchMap(id => this.invoicesService.deleteInvoice(id))
-    );
-
-    this.invoicesList$ = Observable.merge(
-      this.invoicesListData$,
-      this.deleteInvoice$,
-    );
+    this.invoicesCollection$ = this.invoicesService.invoicesCollection$;
   }
 
   hideInkBar() {
     this.headerService.hideInkBar();
   }
+
   deleteInvoice(id) {
-    this.deleteCurrentInvoice$.next(id);
+    this.invoicesService.deleteInvoice$.next(id);
   }
 }
