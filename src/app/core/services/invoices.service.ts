@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { ConnectableObservable } from 'rxjs/observable/ConnectableObservable';
 import { Subject } from 'rxjs/Subject';
-import { mergeScan} from 'rxjs/operators';
+import { map, mergeScan, switchMap, tap } from 'rxjs/operators';
 import 'rxjs/add/operator/publishReplay';
 import 'rxjs/add/observable/of';
 
@@ -23,7 +23,7 @@ export class InvoicesService {
   ) {
     this.passRequest = new Subject();
     this.invoicesList$ = this.passRequest.pipe(
-      mergeScan((acc) => acc ? Observable.of(acc) : this.getInvoicesRequest(), null)
+      mergeScan((acc) => acc ? Observable.of(acc) : this.getInvoicesRequest(), null),
     ).publishReplay(1);
     this.invoicesList$.connect();
   }
@@ -37,7 +37,11 @@ export class InvoicesService {
     return this.invoicesList$;
   }
 
-  getInvoice(id) {
-    return this.httpClient.get<Invoice[]>(`invoices/${id}`);
+  deleteInvoice(id) {
+    return this.httpClient.delete<Invoice>(`invoices/${id}`).pipe(
+      switchMap(res => this.invoicesList$.pipe(
+        map(invoices => invoices.filter(invoice => invoice.id !== res.id)),
+      ))
+    );
   }
 }
