@@ -42,7 +42,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
       { path: '/invoices', label: 'Invoices'},
     ];
 
-    this.invoicesAmount$ = this.invoicesService.invoicesList$;
+    this.invoicesAmount$ = this.invoicesService.invoicesCollection$;
   }
 
   ngAfterViewInit() {
