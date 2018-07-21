@@ -54,8 +54,6 @@ export class InvoicesService {
     this.invoicesCollection$ = Observable.merge(
       this.invoicesListCombined$,
       this.deleteInvoiceSubscription$,
-    ).pipe(
-      tap(console.log)
     ).publishReplay(1);
     this.invoicesCollection$.connect();
   }
