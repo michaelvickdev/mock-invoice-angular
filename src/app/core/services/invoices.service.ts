@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { ConnectableObservable } from 'rxjs/observable/ConnectableObservable';
 import { Subject } from 'rxjs/Subject';
 import { combineLatest } from 'rxjs/observable/combineLatest';
-import { map, mergeScan, switchMap, tap } from 'rxjs/operators';
+import { map, mergeScan, switchMap } from 'rxjs/operators';
 import 'rxjs/add/operator/publishReplay';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/merge';
