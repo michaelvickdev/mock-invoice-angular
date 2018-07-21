@@ -59,7 +59,7 @@ export class InvoicesService {
   }
 
   getInvoicesRequest() {
-    return this.httpClient.get<Product[]>('invoices');
+    return this.httpClient.get<Invoice[]>('invoices');
   }
 
   getInvoices() {
