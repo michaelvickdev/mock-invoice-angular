@@ -39,8 +39,10 @@ export class InvoicesService {
     this.invoicesListCombined$ = combineLatest(this.invoicesList$, this.customersService.customersList$).pipe(
       map(([invoices, customers]) => {
         return invoices.map(invoice => {
-          invoice.customer = customers.find(customer => invoice.customer_id === customer.id);
-          return invoice;
+          return {
+            ...invoice,
+            customer: customers.find(customer => invoice.customer_id === customer.id),
+          };
         });
       }),
     );
@@ -69,7 +71,7 @@ export class InvoicesService {
 
   deleteInvoice(id) {
     return this.httpClient.delete<Invoice>(`invoices/${id}`).pipe(
-      switchMap(res => this.invoicesList$.pipe(
+      switchMap(res => this.invoicesListCombined$.pipe(
         map(invoices => {
           const invoicesArray = invoices;
           invoicesArray.splice(_.indexOf(invoicesArray, res.id), 1);
