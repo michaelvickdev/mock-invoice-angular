@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { InvoicesResolver } from './core/resolvers/invoices-resolver';
 import { CustomersResolver } from './core/resolvers/customers-resolver';
 import { ProductsResolver } from './core/resolvers/products-resolver';
+import { ViewInvoiceResolver } from './core/resolvers/view-invoice-resolver';
 
 
 const appRoutes: Routes = [
@@ -27,7 +28,7 @@ const appRoutes: Routes = [
       },
       { path: 'view-invoice/:id',
         loadChildren: './view-invoice/view-invoice.module#ViewInvoiceModule',
-        resolve: [ InvoicesResolver, CustomersResolver, ProductsResolver ]
+        resolve: [ InvoicesResolver, CustomersResolver, ProductsResolver, ViewInvoiceResolver]
       },
       { path: 'edit-invoice',
         loadChildren: './edit-invoice/edit-invoice.module#EditInvoiceModule',
