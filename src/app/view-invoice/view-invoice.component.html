@@ -1,28 +1,43 @@
 <main class="view-main">
-    <div class="view-container">
-        <div class="view-title"> Invoice #{{ (invoice$ | async).id}}</div>
-        <div class="view-name" routerLink="/customers">{{ (invoice$ | async).customer.name }}</div>
-        <div class="view-products">
-            <ul class="view-products__list">
-                <li class="view-products__item view-products__item_flex">
-                    <div class="view-products__name">Products</div>
-                </li>
-                <li class="view-products__item">
-                    <div class="view-products__name">Qty</div>
-                </li>
-                <li class="view-products__item">
-                    <div class="view-products__name">Price</div>
-                </li>
-            </ul>
-            <div class="view-discount">
-                <div class="view-discount__title">Discount %</div>
-                <div class="view-discount__percent">{{ (invoice$ | async).discount }}</div>
-            </div>
-        </div>
-        <div class="view-string"></div>
-        <div class="view-total">
-            <div class="view-total__title">TOTAL</div>
-            <div class="view-total__amount">{{ (invoice$ | async).total * (1 - (invoice$ | async).discount / 100)}}</div>
-        </div>
+  <div class="view-container">
+    <div class="view-title"> Invoice #{{ (updatedInvoice$ | async)?.id}}</div>
+    <div class="view-name" routerLink="/customers">{{ (updatedInvoice$ | async)?.customer.name }}</div>
+    <div class="view-products">
+      <mat-table [dataSource]='(updatedInvoice$ | async)?.items'>
+        <ng-container matColumnDef="number">
+          <mat-header-cell class="numbers" *matHeaderCellDef>Number</mat-header-cell>
+          <mat-cell class="numbers" *matCellDef="let item; let rowIndex = index">{{rowIndex + 1}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="product_name">
+          <mat-header-cell *matHeaderCellDef>Product Name</mat-header-cell>
+          <mat-cell *matCellDef="let item">{{item?.product.name}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="quantity">
+          <mat-header-cell *matHeaderCellDef>Qty</mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{item?.quantity}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="price">
+          <mat-header-cell *matHeaderCellDef>Price</mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{item?.product.price}}</mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
+        <mat-row *matRowDef="let myRowData; columns: columnsToDisplay;"></mat-row>
+      </mat-table>
+      <div class="view-discount">
+        <div class="view-discount__title">Discount %</div>
+        <div class="view-discount__percent">{{ (updatedInvoice$ | async)?.discount }}</div>
+      </div>
     </div>
+    <div class="view-string"></div>
+    <div class="view-total">
+      <div class="view-total__title">TOTAL</div>
+      <div class="view-total__amount">
+        {{ (updatedInvoice$ | async)?.total * (1 - (updatedInvoice$ | async)?.discount / 100)}}
+      </div>
+    </div>
+  </div>
 </main>
