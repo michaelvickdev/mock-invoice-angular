@@ -65,8 +65,4 @@ export class ViewInvoiceComponent implements OnInit {
     ).publishReplay(1);
     this.updatedInvoice$.connect();
   }
-
-  getCombinedData(id) {
-    this.invoicesService.getInvoices();
-  }
 }
