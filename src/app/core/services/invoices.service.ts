@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { ConnectableObservable } from 'rxjs/observable/ConnectableObservable';
 import { Subject } from 'rxjs/Subject';
 import { combineLatest } from 'rxjs/observable/combineLatest';
-import { map, mergeScan, switchMap, tap } from 'rxjs/operators';
+import { distinctUntilChanged, map, mergeAll, mergeMap, mergeScan, switchMap, tap } from 'rxjs/operators';
 import 'rxjs/add/operator/publishReplay';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/merge';
@@ -41,7 +41,10 @@ export class InvoicesService {
     this.invoicesList$.connect();
 
     this.invoicesItemsList$ = this.passItemsRequest.pipe(
-      mergeScan((acc, id) => (acc) ? Observable.of(acc) : this.getInvoiceItemsRequest(id), null),
+      distinctUntilChanged(),
+      switchMap((id) => {
+        return this.getInvoiceItemsRequest(id);
+      })
     ).publishReplay(1);
     this.invoicesItemsList$.connect();
 
