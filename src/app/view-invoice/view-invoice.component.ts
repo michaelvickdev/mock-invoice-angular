@@ -39,13 +39,14 @@ export class ViewInvoiceComponent implements OnInit {
 
     this.currentInvoice$ = this.route.paramMap.pipe(
       switchMap((params: ParamMap) => {
-        return this.invoicesService.invoicesCollection$.pipe(
+        return this.invoicesService.invoicesListCombined$.pipe(
           map(invoices => {
             return invoices.find(invoice => invoice.id === +params.get('id'));
           }),
         );
       })
     );
+
     this.invoiceItems$ = this.invoicesService.invoicesItemsList$;
 
     this.updatedInvoice$ = combineLatest(
@@ -54,13 +55,16 @@ export class ViewInvoiceComponent implements OnInit {
       this.currentInvoice$,
     ).pipe(
       map(([products, invoiceItems, currentInvoice]) => {
-        currentInvoice.items = _.map(invoiceItems, item => {
+        const items = _.map(invoiceItems, item => {
           return {
             ...item,
             product: products.find(product => item.product_id === product.id),
           };
         });
-        return currentInvoice;
+        return {
+          ...currentInvoice,
+          items: [...items],
+        };
       }),
     );
   }
