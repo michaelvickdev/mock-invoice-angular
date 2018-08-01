@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { ConnectableObservable } from 'rxjs/observable/ConnectableObservable';
 import { Subject } from 'rxjs/Subject';
 import { combineLatest } from 'rxjs/observable/combineLatest';
-import { distinctUntilChanged, map, mergeAll, mergeMap, mergeScan, switchMap, tap } from 'rxjs/operators';
+import { distinctUntilChanged, map, mergeScan, switchMap, tap } from 'rxjs/operators';
 import 'rxjs/add/operator/publishReplay';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/merge';
@@ -35,11 +35,13 @@ export class InvoicesService {
     private customersService: CustomersService,
 
   ) {
+    // getting initial invoices collection
     this.invoicesList$ = this.passRequest.pipe(
       mergeScan((acc) => acc ? Observable.of(acc) : this.getInvoicesRequest(), null),
     ).publishReplay(1);
     this.invoicesList$.connect();
 
+    // getting initial invoice-items collection
     this.invoicesItemsList$ = this.passItemsRequest.pipe(
       distinctUntilChanged(),
       switchMap((id) => {
@@ -48,6 +50,7 @@ export class InvoicesService {
     ).publishReplay(1);
     this.invoicesItemsList$.connect();
 
+    // adding customer info to initial invoices collection
     this.invoicesListCombined$ = combineLatest(this.invoicesList$, this.customersService.customersList$).pipe(
       map(([invoices, customers]) => {
         return invoices.map(invoice => {
@@ -63,6 +66,7 @@ export class InvoicesService {
       switchMap(id => this.deleteInvoice(id))
     );
 
+    // main invoices collection to display
     this.invoicesCollection$ = Observable.merge(
       this.invoicesListCombined$,
       this.deleteInvoiceSubscription$,
