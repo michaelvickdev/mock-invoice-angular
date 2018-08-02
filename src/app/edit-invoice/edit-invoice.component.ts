@@ -9,14 +9,14 @@ import { FormControl, FormGroup } from '@angular/forms';
 })
 export class EditInvoiceComponent implements OnInit {
 
-  newInvoice: FormGroup;
+  editInvoice: FormGroup;
 
   constructor(
   ) {
   }
 
   ngOnInit() {
-    this.newInvoice = new FormGroup({
+    this.editInvoice = new FormGroup({
       name: new FormControl(),
       product: new FormControl(),
       quantity: new FormControl(),
