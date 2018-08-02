@@ -36,7 +36,7 @@
     <div class="view-total">
       <div class="view-total__title">TOTAL</div>
       <div class="view-total__amount">
-        {{ (updatedInvoice$ | async)?.total * (1 - (updatedInvoice$ | async)?.discount / 100)}}
+        {{ (updatedInvoice$ | async)?.total }}
       </div>
     </div>
   </div>
