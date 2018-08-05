@@ -1,22 +1,30 @@
 <main class="create-main">
   <div class="create-container">
-    <div class="create-title"> Invoice #123</div>
-    <div class="create-name" routerLink="/customers"></div>
-    <div class="create-products">
-      <div class="create-products__info">
+    <form [formGroup]="newInvoice">
+      <div class="create-title"> Invoice #123</div>
+      <div class="create-name">
+        <mat-select placeholder="Select Name" formControlName="name">
+          <mat-option *ngFor="let customer of customersList$ | async" [value]="customer.name">
+            {{ customer.name }}
+          </mat-option>
+        </mat-select>
+      </div>
+      <div class="create-products">
+        <div class="create-products__info">
 
+        </div>
+        <div class="create-discount">
+          <div class="create-discount__title">Discount %</div>
+          <div class="create-discount__percent">0</div>
+        </div>
       </div>
-      <div class="create-discount">
-        <div class="create-discount__title">Discount %</div>
-        <div class="create-discount__percent">0</div>
-      </div>
-    </div>
-    <div class="create-string"></div>
-    <div class="create-total">
-      <div class="create-total__title">TOTAL</div>
-      <div class="create-total__amount">333
+      <div class="create-string"></div>
+      <div class="create-total">
+        <div class="create-total__title">TOTAL</div>
+        <div class="create-total__amount">333
 
+        </div>
       </div>
-    </div>
+    </form>
   </div>
 </main>
