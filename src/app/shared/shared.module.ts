@@ -9,6 +9,7 @@ import {
   MatMenuModule,
   MatTabsModule,
   MatTableModule,
+  MatSelectModule,
 } from '@angular/material';
 
 import { APP_DIRECTIVES } from './directives/index';
@@ -23,7 +24,8 @@ import { APP_DIRECTIVES } from './directives/index';
     MatCheckboxModule,
     MatTabsModule,
     MatMenuModule,
-    MatTableModule
+    MatTableModule,
+    MatSelectModule,
   ],
   exports: [
     CommonModule,
@@ -33,6 +35,7 @@ import { APP_DIRECTIVES } from './directives/index';
     MatCheckboxModule,
     MatTabsModule,
     MatTableModule,
+    MatSelectModule,
     RouterModule,
     APP_DIRECTIVES,
   ]
