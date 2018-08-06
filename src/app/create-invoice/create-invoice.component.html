@@ -2,6 +2,7 @@
   <div class="create-container">
     <form [formGroup]="newInvoice">
       <div class="create-title"> Invoice #123</div>
+
       <div class="create-name">
         <mat-select placeholder="Select Name" formControlName="name">
           <mat-option *ngFor="let customer of customersList$ | async" [value]="customer.name">
@@ -11,14 +12,23 @@
       </div>
       <div class="create-products">
         <div class="create-products__info">
-
+          <div class="create-products__column create-products__column_select">
+            <div class="create-products__title">Products</div>
+            <mat-select class="create-products__select" placeholder="Select Name" formControlName="product">
+              <mat-option *ngFor="let product of productsList$ | async" [value]="product.name">
+                {{ product.name }}
+              </mat-option>
+            </mat-select>
+          </div>
         </div>
         <div class="create-discount">
           <div class="create-discount__title">Discount %</div>
           <div class="create-discount__percent">0</div>
         </div>
       </div>
+
       <div class="create-string"></div>
+
       <div class="create-total">
         <div class="create-total__title">TOTAL</div>
         <div class="create-total__amount">333
