@@ -32,10 +32,41 @@
       width: 100%;
       display: flex;
       justify-content: space-between;
+      flex-grow: 1;
       margin-bottom: 20px;
 
       &__info {
         width: 50%;
+        max-width: 50%;
+        display: flex;
+        justify-content: space-between;
+      }
+      &__column {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        flex-basis: 17%;
+        &_select {
+          flex-basis: 55%;
+        }
+      }
+      &__title {
+        font-size: 16px;
+        text-align: center;
+        margin-bottom: 5px;
+      }
+      &__select {
+        font-size: 16px;
+        padding: 6px 5px 6px 20px;
+        border: 1px solid #5b91d3;
+      }
+      &__input {
+        width: 100%;
+        height: 36px;
+        font-size: 18px;
+        text-align: center;
+        padding: 0 5px;
+        border: 1px solid #5b91d3;
       }
     }
     &-discount {
@@ -44,6 +75,7 @@
       flex-direction: column;
       justify-content: flex-start;
       align-items: center;
+      flex-grow: 1;
       &__title {
         background-color: #5b91d3;
         color: #fff;
