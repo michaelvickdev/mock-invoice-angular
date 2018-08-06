@@ -24,6 +24,10 @@
             <div class="create-products__title">Quantity</div>
             <input class="create-products__input" formControlName="quantity" type="number">
           </div>
+          <div class="create-products__column">
+            <div class="create-products__title">Price</div>
+            <input class="create-products__input" formControlName="price" value="{{0 | currency}}" type="text">
+          </div>
         </div>
         <div class="create-discount">
           <div class="create-discount__title">Discount %</div>
