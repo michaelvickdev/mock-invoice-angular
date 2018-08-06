@@ -15,17 +15,14 @@
     &-name {
       display: inline-block;
       width: 50%;
-      background-color: #5b91d3;
       text-align: left;
       color: #fff;
       padding: 10px 20px;
+      border: 1px solid #5b91d3;
       margin-bottom: 20px;
       cursor: pointer;
       & .mat-select-value {
-        color: #ffffff;
-      }
-      & .mat-select-placeholder {
-        color: #ffffff;
+        color: black;
       }
     }
     &-products {
@@ -53,17 +50,23 @@
       &__title {
         font-size: 16px;
         text-align: center;
-        margin-bottom: 5px;
+        margin-bottom: 22px;
+        background-color: #5b91d3;
+        color: #fff;
+        padding: 10px 20px;
       }
       &__select {
         font-size: 16px;
         padding: 6px 5px 6px 20px;
         border: 1px solid #5b91d3;
+        & .mat-select-value {
+          color: black;
+        }
       }
       &__input {
         width: 100%;
         height: 36px;
-        font-size: 18px;
+        font-size: 16px;
         text-align: center;
         padding: 0 5px;
         border: 1px solid #5b91d3;
@@ -79,13 +82,16 @@
       &__title {
         background-color: #5b91d3;
         color: #fff;
-        padding: 5px 15px;
-        border: 1px solid black;
+        padding: 10px 15px;
         margin-bottom: 20px;
       }
       &__percent {
-        padding: 5px 47px;
-        border: 1px solid black;
+        width: 108px;
+        height: 36px;
+        font-size: 16px;
+        text-align: center;
+        padding: 0 5px;
+        border: 1px solid #5b91d3;
       }
     }
     &-string {
