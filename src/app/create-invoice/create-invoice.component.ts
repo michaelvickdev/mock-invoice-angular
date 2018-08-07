@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 
 import { Observable } from 'rxjs/Observable';
@@ -15,7 +15,7 @@ import { Product } from '../core/interfaces/product';
   templateUrl: './create-invoice.component.html',
   styleUrls: ['./create-invoice.component.scss']
 })
-export class CreateInvoiceComponent implements OnInit {
+export class CreateInvoiceComponent implements OnInit, OnDestroy {
 
   createInvoiceForm: FormGroup;
   customersList$: Observable<Customer[]>;
@@ -39,5 +39,8 @@ export class CreateInvoiceComponent implements OnInit {
       discount: new FormControl(),
       total: new FormControl(),
     });
+  }
+
+  ngOnDestroy() {
   }
 }
