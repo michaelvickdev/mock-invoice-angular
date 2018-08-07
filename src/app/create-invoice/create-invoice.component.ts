@@ -2,6 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 
 import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
+import { map, filter } from 'rxjs/operators';
 
 import { CustomersService } from '../core/services/customers.service';
 import { ProductsService } from '../core/services/products.service';
@@ -20,7 +22,7 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
   createInvoiceForm: FormGroup;
   customersList$: Observable<Customer[]>;
   productsList$: Observable<Product[]>;
-
+  createInvoiceFormSubscription: Subscription;
   constructor(
     private customerService: CustomersService,
     private productsService: ProductsService,
@@ -58,8 +60,17 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
       discount: new FormControl(),
       total: new FormControl(),
     });
+
+    this.createInvoiceFormSubscription = this.createInvoiceForm.valueChanges.pipe(
+      filter(form =>  form.quantity && form.price && form.discount),
+    ).subscribe(form => {
+        const total = (form.quantity * form.price) * ((100 - form.discount) / 100)
+        return this.createInvoiceTotalControl.setValue(total, {emitEvent: false});
+      }
+    );
   }
 
   ngOnDestroy() {
+    this.createInvoiceFormSubscription.unsubscribe();
   }
 }
