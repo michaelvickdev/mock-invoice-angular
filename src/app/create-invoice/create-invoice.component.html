@@ -1,6 +1,6 @@
 <main class="create-main">
   <div class="create-container">
-    <form [formGroup]="newInvoice">
+    <form [formGroup]="createInvoiceForm">
       <div class="create-title"> Invoice #123</div>
 
       <div class="create-name">
@@ -26,12 +26,12 @@
           </div>
           <div class="create-products__column">
             <div class="create-products__title">Price</div>
-            <input class="create-products__input" formControlName="price" value="{{0 | currency}}" type="text">
+            <input class="create-products__input" formControlName="price" [value]="0 | currency" type="text">
           </div>
         </div>
         <div class="create-discount">
           <div class="create-discount__title">Discount %</div>
-          <input class="create-discount__percent" formControlName="discount" value="{{0}}" type="number">
+          <input class="create-discount__percent" formControlName="discount" [value]="0" type="number">
         </div>
       </div>
 

@@ -17,7 +17,7 @@ import { Product } from '../core/interfaces/product';
 })
 export class CreateInvoiceComponent implements OnInit {
 
-  newInvoice: FormGroup;
+  createInvoiceForm: FormGroup;
   customersList$: Observable<Customer[]>;
   productsList$: Observable<Product[]>;
 
@@ -31,7 +31,7 @@ export class CreateInvoiceComponent implements OnInit {
     this.customersList$ = this.customerService.customersList$;
     this.productsList$ = this.productsService.productsList$;
 
-    this.newInvoice = new FormGroup({
+    this.createInvoiceForm = new FormGroup({
       name: new FormControl(),
       product: new FormControl(),
       quantity: new FormControl(),
