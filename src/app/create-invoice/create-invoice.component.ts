@@ -27,6 +27,25 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
   ) {
   }
 
+  get createInvoiceNameControl() {
+    return this.createInvoiceForm.get('name');
+  }
+  get createInvoiceProductControl() {
+    return this.createInvoiceForm.get('product');
+  }
+  get createInvoiceQuantityControl() {
+    return this.createInvoiceForm.get('quantity');
+  }
+  get createInvoicePriceControl() {
+    return this.createInvoiceForm.get('price');
+  }
+  get createInvoiceDiscountControl() {
+    return this.createInvoiceForm.get('discount');
+  }
+  get createInvoiceTotalControl() {
+    return this.createInvoiceForm.get('total');
+  }
+
   ngOnInit() {
     this.customersList$ = this.customerService.customersList$;
     this.productsList$ = this.productsService.productsList$;
