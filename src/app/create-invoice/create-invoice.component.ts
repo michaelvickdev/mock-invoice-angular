@@ -58,9 +58,9 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
     this.createInvoiceForm = new FormGroup({
       name: new FormControl(),
       product: new FormControl(),
-      quantity: new FormControl('', { updateOn: 'blur' }),
-      price: new FormControl('', { updateOn: 'blur' }),
-      discount: new FormControl('', { updateOn: 'blur' }),
+      quantity: new FormControl(null, { updateOn: 'blur' }),
+      price: new FormControl(null),
+      discount: new FormControl(null, { updateOn: 'blur' }),
       total: new FormControl(),
     });
 
