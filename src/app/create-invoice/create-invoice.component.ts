@@ -55,9 +55,9 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
     this.createInvoiceForm = new FormGroup({
       name: new FormControl(),
       product: new FormControl(),
-      quantity: new FormControl(),
-      price: new FormControl(),
-      discount: new FormControl(),
+      quantity: new FormControl('', { updateOn: 'blur' }),
+      price: new FormControl('', { updateOn: 'blur' }),
+      discount: new FormControl('', { updateOn: 'blur' }),
       total: new FormControl(),
     });
 
@@ -65,7 +65,7 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
       filter(form =>  form.quantity && form.price && form.discount),
     ).subscribe(form => {
         const total = (form.quantity * form.price) * ((100 - form.discount) / 100)
-        return this.createInvoiceTotalControl.setValue(total, {emitEvent: false});
+        return this.createInvoiceTotalControl.setValue(total, {onlySelf: true});
       }
     );
   }
