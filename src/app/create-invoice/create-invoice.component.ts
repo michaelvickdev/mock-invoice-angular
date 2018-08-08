@@ -62,7 +62,7 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
     });
 
     this.createInvoiceFormSubscription = this.createInvoiceForm.valueChanges.pipe(
-      filter(form =>  form.quantity && form.price && form.discount),
+      filter(form =>  form.quantity && form.price),
     ).subscribe(form => {
         const total = (form.quantity * form.price) * ((100 - form.discount) / 100)
         return this.createInvoiceTotalControl.setValue(total, {onlySelf: true});
