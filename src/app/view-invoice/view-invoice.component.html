@@ -15,12 +15,12 @@
         </ng-container>
 
         <ng-container matColumnDef="quantity">
-          <mat-header-cell *matHeaderCellDef>Qty</mat-header-cell>
+          <mat-header-cell class="view-products__flex-change" *matHeaderCellDef>Qty</mat-header-cell>
           <mat-cell *matCellDef="let item"> {{item?.quantity}}</mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="price">
-          <mat-header-cell *matHeaderCellDef>Price</mat-header-cell>
+          <mat-header-cell class="view-products__flex-change" *matHeaderCellDef>Price</mat-header-cell>
           <mat-cell *matCellDef="let item"> {{item?.product.price | currency}}</mat-cell>
         </ng-container>
 

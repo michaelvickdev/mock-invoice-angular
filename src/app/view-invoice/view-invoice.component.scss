@@ -30,6 +30,12 @@
     & .mat-table {
       width: 50%;
     }
+    & .mat-column-product_name {
+      flex: 2;
+    }
+    &__flex-change {
+      flex: 1;
+    }
   }
   &-discount {
     width: 50%;
@@ -73,5 +79,4 @@
     }
   }
 }
-
 
