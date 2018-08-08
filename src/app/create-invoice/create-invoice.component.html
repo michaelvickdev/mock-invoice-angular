@@ -25,7 +25,7 @@
             <input class="create-products__input" formControlName="quantity" [value]="0" type="number">
           </div>
           <div class="create-products__column">
-            <div class="create-products__title">Price</div>
+            <div class="create-products__title">Price($)</div>
             <input class="create-products__input" formControlName="price" [value]="0" type="number">
           </div>
         </div>
@@ -39,7 +39,7 @@
 
       <div class="create-total">
         <div class="create-total__title">TOTAL</div>
-        <div class="create-total__amount">{{createInvoiceTotalControl.value || 0}}
+        <div class="create-total__amount">{{createInvoiceTotalControl.value || 0 | currency}}
         </div>
       </div>
     </form>
