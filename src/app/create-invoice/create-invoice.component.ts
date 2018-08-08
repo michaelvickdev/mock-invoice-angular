@@ -4,7 +4,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import * as _ from 'lodash';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { map, filter } from 'rxjs/operators';
+import { map, filter, switchMap } from 'rxjs/operators';
 
 import { CustomersService } from '../core/services/customers.service';
 import { ProductsService } from '../core/services/products.service';
@@ -24,6 +24,8 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
   customersList$: Observable<Customer[]>;
   productsList$: Observable<Product[]>;
   createInvoiceFormSubscription: Subscription;
+  productControlSubscription: Subscription;
+
   constructor(
     private customerService: CustomersService,
     private productsService: ProductsService,
@@ -63,15 +65,21 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
     });
 
     this.createInvoiceFormSubscription = this.createInvoiceForm.valueChanges.pipe(
-      filter(form =>  form.quantity && form.price),
+      filter(form =>  form.quantity && form.product),
     ).subscribe(form => {
-        const total = (form.quantity * form.price) * ((100 - form.discount) / 100)
-        return this.createInvoiceTotalControl.setValue(total, {onlySelf: true});
+        const total = (form.quantity * form.price) * ((100 - form.discount) / 100);
+        return this.createInvoiceTotalControl.patchValue(total, {onlySelf: true});
       }
     );
+    this.productControlSubscription = this.createInvoiceProductControl.valueChanges.pipe(
+      switchMap( productName => this.productsList$.pipe(
+        map(products => _.find(products, {'name': productName}).price),
+      ))
+    ).subscribe(price => this.createInvoicePriceControl.patchValue(price));
   }
 
   ngOnDestroy() {
     this.createInvoiceFormSubscription.unsubscribe();
+    this.productControlSubscription.unsubscribe();
   }
 }
