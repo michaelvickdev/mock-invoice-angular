@@ -8,10 +8,10 @@ import { map, filter, switchMap } from 'rxjs/operators';
 
 import { CustomersService } from '../core/services/customers.service';
 import { ProductsService } from '../core/services/products.service';
+import { InvoicesService } from '../core/services/invoices.service';
 
 import { Customer } from '../core/interfaces/customer';
 import { Product } from '../core/interfaces/product';
-import { InvoicesService } from '../core/services/invoices.service';
 
 
 @Component({
