@@ -24,16 +24,15 @@ const appRoutes: Routes = [
         resolve: [ ProductsResolver ]
       },
       { path: 'create-invoice',
-        loadChildren: './create-invoice/create-invoice.module#CreateInvoiceModule',
+        loadChildren: './create-edit-invoice/create-edit-invoice.module#CreateEditInvoiceModule',
         resolve: [ InvoicesResolver, CustomersResolver, ProductsResolver ]
-
       },
       { path: 'view-invoice/:id',
         loadChildren: './view-invoice/view-invoice.module#ViewInvoiceModule',
         resolve: [ InvoicesResolver, CustomersResolver, ProductsResolver, ViewInvoiceResolver]
       },
       { path: 'edit-invoice',
-        loadChildren: './edit-invoice/edit-invoice.module#EditInvoiceModule',
+        loadChildren: './create-edit-invoice/create-edit-invoice.module#CreateEditInvoiceModule',
       },
     ],
   },
