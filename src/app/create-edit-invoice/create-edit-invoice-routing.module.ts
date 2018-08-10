@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { CreateInvoiceComponent } from './create-invoice.component';
+import { CreateEditInvoiceComponent } from './create-edit-invoice.component';
 
 
 const createInvoiceRoutes: Routes = [
-  { path: '', component: CreateInvoiceComponent }
+  { path: '', component: CreateEditInvoiceComponent }
 ];
 
 @NgModule({
@@ -16,4 +16,4 @@ const createInvoiceRoutes: Routes = [
     RouterModule
   ],
 })
-export class CreateInvoiceRoutingModule {}
+export class CreateEditInvoiceRoutingModule {}

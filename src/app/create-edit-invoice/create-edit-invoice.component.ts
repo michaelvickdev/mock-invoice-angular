@@ -15,11 +15,11 @@ import { Product } from '../core/interfaces/product';
 
 
 @Component({
-  selector: 'app-create-invoice',
-  templateUrl: './create-invoice.component.html',
-  styleUrls: ['./create-invoice.component.scss']
+  selector: 'app-create-edit-invoice',
+  templateUrl: './create-edit-invoice.component.html',
+  styleUrls: ['./create-edit-invoice.component.scss']
 })
-export class CreateInvoiceComponent implements OnInit, OnDestroy {
+export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
 
   createInvoiceForm: FormGroup;
   customersList$: Observable<Customer[]>;
