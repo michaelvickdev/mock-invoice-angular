@@ -1,6 +1,6 @@
 <main class="create-main">
   <div class="create-container">
-    <form [formGroup]="createInvoiceForm">
+    <form [formGroup]="createInvoiceForm" (ngSubmit)="onSubmit()">
       <div class="create-title"> Invoice #123</div>
 
       <div class="create-name">
@@ -44,6 +44,7 @@
         <div class="create-total__amount">{{createInvoiceTotalControl.value || 0 | currency}}
         </div>
       </div>
+      <button class="create-submit" type="submit">Save</button>
     </form>
   </div>
 </main>
