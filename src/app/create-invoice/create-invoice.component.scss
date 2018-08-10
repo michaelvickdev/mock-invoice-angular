@@ -102,12 +102,12 @@
     &-total {
       width: 50%;
       display: flex;
+      margin-bottom: 20px;
       &__title {
         display: inline-block;
         background-color: #5b91d3;
         color: #fff;
         padding: 10px 47px;
-        border: 1px solid black;
         margin-right: 30px;
       }
       &__amount {
@@ -117,6 +117,13 @@
         padding: 10px 10px;
         border: 1px solid black;
       }
+    }
+    &-submit {
+      padding: 10px 25px;
+      background-color: #5b91d3;
+      color: #ffffff;
+      border: 1px solid black;
+      cursor: pointer;
     }
   }
 }
