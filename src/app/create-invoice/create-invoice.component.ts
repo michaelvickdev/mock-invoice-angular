@@ -11,6 +11,7 @@ import { ProductsService } from '../core/services/products.service';
 
 import { Customer } from '../core/interfaces/customer';
 import { Product } from '../core/interfaces/product';
+import { InvoicesService } from '../core/services/invoices.service';
 
 
 @Component({
@@ -29,6 +30,7 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
   constructor(
     private customerService: CustomersService,
     private productsService: ProductsService,
+    private invoicesService: InvoicesService,
   ) {
   }
 
@@ -76,6 +78,9 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
         map(products => _.find(products, {'name': productName}).price),
       ))
     ).subscribe(price => this.createInvoicePriceControl.patchValue(price));
+  }
+
+  onSubmit() {
   }
 
   ngOnDestroy() {
