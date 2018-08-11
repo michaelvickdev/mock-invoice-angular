@@ -5,7 +5,7 @@
 
       <div class="create-name">
         <mat-select placeholder="Select Name" formControlName="name">
-          <mat-option *ngFor="let customer of customersList$ | async" [value]="customer.name">
+          <mat-option *ngFor="let customer of customersList$ | async" [value]="customer.id">
             {{ customer.name }}
           </mat-option>
         </mat-select>

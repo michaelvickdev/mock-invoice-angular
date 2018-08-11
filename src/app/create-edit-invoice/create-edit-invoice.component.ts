@@ -58,8 +58,8 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
     this.productsList$ = this.productsService.productsList$;
 
     this.createInvoiceForm = new FormGroup({
-      name: new FormControl(),
-      product: new FormControl(),
+      customer_id: new FormControl(),
+      product_id: new FormControl(),
       quantity: new FormControl(null, { updateOn: 'blur' }),
       price: new FormControl(null),
       discount: new FormControl(null, { updateOn: 'blur' }),
