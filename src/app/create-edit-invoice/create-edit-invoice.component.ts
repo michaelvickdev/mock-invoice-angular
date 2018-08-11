@@ -35,10 +35,10 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
   }
 
   get createInvoiceNameControl() {
-    return this.createInvoiceForm.get('name');
+    return this.createInvoiceForm.get('customer_id');
   }
   get createInvoiceProductControl() {
-    return this.createInvoiceForm.get('product');
+    return this.createInvoiceForm.get('product_id');
   }
   get createInvoiceQuantityControl() {
     return this.createInvoiceForm.get('quantity');
@@ -67,7 +67,7 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
     });
 
     this.createInvoiceFormSubscription = this.createInvoiceForm.valueChanges.pipe(
-      filter(form =>  form.quantity && form.product),
+      filter(form =>  form.quantity && form.product_id),
     ).subscribe(form => {
         const total = (form.quantity * form.price) * ((100 - form.discount) / 100);
         return this.createInvoiceTotalControl.patchValue(total, {onlySelf: true});

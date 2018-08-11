@@ -4,7 +4,7 @@
       <div class="create-title"> Invoice #123</div>
 
       <div class="create-name">
-        <mat-select placeholder="Select Name" formControlName="name">
+        <mat-select placeholder="Select Name" formControlName="customer_id">
           <mat-option *ngFor="let customer of customersList$ | async" [value]="customer.id">
             {{ customer.name }}
           </mat-option>
@@ -14,7 +14,7 @@
         <div class="create-products__info">
           <div class="create-products__column create-products__column_select">
             <div class="create-products__title">Products</div>
-            <mat-select class="create-products__select" placeholder="Select Name" formControlName="product">
+            <mat-select class="create-products__select" placeholder="Select Name" formControlName="product_id">
               <mat-option *ngFor="let product of productsList$ | async" [value]="product.name">
                 {{ product.name }}
               </mat-option>
