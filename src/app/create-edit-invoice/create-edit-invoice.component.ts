@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 import * as _ from 'lodash';
 import { Observable } from 'rxjs/Observable';
@@ -58,11 +58,17 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
     this.productsList$ = this.productsService.productsList$;
 
     this.createInvoiceForm = new FormGroup({
-      customer_id: new FormControl(),
-      product_id: new FormControl(),
-      quantity: new FormControl(null, { updateOn: 'blur' }),
+      customer_id: new FormControl(null, Validators.required ),
+      product_id: new FormControl(null, Validators.required),
+      quantity: new FormControl(null, {
+        validators: Validators.required,
+        updateOn: 'blur'
+      }),
       price: new FormControl(null),
-      discount: new FormControl(null, { updateOn: 'blur' }),
+      discount: new FormControl(null, {
+        validators: Validators.required,
+        updateOn: 'blur'
+      }),
       total: new FormControl(),
     });
 
@@ -81,6 +87,7 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
+    console.log('qqq')
   }
 
   ngOnDestroy() {

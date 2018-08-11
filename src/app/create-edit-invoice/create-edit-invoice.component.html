@@ -44,7 +44,7 @@
         <div class="create-total__amount">{{createInvoiceTotalControl.value || 0 | currency}}
         </div>
       </div>
-      <button class="create-submit" type="submit">Save</button>
+      <button class="create-submit" type="submit" [disabled]="createInvoiceForm.invalid">Save</button>
     </form>
   </div>
 </main>
