@@ -28,6 +28,7 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
   createInvoiceFormSubscription: Subscription;
   productControlSubscription: Subscription;
   createInvoiceSubscription: Subscription;
+  passCreateInvoiceRequest$: Subject<any> = new Subject();
 
   constructor(
     private customerService: CustomersService,
@@ -86,9 +87,15 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
         map(products => _.find(products, {'id': productName}).price),
       ))
     ).subscribe(price => this.createInvoicePriceControl.patchValue(price));
+
+    this.createInvoiceSubscription = this.passCreateInvoiceRequest$.pipe(
+      switchMap(invoice => this.invoicesService.postInvoiceRequest(invoice)),
+      switchMap(res => this.invoicesService.postInvoiceItemsRequest(res.id, this.createInvoiceForm.value)),
+    ).subscribe();
   }
 
   onSubmit() {
+    this.passCreateInvoiceRequest$.next(this.createInvoiceForm.value);
   }
 
   ngOnDestroy() {
