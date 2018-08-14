@@ -88,9 +88,29 @@ export class InvoicesService {
     this.passRequest.next();
     return this.invoicesList$;
   }
+
   getInvoiceItems(id) {
     this.passItemsRequest.next(id);
     return this.invoicesItemsList$;
+  }
+
+  postInvoiceRequest(data) {
+    const invoice = {
+      customer_id: data.customer_id,
+      discount: data.discount,
+      total: data.total,
+      items: [],
+    };
+    return this.httpClient.post<Invoice>('invoices', invoice);
+  }
+
+  postInvoiceItemsRequest(id, data) {
+    const invoiceItems = {
+      invoice_id: id,
+      product_id: data.product_id,
+      quantity: data.quantity,
+    };
+    return this.httpClient.post<InvoiceItem[]>(`invoices/${id}/items`, invoiceItems);
   }
 
   deleteInvoice(id) {
