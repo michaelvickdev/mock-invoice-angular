@@ -12,6 +12,7 @@ import { InvoicesService } from '../core/services/invoices.service';
 
 import { Customer } from '../core/interfaces/customer';
 import { Product } from '../core/interfaces/product';
+import { Subject } from 'rxjs/Subject';
 
 
 @Component({
@@ -26,6 +27,7 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
   productsList$: Observable<Product[]>;
   createInvoiceFormSubscription: Subscription;
   productControlSubscription: Subscription;
+  createInvoiceSubscription: Subscription;
 
   constructor(
     private customerService: CustomersService,
@@ -81,17 +83,17 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
     );
     this.productControlSubscription = this.createInvoiceProductControl.valueChanges.pipe(
       switchMap( productName => this.productsList$.pipe(
-        map(products => _.find(products, {'name': productName}).price),
+        map(products => _.find(products, {'id': productName}).price),
       ))
     ).subscribe(price => this.createInvoicePriceControl.patchValue(price));
   }
 
   onSubmit() {
-    console.log('qqq')
   }
 
   ngOnDestroy() {
     this.createInvoiceFormSubscription.unsubscribe();
     this.productControlSubscription.unsubscribe();
+    this.createInvoiceSubscription.unsubscribe();
   }
 }
