@@ -94,13 +94,7 @@ export class InvoicesService {
     return this.invoicesItemsList$;
   }
 
-  postInvoiceRequest(data) {
-    const invoice = {
-      customer_id: data.customer_id,
-      discount: data.discount,
-      total: data.total,
-      items: [],
-    };
+  postInvoiceRequest(invoice) {
     return this.httpClient.post<Invoice>('invoices', invoice);
   }
 
