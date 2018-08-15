@@ -104,15 +104,6 @@ export class InvoicesService {
     return this.httpClient.post<Invoice>('invoices', invoice);
   }
 
-  postInvoiceItemsRequest(id, data) {
-    const invoiceItems = {
-      invoice_id: id,
-      product_id: data.product_id,
-      quantity: data.quantity,
-    };
-    return this.httpClient.post<InvoiceItem[]>(`invoices/${id}/items`, invoiceItems);
-  }
-
   deleteInvoice(id) {
     return this.httpClient.delete<Invoice>(`invoices/${id}`).pipe(
       switchMap(res => this.invoicesListCombined$.pipe(
