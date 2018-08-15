@@ -90,7 +90,6 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
 
     this.createInvoiceSubscription = this.passCreateInvoiceRequest$.pipe(
       switchMap(invoice => this.invoicesService.postInvoiceRequest(invoice)),
-      switchMap(res => this.invoicesService.postInvoiceItemsRequest(res.id, this.createInvoiceForm.value)),
     ).subscribe();
   }
 
