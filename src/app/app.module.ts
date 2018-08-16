@@ -7,16 +7,22 @@ import { CoreModule } from './core/core.module';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
+import { ModalBoxComponent } from './core/modal-box/modal-box.component';
+
 
 @NgModule({
   declarations: [
     AppComponent,
+    ModalBoxComponent,
   ],
   imports: [
     BrowserModule,
     CoreModule,
     BrowserAnimationsModule,
     AppRoutingModule,
+  ],
+  entryComponents: [
+    ModalBoxComponent,
   ],
   bootstrap: [AppComponent]
 })
