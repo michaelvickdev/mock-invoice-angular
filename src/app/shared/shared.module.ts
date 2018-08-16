@@ -11,7 +11,6 @@ import {
   MatTableModule,
   MatSelectModule,
   MatDialogModule,
-  MatDialogRef,
 } from '@angular/material';
 
 import { APP_DIRECTIVES } from './directives';
@@ -29,7 +28,6 @@ import { APP_DIRECTIVES } from './directives';
     MatTableModule,
     MatSelectModule,
     MatDialogModule,
-    MatDialogRef,
   ],
   exports: [
     CommonModule,
@@ -41,7 +39,6 @@ import { APP_DIRECTIVES } from './directives';
     MatTableModule,
     MatSelectModule,
     MatDialogModule,
-    MatDialogRef,
     RouterModule,
     APP_DIRECTIVES,
   ]
