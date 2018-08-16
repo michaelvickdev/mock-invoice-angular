@@ -10,9 +10,11 @@ import {
   MatTabsModule,
   MatTableModule,
   MatSelectModule,
+  MatDialogModule,
+  MatDialogRef,
 } from '@angular/material';
 
-import { APP_DIRECTIVES } from './directives/index';
+import { APP_DIRECTIVES } from './directives';
 
 @NgModule({
   declarations: [
@@ -26,6 +28,8 @@ import { APP_DIRECTIVES } from './directives/index';
     MatMenuModule,
     MatTableModule,
     MatSelectModule,
+    MatDialogModule,
+    MatDialogRef,
   ],
   exports: [
     CommonModule,
@@ -36,6 +40,8 @@ import { APP_DIRECTIVES } from './directives/index';
     MatTabsModule,
     MatTableModule,
     MatSelectModule,
+    MatDialogModule,
+    MatDialogRef,
     RouterModule,
     APP_DIRECTIVES,
   ]
