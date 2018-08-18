@@ -53,6 +53,8 @@ export class InvoicesService {
     // adding customer info to initial invoices collection
     this.invoicesListCombined$ = combineLatest(this.invoicesList$, this.customersService.customersList$).pipe(
       map(([invoices, customers]) => {
+        console.error(222, invoices);
+        // debugger;
         return invoices.map(invoice => {
           return {
             ...invoice,
@@ -64,7 +66,7 @@ export class InvoicesService {
 
     this.deleteInvoiceSubscription$ = this.deleteInvoice$.pipe(
       switchMap(id => this.deleteInvoice(id))
-    );
+    )
 
     // main invoices collection to display
     this.invoicesCollection$ = Observable.merge(
@@ -103,10 +105,23 @@ export class InvoicesService {
       switchMap(res => this.invoicesListCombined$.pipe(
         map(invoices => {
           const invoicesArray = invoices;
-          invoicesArray.splice(_.indexOf(invoicesArray, res.id), 1);
+          invoicesArray.splice(_.indexOf(invoicesArray, id), 1);
+          console.error(111, invoicesArray, id);
           return invoicesArray;
         }),
+        // tap(this.deleteInvoice)
       ))
+
     );
+  }
+  deleteFromCollection(id) {
+    switchMap(res => this.invoicesListCombined$.pipe(
+      map(invoices => {
+        const invoicesArray = invoices;
+        invoicesArray.splice(_.indexOf(invoicesArray, id), 1);
+        console.error(111, invoicesArray, id);
+        return invoicesArray;
+      }),
+    ));
   }
 }
