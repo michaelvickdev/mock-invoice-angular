@@ -65,7 +65,7 @@ export class InvoicesService {
     );
 
     this.deleteInvoiceSubscription$ = this.deleteInvoice$.pipe(
-      switchMap(id => this.deleteInvoice(id))
+      switchMap(id => this.deleteFromCollection(id))
     )
 
     // main invoices collection to display
@@ -102,26 +102,19 @@ export class InvoicesService {
 
   deleteInvoice(id) {
     return this.httpClient.delete<Invoice>(`invoices/${id}`).pipe(
-      switchMap(res => this.invoicesListCombined$.pipe(
-        map(invoices => {
-          const invoicesArray = invoices;
-          invoicesArray.splice(_.indexOf(invoicesArray, id), 1);
-          console.error(111, invoicesArray, id);
-          return invoicesArray;
-        }),
-        // tap(this.deleteInvoice)
-      ))
+      map(res => this.deleteInvoice$.next(res.id))
 
     );
   }
   deleteFromCollection(id) {
-    switchMap(res => this.invoicesListCombined$.pipe(
+    return this.invoicesListCombined$.pipe(
       map(invoices => {
         const invoicesArray = invoices;
-        invoicesArray.splice(_.indexOf(invoicesArray, id), 1);
+        const invoiceToDelete = _.find(invoicesArray, ['id', id]);
+        invoicesArray.splice(_.indexOf(invoicesArray, invoiceToDelete), 1);
         console.error(111, invoicesArray, id);
         return invoicesArray;
       }),
-    ));
+    );
   }
 }
