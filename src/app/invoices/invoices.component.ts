@@ -44,9 +44,9 @@ export class InvoicesComponent implements OnInit {
           mapTo(id)
         );
       }),
-      map((id) => this.invoicesService.deleteInvoice$.next(id))
+      switchMap((id) => this.invoicesService.deleteInvoice(id))
     ).subscribe((invoices) => {
-      this.modalBoxService.confirmModal(`Invoice number 123 was deleted`, false);
+      this.modalBoxService.confirmModal(`Invoice number ${invoices} was deleted`, false);
     });
   }
 
