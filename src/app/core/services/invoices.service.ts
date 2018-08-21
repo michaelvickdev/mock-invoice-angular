@@ -109,11 +109,12 @@ export class InvoicesService {
   deleteFromCollection(id) {
     return this.invoicesListCombined$.pipe(
       map(invoices => {
-        const invoicesArray = invoices;
-        const invoiceToDelete = _.find(invoicesArray, ['id', id]);
-        invoicesArray.splice(_.indexOf(invoicesArray, invoiceToDelete), 1);
-        console.error(111, invoicesArray, id);
-        return invoicesArray;
+        const invoiceToDelete = _.find(invoices, ['id', id]);
+        invoices.splice(_.indexOf(invoices, invoiceToDelete), 1);
+        console.error(111, invoices, id);
+        return invoices.map(invoice => {
+          return {...invoice};
+        });
       }),
     );
   }
