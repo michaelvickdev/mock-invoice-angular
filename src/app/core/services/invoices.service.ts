@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { ConnectableObservable } from 'rxjs/observable/ConnectableObservable';
 import { Subject } from 'rxjs/Subject';
 import { combineLatest } from 'rxjs/observable/combineLatest';
-import { distinctUntilChanged, map, mergeScan, switchMap, tap } from 'rxjs/operators';
+import { distinctUntilChanged, map, mergeScan, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import 'rxjs/add/operator/publishReplay';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/merge';
@@ -54,7 +54,6 @@ export class InvoicesService {
     this.invoicesListCombined$ = combineLatest(this.invoicesList$, this.customersService.customersList$).pipe(
       map(([invoices, customers]) => {
         console.error(222, invoices);
-        // debugger;
         return invoices.map(invoice => {
           return {
             ...invoice,
@@ -65,8 +64,16 @@ export class InvoicesService {
     );
 
     this.deleteInvoiceSubscription$ = this.deleteInvoice$.pipe(
-      switchMap(id => this.deleteFromCollection(id))
-    )
+      withLatestFrom(this.invoicesListCombined$),
+      map(([id, invoices]) => {
+        const invoiceToDelete = _.find(invoices, ['id', id]);
+        invoices.splice(_.indexOf(invoices, invoiceToDelete), 1);
+        console.log(111, invoices, id);
+        return invoices.map(invoice => {
+          return {...invoice};
+        });
+      }),
+    );
 
     // main invoices collection to display
     this.invoicesCollection$ = Observable.merge(
@@ -103,19 +110,6 @@ export class InvoicesService {
   deleteInvoice(id) {
     return this.httpClient.delete<Invoice>(`invoices/${id}`).pipe(
       map(res => this.deleteInvoice$.next(res.id))
-
-    );
-  }
-  deleteFromCollection(id) {
-    return this.invoicesListCombined$.pipe(
-      map(invoices => {
-        const invoiceToDelete = _.find(invoices, ['id', id]);
-        invoices.splice(_.indexOf(invoices, invoiceToDelete), 1);
-        console.error(111, invoices, id);
-        return invoices.map(invoice => {
-          return {...invoice};
-        });
-      }),
     );
   }
 }
