@@ -35,8 +35,4 @@ export class CustomersService {
     this.passRequest.next();
     return this.customersList$;
   }
-
-  getCustomer(id) {
-    return this.httpClient.get<Customer[]>(`customers/${id}`);
-  }
 }
