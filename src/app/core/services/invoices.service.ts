@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
+import * as _ from 'lodash';
 import { Observable } from 'rxjs/Observable';
 import { ConnectableObservable } from 'rxjs/observable/ConnectableObservable';
 import { Subject } from 'rxjs/Subject';
@@ -8,20 +9,18 @@ import { combineLatest } from 'rxjs/observable/combineLatest';
 import {
   distinctUntilChanged,
   map,
-  mergeScan, startWith,
+  mergeScan,
   switchMap,
-  switchMapTo,
   take,
-  tap,
   withLatestFrom
 } from 'rxjs/operators';
 import 'rxjs/add/operator/publishReplay';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/merge';
-import * as _ from 'lodash';
 
 import { Invoice } from '../interfaces/invoice';
 import { InvoiceItem } from '../interfaces/invoice-item';
+
 import { CustomersService } from './customers.service';
 
 @Injectable()
