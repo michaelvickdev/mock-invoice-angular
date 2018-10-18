@@ -36,6 +36,8 @@ export class InvoicesService {
   passItemsRequest: Subject<Observable<InvoiceItem[]>> = new Subject();
   invoicesItemsList$: ConnectableObservable<InvoiceItem[]>;
 
+  addInvoice$: Subject<{}> = new Subject();
+  addInvoiceSubscription$: Observable<any>;
   deleteInvoice$: Subject<number> = new Subject();
   deleteInvoiceSubscription$: Observable<Invoice[]>;
 
@@ -79,6 +81,16 @@ export class InvoicesService {
       this.invoicesListCombined$.pipe(take(1)),
     );
 
+    this.addInvoiceSubscription$ = this.addInvoice$.pipe(
+      withLatestFrom(this.initialCollection$, this.customersService.customersList$),
+      map(([newInvoice, invoices, customers]) => {
+        return [
+          ...invoices,
+          {...newInvoice, customer: customers.find(customer => newInvoice['customer_id'] === customer.id)}
+        ];
+      }),
+    );
+
     this.deleteInvoiceSubscription$ = this.deleteInvoice$.pipe(
       withLatestFrom(this.initialCollection$),
       map(([id, invoices]) => {
@@ -95,6 +107,7 @@ export class InvoicesService {
     this.invoicesCollection$ = Observable.merge(
       this.initialCollection$,
       this.deleteInvoiceSubscription$,
+      this.addInvoiceSubscription$,
     )
     .publishReplay(1);
     this.invoicesCollection$.connect();

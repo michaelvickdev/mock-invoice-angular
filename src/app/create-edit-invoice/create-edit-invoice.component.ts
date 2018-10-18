@@ -4,7 +4,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import * as _ from 'lodash';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { map, filter, switchMap } from 'rxjs/operators';
+import { map, filter, switchMap, tap } from 'rxjs/operators';
 
 import { CustomersService } from '../core/services/customers.service';
 import { ProductsService } from '../core/services/products.service';
@@ -102,6 +102,7 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
         };
         return this.invoicesService.postInvoiceRequest(invoice);
       }),
+      tap(newInvoice => this.invoicesService.addInvoice$.next(newInvoice)),
     ).subscribe();
   }
 
