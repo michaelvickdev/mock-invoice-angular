@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { Subject } from 'rxjs/Subject';
-import { filter, map, mapTo, mergeMap, switchMap } from 'rxjs/operators';
+import { filter, mapTo, mergeMap, switchMap } from 'rxjs/operators';
 
 import { Invoice } from '../core/interfaces/invoice';
 import { InvoicesService } from '../core/services/invoices.service';
@@ -18,11 +18,11 @@ import { ModalBoxService } from '../core/services/modal-box.service';
   styleUrls: ['./invoices.component.scss']
 })
 export class InvoicesComponent implements OnInit {
+  columnsToDisplay: Array<string>;
 
   invoicesCollection$: Observable<Invoice[]>;
-  columnsToDisplay: Array<string>;
-  deleteInvoiceSubscription: Subscription;
   deleteInvoice$: Subject<any> = new Subject<any>();
+  deleteInvoiceSubscription: Subscription;
 
   constructor(
     private invoicesService: InvoicesService,
@@ -38,16 +38,13 @@ export class InvoicesComponent implements OnInit {
     this.invoicesCollection$ = this.invoicesService.invoicesCollection$;
 
     this.deleteInvoiceSubscription = this.deleteInvoice$.pipe(
-      mergeMap((id) => {
-        return this.modalBoxService.confirmModal('Do you want to delete an invoice?').pipe(
+      mergeMap(id => this.modalBoxService.confirmModal('Do you want to delete an invoice?').pipe(
           filter((choice) => choice),
           mapTo(id)
-        );
-      }),
-      switchMap((id) => this.invoicesService.deleteInvoice(id))
-    ).subscribe((invoices) => {
-      this.modalBoxService.confirmModal(`Invoice number ${invoices} was deleted`, false);
-    });
+        )
+      ),
+      switchMap(id => this.invoicesService.deleteInvoice(id))
+    ).subscribe(invoices => this.modalBoxService.confirmModal(`Invoice number ${invoices} was deleted`, false));
   }
 
   hideInkBar() {
