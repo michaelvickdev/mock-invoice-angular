@@ -36,9 +36,9 @@ export class InvoicesService {
   invoicesItemsList$: ConnectableObservable<InvoiceItem[]>;
 
   addInvoice$: Subject<{}> = new Subject();
-  addInvoiceSubscription$: Observable<any>;
+  addInvoiceCollection$: Observable<any>;
   deleteInvoice$: Subject<number> = new Subject();
-  deleteInvoiceSubscription$: Observable<Invoice[]>;
+  deleteInvoiceCollection$: Observable<Invoice[]>;
 
   constructor(
     private httpClient: HttpClient,
@@ -47,16 +47,14 @@ export class InvoicesService {
   ) {
     // getting initial invoices collection
     this.invoicesList$ = this.passRequest.pipe(
-      mergeScan((acc) => acc ? Observable.of(acc) : this.getInvoicesRequest(), null),
+      mergeScan(acc => acc ? Observable.of(acc) : this.getInvoicesRequest(), null),
     ).publishReplay(1);
     this.invoicesList$.connect();
 
     // getting initial invoice-items collection
     this.invoicesItemsList$ = this.passItemsRequest.pipe(
       distinctUntilChanged(),
-      switchMap((id) => {
-        return this.getInvoiceItemsRequest(id);
-      })
+      switchMap(id => this.getInvoiceItemsRequest(id)),
     ).publishReplay(1);
     this.invoicesItemsList$.connect();
 
@@ -65,48 +63,44 @@ export class InvoicesService {
       this.invoicesList$,
       this.customersService.customersList$.pipe(take(1))
     ).pipe(
-      map(([invoices, customers]) => {
-        console.error(222, invoices);
-        return invoices.map(invoice => {
-          return {
-            ...invoice,
-            customer: customers.find(customer => invoice.customer_id === customer.id),
-          };
-        });
-      }),
+      map(([invoices, customers]) => invoices.map(invoice =>
+        ({
+          ...invoice,
+          customer: customers.find(customer => invoice.customer_id === customer.id),
+        }))
+      ),
     );
 
     this.initialCollection$ = Observable.merge(
       this.invoicesListCombined$.pipe(take(1)),
     );
 
-    this.addInvoiceSubscription$ = this.addInvoice$.pipe(
+    // add new invoice to collection
+    this.addInvoiceCollection$ = this.addInvoice$.pipe(
       withLatestFrom(this.initialCollection$, this.customersService.customersList$),
       map(([newInvoice, invoices, customers]) => {
         return [
           ...invoices,
-          {...newInvoice, customer: customers.find(customer => newInvoice['customer_id'] === customer.id)}
+          {...newInvoice, customer: customers.find(customer => newInvoice['customer_id'] === customer.id)},
         ];
       }),
     );
 
-    this.deleteInvoiceSubscription$ = this.deleteInvoice$.pipe(
+    // delete an invoice invoice from collection
+    this.deleteInvoiceCollection$ = this.deleteInvoice$.pipe(
       withLatestFrom(this.initialCollection$),
       map(([id, invoices]) => {
         const invoiceToDelete = _.find(invoices, ['id', id]);
         invoices.splice(_.indexOf(invoices, invoiceToDelete), 1);
-        console.log(111, invoices, id);
-        return invoices.map(invoice => {
-          return {...invoice};
-        });
+        return [...invoices];
       }),
     );
 
     // main invoices collection to display
     this.invoicesCollection$ = Observable.merge(
       this.initialCollection$,
-      this.deleteInvoiceSubscription$,
-      this.addInvoiceSubscription$,
+      this.addInvoiceCollection$,
+      this.deleteInvoiceCollection$,
     )
     .publishReplay(1);
     this.invoicesCollection$.connect();
