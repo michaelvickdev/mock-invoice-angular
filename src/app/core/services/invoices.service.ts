@@ -11,6 +11,7 @@ import {
   mergeScan,
   switchMap,
   take,
+  tap,
   withLatestFrom
 } from 'rxjs/operators';
 import 'rxjs/add/operator/publishReplay';
@@ -127,7 +128,7 @@ export class InvoicesService {
 
   deleteInvoice(id) {
     return this.httpClient.delete<Invoice>(`invoices/${id}`).pipe(
-      map(res => this.deleteInvoice$.next(res.id))
+      tap(res => this.deleteInvoice$.next(res.id))
     );
   }
 }

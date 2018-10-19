@@ -38,13 +38,13 @@ export class InvoicesComponent implements OnInit {
     this.invoicesCollection$ = this.invoicesService.invoicesCollection$;
 
     this.deleteInvoiceSubscription = this.deleteInvoice$.pipe(
-      mergeMap(id => this.modalBoxService.confirmModal('Do you want to delete an invoice?').pipe(
-          filter((choice) => choice),
+      mergeMap(id => this.modalBoxService.confirmModal('Are you sure you want to delete an invoice?').pipe(
+          filter(choice => !!choice),
           mapTo(id)
         )
       ),
       switchMap(id => this.invoicesService.deleteInvoice(id))
-    ).subscribe(invoices => this.modalBoxService.confirmModal(`Invoice number ${invoices} was deleted`, false));
+    ).subscribe(invoices => this.modalBoxService.confirmModal(`Invoice number ${invoices.id} has been deleted`, false));
   }
 
   hideInkBar() {
