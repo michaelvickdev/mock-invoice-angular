@@ -75,25 +75,30 @@ export class InvoicesService {
       this.invoicesListCombined$.pipe(take(1)),
     );
 
-    // add new invoice to collection
+    // add a new invoice to a collection
     this.addInvoiceCollection$ = this.addInvoice$.pipe(
-      withLatestFrom(this.initialCollection$, this.customersService.customersList$),
-      map(([newInvoice, invoices, customers]) => {
-        return [
-          ...invoices,
-          {...newInvoice, customer: customers.find(customer => newInvoice['customer_id'] === customer.id)},
-        ];
-      }),
+      switchMap(newInvoice => this.invoicesCollection$.pipe(
+        take(1),
+        withLatestFrom(this.customersService.customersList$),
+        map(([invoices, customers]) => {
+          return [
+            ...invoices,
+            {...newInvoice, customer: customers.find(customer => newInvoice['customer_id'] === customer.id)},
+          ];
+        }),
+      ))
     );
 
     // delete an invoice invoice from collection
     this.deleteInvoiceCollection$ = this.deleteInvoice$.pipe(
-      withLatestFrom(this.initialCollection$),
-      map(([id, invoices]) => {
-        const invoiceToDelete = _.find(invoices, ['id', id]);
-        invoices.splice(_.indexOf(invoices, invoiceToDelete), 1);
-        return [...invoices];
-      }),
+      switchMap(id => this.invoicesCollection$.pipe(
+        take(1),
+        map(invoices => {
+          const invoiceToDelete = _.find(invoices, ['id', id]);
+          invoices.splice(_.indexOf(invoices, invoiceToDelete), 1);
+          return [...invoices];
+        })
+      ))
     );
 
     // main invoices collection to display
