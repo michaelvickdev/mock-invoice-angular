@@ -94,9 +94,7 @@ export class InvoicesService {
       switchMap(id => this.invoicesCollection$.pipe(
         take(1),
         map(invoices => {
-          const invoiceToDelete = _.find(invoices, ['id', id]);
-          invoices.splice(_.indexOf(invoices, invoiceToDelete), 1);
-          return [...invoices];
+          return invoices.filter(invoice => invoice.id !== id);
         })
       ))
     );
