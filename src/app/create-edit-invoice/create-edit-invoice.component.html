@@ -1,7 +1,7 @@
 <main class="create-main">
   <div class="create-container">
     <form [formGroup]="createInvoiceForm" (ngSubmit)="onSubmit()">
-      <div class="create-title"> Invoice #{{(invoicesList$ | async).length + 1}}</div>
+      <div class="create-title"> Invoice #{{(invoicesList$ | async)[(invoicesList$ | async).length -1]?.id + 1}}</div>
 
       <div class="create-name">
         <mat-select placeholder="Select Name" formControlName="customer_id">
