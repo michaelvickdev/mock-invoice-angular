@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import * as _ from 'lodash';
 import { Observable } from 'rxjs/Observable';
 import { ConnectableObservable } from 'rxjs/observable/ConnectableObservable';
 import { Subject } from 'rxjs/Subject';
@@ -30,7 +29,6 @@ export class InvoicesService {
   invoicesList$: ConnectableObservable<Invoice[]>;
   invoicesListCombined$: Observable<Invoice[]>;
   invoicesCollection$: ConnectableObservable<Invoice[]>;
-  initialCollection$: Observable<Invoice[]>;
 
   passItemsRequest: Subject<Observable<InvoiceItem[]>> = new Subject();
   invoicesItemsList$: ConnectableObservable<InvoiceItem[]>;
@@ -71,10 +69,6 @@ export class InvoicesService {
       ),
     );
 
-    this.initialCollection$ = Observable.merge(
-      this.invoicesListCombined$.pipe(take(1)),
-    );
-
     // add a new invoice to a collection
     this.addInvoiceCollection$ = this.addInvoice$.pipe(
       switchMap(newInvoice => this.invoicesCollection$.pipe(
@@ -101,7 +95,7 @@ export class InvoicesService {
 
     // main invoices collection to display
     this.invoicesCollection$ = Observable.merge(
-      this.initialCollection$,
+      this.invoicesListCombined$.pipe(take(1)),
       this.addInvoiceCollection$,
       this.deleteInvoiceCollection$,
     )
