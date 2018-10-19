@@ -75,12 +75,12 @@ export class InvoicesService {
       switchMap(newInvoice => this.invoicesCollection$.pipe(
         take(1),
         withLatestFrom(this.customersService.customersList$),
-        map(([invoices, customers]) => {
-          return [
+        map(([invoices, customers]) =>
+          [
             ...invoices,
             {...newInvoice, customer: customers.find(customer => newInvoice['customer_id'] === customer.id)},
-          ];
-        }),
+          ]
+        ),
       ))
     );
 
@@ -88,9 +88,7 @@ export class InvoicesService {
     this.deleteInvoiceCollection$ = this.deleteInvoice$.pipe(
       switchMap(id => this.invoicesCollection$.pipe(
         take(1),
-        map(invoices => {
-          return invoices.filter(invoice => invoice.id !== id);
-        })
+        map(invoices => invoices.filter(invoice => invoice.id !== id))
       ))
     );
 
@@ -126,7 +124,7 @@ export class InvoicesService {
     return this.httpClient.post<Invoice>('invoices', invoice);
   }
 
-  deleteInvoice(id) {
+  deleteInvoiceRequest(id) {
     return this.httpClient.delete<Invoice>(`invoices/${id}`).pipe(
       tap(res => this.deleteInvoice$.next(res.id))
     );

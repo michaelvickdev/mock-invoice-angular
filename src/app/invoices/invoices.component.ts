@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { Subject } from 'rxjs/Subject';
-import { filter, mapTo, mergeMap, switchMap } from 'rxjs/operators';
+import { filter, mapTo, mergeMap, switchMap, tap } from 'rxjs/operators';
 
 import { Invoice } from '../core/interfaces/invoice';
 import { InvoicesService } from '../core/services/invoices.service';
@@ -43,8 +43,9 @@ export class InvoicesComponent implements OnInit {
           mapTo(id)
         )
       ),
-      switchMap(id => this.invoicesService.deleteInvoice(id))
-    ).subscribe(invoices => this.modalBoxService.confirmModal(`Invoice number ${invoices.id} has been deleted`, false));
+      switchMap(id => this.invoicesService.deleteInvoiceRequest(id)),
+      tap(invoices => this.modalBoxService.confirmModal(`Invoice number ${invoices.id} has been deleted`, false)),
+    ).subscribe();
   }
 
   hideInkBar() {
