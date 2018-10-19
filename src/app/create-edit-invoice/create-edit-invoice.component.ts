@@ -12,6 +12,7 @@ import { InvoicesService } from '../core/services/invoices.service';
 
 import { Customer } from '../core/interfaces/customer';
 import { Product } from '../core/interfaces/product';
+import { Invoice } from '../core/interfaces/invoice';
 import { Subject } from 'rxjs/Subject';
 
 
@@ -25,6 +26,7 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
   createInvoiceForm: FormGroup;
   customersList$: Observable<Customer[]>;
   productsList$: Observable<Product[]>;
+  invoicesList$: Observable<Invoice[]>;
   createInvoiceFormSubscription: Subscription;
   productControlSubscription: Subscription;
   createInvoiceSubscription: Subscription;
@@ -59,6 +61,7 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.customersList$ = this.customerService.customersList$;
     this.productsList$ = this.productsService.productsList$;
+    this.invoicesList$ = this.invoicesService.invoicesCollection$;
 
     this.createInvoiceForm = new FormGroup({
       customer_id: new FormControl(null, Validators.required ),
