@@ -4,7 +4,7 @@
       <div class="create-title"> Invoice #{{(invoicesList$ | async)[(invoicesList$ | async).length -1]?.id + 1}}</div>
 
       <div class="create-name">
-        <mat-select placeholder="Select Name" formControlName="customer_id">
+        <mat-select placeholder="Select name" formControlName="customer_id">
           <mat-option *ngFor="let customer of customersList$ | async" [value]="customer.id">
             {{ customer.name }}
           </mat-option>
@@ -14,7 +14,7 @@
         <div class="create-products__info">
           <div class="create-products__column create-products__column_select">
             <div class="create-products__title">Products</div>
-            <mat-select class="create-products__select" placeholder="Select Name" formControlName="product_id">
+            <mat-select class="create-products__select" placeholder="Select product" formControlName="product_id">
               <mat-option *ngFor="let product of productsList$ | async" [value]="product.id">
                 {{ product.name }}
               </mat-option>
@@ -22,7 +22,7 @@
           </div>
           <div class="create-products__column">
             <div class="create-products__title">Quantity</div>
-            <input class="create-products__input" formControlName="quantity" [value]="0" type="number">
+            <input class="create-products__input" appOnlyNumbers formControlName="quantity" type="text">
           </div>
           <div class="create-products__column">
             <div class="create-products__title">Price</div>
@@ -33,7 +33,7 @@
         </div>
         <div class="create-discount">
           <div class="create-discount__title">Discount %</div>
-          <input class="create-discount__percent" formControlName="discount" [value]="0" type="number">
+          <input class="create-discount__percent" appOnlyNumbers formControlName="discount" type="text">
         </div>
       </div>
 
