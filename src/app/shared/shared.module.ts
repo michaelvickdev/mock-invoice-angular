@@ -17,7 +17,7 @@ import { APP_DIRECTIVES } from './directives';
 
 @NgModule({
   declarations: [
-    APP_DIRECTIVES,
+    ...APP_DIRECTIVES,
   ],
   imports: [
     CommonModule,
@@ -40,7 +40,7 @@ import { APP_DIRECTIVES } from './directives';
     MatSelectModule,
     MatDialogModule,
     RouterModule,
-    APP_DIRECTIVES,
+    ...APP_DIRECTIVES,
   ]
 })
 export class SharedModule {
