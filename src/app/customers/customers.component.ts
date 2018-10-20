@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
 import { Customer } from '../core/interfaces/customer';
+
 import { CustomersService } from '../core/services/customers.service';
 
 
@@ -14,12 +15,13 @@ import { CustomersService } from '../core/services/customers.service';
 
 export class CustomersComponent implements OnInit {
 
-  customersList$: Observable<Customer[]>;
   columnsToDisplay: Array<string>;
+  customersList$: Observable<Customer[]>;
 
   constructor(
     private customersServices: CustomersService
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this.columnsToDisplay = ['number', 'customer_name', 'address', 'phone'];

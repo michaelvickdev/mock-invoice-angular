@@ -2,10 +2,9 @@ import { Component, OnInit } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
 
-import { InvoicesService } from '../core/services/invoices.service';
-
 import { Invoice } from '../core/interfaces/invoice';
 
+import { InvoicesService } from '../core/services/invoices.service';
 
 @Component({
   selector: 'app-view-invoice',
