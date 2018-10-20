@@ -1,9 +1,9 @@
 <main class="view-main">
   <div class="view-container">
-    <div class="view-title"> Invoice #{{ (updatedInvoice$ | async)?.id}}</div>
-    <div class="view-name" routerLink="/customers">{{ (updatedInvoice$ | async)?.customer.name }}</div>
+    <div class="view-title"> Invoice #{{ (viewInvoice$ | async)?.id}}</div>
+    <div class="view-name" routerLink="/customers">{{ (viewInvoice$ | async)?.customer.name }}</div>
     <div class="view-products">
-      <mat-table [dataSource]='(updatedInvoice$ | async)?.items'>
+      <mat-table [dataSource]='(viewInvoice$ | async)?.items'>
         <ng-container matColumnDef="number">
           <mat-header-cell class="numbers" *matHeaderCellDef>Number</mat-header-cell>
           <mat-cell class="numbers" *matCellDef="let item; let rowIndex = index">{{rowIndex + 1}}</mat-cell>
@@ -29,14 +29,14 @@
       </mat-table>
       <div class="view-discount">
         <div class="view-discount__title">Discount %</div>
-        <div class="view-discount__percent">{{ (updatedInvoice$ | async)?.discount }}</div>
+        <div class="view-discount__percent">{{ (viewInvoice$ | async)?.discount }}</div>
       </div>
     </div>
     <div class="view-string"></div>
     <div class="view-total">
       <div class="view-total__title">TOTAL</div>
       <div class="view-total__amount">
-        {{ (updatedInvoice$ | async)?.total | currency }}
+        {{ (viewInvoice$ | async)?.total | currency }}
       </div>
     </div>
   </div>

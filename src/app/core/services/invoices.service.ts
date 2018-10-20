@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
+import * as _ from 'lodash';
 import { Observable } from 'rxjs/Observable';
 import { ConnectableObservable } from 'rxjs/observable/ConnectableObservable';
 import { Subject } from 'rxjs/Subject';
@@ -22,6 +23,7 @@ import { Invoice } from '../interfaces/invoice';
 import { InvoiceItem } from '../interfaces/invoice-item';
 
 import { CustomersService } from './customers.service';
+import { ProductsService } from './products.service';
 
 @Injectable()
 export class InvoicesService {
@@ -31,8 +33,10 @@ export class InvoicesService {
   invoicesListCombined$: Observable<Invoice[]>;
   invoicesCollection$: ConnectableObservable<Invoice[]>;
 
-  passItemsRequest: Subject<Observable<InvoiceItem[]>> = new Subject();
+  passItemsRequest: Subject<number> = new Subject();
+  currentInvoice$: ConnectableObservable<Invoice>;
   invoicesItemsList$: ConnectableObservable<InvoiceItem[]>;
+  viewInvoice$;
 
   addInvoice$: Subject<{}> = new Subject();
   addInvoiceCollection$: Observable<any>;
@@ -42,6 +46,7 @@ export class InvoicesService {
   constructor(
     private httpClient: HttpClient,
     private customersService: CustomersService,
+    private productsService: ProductsService,
 
   ) {
     // getting initial invoices collection
@@ -56,6 +61,32 @@ export class InvoicesService {
       switchMap(id => this.getInvoiceItemsRequest(id)),
     ).publishReplay(1);
     this.invoicesItemsList$.connect();
+
+    // getting current invoice for the view page
+    this.currentInvoice$ = this.passItemsRequest.pipe(
+      switchMap(id => this.invoicesCollection$.pipe(
+        map(invoices => invoices.find(invoice => invoice.id === id)))
+      )
+    ).publishReplay(1);
+    this.currentInvoice$.connect();
+
+    this.viewInvoice$ = combineLatest(
+      this.productsService.productsList$,
+      this.invoicesItemsList$,
+      this.currentInvoice$,
+    ).pipe(
+      map(([products, invoiceItems, currentInvoice]) => {
+        const items = _.map(invoiceItems, item =>
+          ({
+            ...item,
+            product: products.find(product => item.product_id === product.id),
+          }));
+        return {
+          ...currentInvoice,
+          items: [...items],
+        };
+      }),
+    );
 
     // adding customer info to initial invoices collection
     this.invoicesListCombined$ = combineLatest(
@@ -115,7 +146,7 @@ export class InvoicesService {
     return this.invoicesList$;
   }
 
-  getInvoiceItems(id) {
+  getInvoiceItems(id: number) {
     this.passItemsRequest.next(id);
     return this.invoicesItemsList$;
   }
