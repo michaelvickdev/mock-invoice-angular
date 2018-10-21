@@ -7,8 +7,8 @@ import { ConnectableObservable } from 'rxjs/observable/ConnectableObservable';
 import { Subject } from 'rxjs/Subject';
 import { combineLatest } from 'rxjs/observable/combineLatest';
 import {
-  distinctUntilChanged,
-  map,
+  distinctUntilChanged, filter,
+  map, mapTo, mergeMap,
   mergeScan,
   switchMap,
   take,
@@ -24,6 +24,7 @@ import { InvoiceItem } from '../interfaces/invoice-item';
 
 import { CustomersService } from './customers.service';
 import { ProductsService } from './products.service';
+import { ModalBoxService } from './modal-box.service';
 
 @Injectable()
 export class InvoicesService {
@@ -41,12 +42,15 @@ export class InvoicesService {
   addInvoice$: Subject<{}> = new Subject();
   addInvoiceCollection$: Observable<any>;
   deleteInvoice$: Subject<number> = new Subject();
+  deleteInvoiceModal$: ConnectableObservable<any>;
   deleteInvoiceCollection$: Observable<Invoice[]>;
+  deleteInvoiceOpenModal$: Subject<number> = new Subject();
 
   constructor(
     private httpClient: HttpClient,
     private customersService: CustomersService,
     private productsService: ProductsService,
+    private modalBoxService: ModalBoxService,
 
   ) {
     // getting initial invoices collection
@@ -131,6 +135,18 @@ export class InvoicesService {
     )
     .publishReplay(1);
     this.invoicesCollection$.connect();
+
+    // open delete invoice modal window and by success send a delete request to DB
+    this.deleteInvoiceModal$ = this.deleteInvoiceOpenModal$.pipe(
+      mergeMap(id => this.modalBoxService.confirmModal('Are you sure you want to delete an invoice?').pipe(
+          filter(choice => !!choice),
+          mapTo(id)
+        )
+      ),
+      switchMap(id => this.deleteInvoiceRequest(id)),
+      tap(invoices => this.modalBoxService.confirmModal(`Invoice number ${invoices.id} has been deleted`, false)),
+    ).publishReplay(1);
+    this.deleteInvoiceModal$.connect();
   }
 
   getInvoicesRequest() {
@@ -157,7 +173,7 @@ export class InvoicesService {
 
   deleteInvoiceRequest(id) {
     return this.httpClient.delete<Invoice>(`invoices/${id}`).pipe(
-      tap(res => this.deleteInvoice$.next(res.id))
+      tap(deletedInvoice => this.deleteInvoice$.next(deletedInvoice.id))
     );
   }
 }
