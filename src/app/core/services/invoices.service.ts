@@ -35,16 +35,18 @@ export class InvoicesService {
   invoicesCollection$: ConnectableObservable<Invoice[]>;
 
   passItemsRequest: Subject<number> = new Subject();
-  currentInvoice$: ConnectableObservable<Invoice>;
   invoicesItemsList$: ConnectableObservable<InvoiceItem[]>;
-  viewInvoice$;
+  currentInvoice$: ConnectableObservable<Invoice>;
+
+  viewInvoice$: Observable<Invoice>;
 
   addInvoice$: Subject<{}> = new Subject();
   addInvoiceCollection$: Observable<any>;
+
   deleteInvoice$: Subject<number> = new Subject();
-  deleteInvoiceModal$: ConnectableObservable<any>;
-  deleteInvoiceCollection$: Observable<Invoice[]>;
   deleteInvoiceOpenModal$: Subject<number> = new Subject();
+  deleteInvoiceCollection$: Observable<Invoice[]>;
+  deleteInvoiceModal$: ConnectableObservable<Invoice>;
 
   constructor(
     private httpClient: HttpClient,
@@ -127,26 +129,24 @@ export class InvoicesService {
       ))
     );
 
+    // open delete invoice modal window and by success send a delete request to DB
+    this.deleteInvoiceModal$ = this.deleteInvoiceOpenModal$.pipe(
+      mergeMap(id => this.modalBoxService.confirmModal('Are you sure you want to delete an invoice?').pipe(
+        filter(choice => !!choice),
+        mapTo(id)
+      )),
+      switchMap(id => this.deleteInvoiceRequest(id)),
+      tap(invoices => this.modalBoxService.confirmModal(`Invoice number ${invoices.id} has been deleted`, false)),
+    ).publishReplay(1);
+    this.deleteInvoiceModal$.connect();
+
     // main invoices collection to display
     this.invoicesCollection$ = Observable.merge(
       this.invoicesListCombined$.pipe(take(1)),
       this.addInvoiceCollection$,
       this.deleteInvoiceCollection$,
-    )
-    .publishReplay(1);
-    this.invoicesCollection$.connect();
-
-    // open delete invoice modal window and by success send a delete request to DB
-    this.deleteInvoiceModal$ = this.deleteInvoiceOpenModal$.pipe(
-      mergeMap(id => this.modalBoxService.confirmModal('Are you sure you want to delete an invoice?').pipe(
-          filter(choice => !!choice),
-          mapTo(id)
-        )
-      ),
-      switchMap(id => this.deleteInvoiceRequest(id)),
-      tap(invoices => this.modalBoxService.confirmModal(`Invoice number ${invoices.id} has been deleted`, false)),
     ).publishReplay(1);
-    this.deleteInvoiceModal$.connect();
+    this.invoicesCollection$.connect();
   }
 
   getInvoicesRequest() {
