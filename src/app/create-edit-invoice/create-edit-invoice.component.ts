@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import * as _ from 'lodash';
 import { Observable } from 'rxjs/Observable';
@@ -48,6 +48,9 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
   get createInvoiceQuantityControl() {
     return this.createInvoiceForm.get('quantity');
   }
+  get createInvoiceArray() {
+    return this.createInvoiceForm.get('items') as FormArray;
+  }
   get createInvoicePriceControl() {
     return this.createInvoiceForm.get('price');
   }
@@ -63,33 +66,44 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
     this.productsList$ = this.productsService.productsList$;
     this.invoicesList$ = this.invoicesService.invoicesCollection$;
 
+    // this.createInvoiceForm = new FormGroup({
+    //   customer_id: new FormControl(null, Validators.required ),
+    //   product_id: new FormControl(null, Validators.required),
+    //   quantity: new FormControl(null, {
+    //     validators: Validators.required,
+    //     updateOn: 'blur'
+    //   }),
+    //   price: new FormControl(null),
+    //   discount: new FormControl(null, {
+    //     validators: Validators.required,
+    //     updateOn: 'blur'
+    //   }),
+    //   total: new FormControl(),
+    // });
+
     this.createInvoiceForm = new FormGroup({
-      customer_id: new FormControl(null, Validators.required ),
-      product_id: new FormControl(null, Validators.required),
-      quantity: new FormControl(null, {
-        validators: Validators.required,
-        updateOn: 'blur'
-      }),
-      price: new FormControl(null),
+      customer_id: new FormControl(null),
       discount: new FormControl(null, {
-        validators: Validators.required,
         updateOn: 'blur'
       }),
       total: new FormControl(),
+      items: new FormArray([]),
     });
 
-    this.createInvoiceFormSubscription = this.createInvoiceForm.valueChanges.pipe(
-      filter(form =>  form.quantity && form.product_id),
-    ).subscribe(form => {
-        const total = (+form.quantity * form.price) * ((100 - +form.discount) / 100);
-        return this.createInvoiceTotalControl.patchValue(total, {onlySelf: true});
-      }
-    );
-    this.productControlSubscription = this.createInvoiceProductControl.valueChanges.pipe(
-      switchMap( productName => this.productsList$.pipe(
-        map(products => _.find(products, {'id': productName}).price),
-      ))
-    ).subscribe(price => this.createInvoicePriceControl.patchValue(price));
+    this.createInvoiceArray.push(this.fillInvoiceArray());
+
+    // this.createInvoiceFormSubscription = this.createInvoiceForm.valueChanges.pipe(
+    //   filter(form =>  form.quantity && form.product_id),
+    // ).subscribe(form => {
+    //     const total = (+form.quantity * form.price) * ((100 - +form.discount) / 100);
+    //     return this.createInvoiceTotalControl.patchValue(total, {onlySelf: true});
+    //   }
+    // );
+    // this.productControlSubscription = this.createInvoiceProductControl.valueChanges.pipe(
+    //   switchMap( productName => this.productsList$.pipe(
+    //     map(products => _.find(products, {'id': productName}).price),
+    //   ))
+    // ).subscribe(price => this.createInvoicePriceControl.patchValue(price));
 
     this.createInvoiceSubscription = this.passCreateInvoiceRequest$.pipe(
       switchMap(data => {
@@ -111,6 +125,17 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     this.passCreateInvoiceRequest$.next(this.createInvoiceForm.value);
+  }
+
+  fillInvoiceArray() {
+    return new FormGroup({
+      product_id: new FormControl(null, Validators.required),
+      quantity: new FormControl(null, {
+        validators: Validators.required,
+        updateOn: 'blur'
+      }),
+      price: new FormControl(null),
+    });
   }
 
   ngOnDestroy() {

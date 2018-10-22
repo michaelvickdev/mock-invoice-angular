@@ -1,7 +1,7 @@
 <main class="create-main">
   <div class="create-container">
+    <div class="create-title"> Invoice #{{(invoicesList$ | async)[(invoicesList$ | async).length -1]?.id + 1}}</div>
     <form [formGroup]="createInvoiceForm" (ngSubmit)="onSubmit()">
-      <div class="create-title"> Invoice #{{(invoicesList$ | async)[(invoicesList$ | async).length -1]?.id + 1}}</div>
 
       <div class="create-name">
         <mat-select placeholder="Select name" formControlName="customer_id">
@@ -10,27 +10,31 @@
           </mat-option>
         </mat-select>
       </div>
-      <div class="create-products">
-        <div class="create-products__info">
-          <div class="create-products__column create-products__column_select">
-            <div class="create-products__title">Products</div>
-            <mat-select class="create-products__select" placeholder="Select product" formControlName="product_id">
-              <mat-option *ngFor="let product of productsList$ | async" [value]="product.id">
-                {{ product.name }}
-              </mat-option>
-            </mat-select>
-          </div>
-          <div class="create-products__column">
-            <div class="create-products__title">Quantity</div>
-            <input class="create-products__input" appOnlyNumbers formControlName="quantity" type="text">
-          </div>
-          <div class="create-products__column">
-            <div class="create-products__title">Price</div>
-            <div class="create-products__input">
-              {{createInvoicePriceControl.value || 0 | currency}}
+      <div class="create-wrapper">
+        <div class="create-products" formArrayName="items">
+          <div class="create-products__row" *ngFor="let itemsGroup of createInvoiceArray.controls; let i = index">
+            <div class="create-products__info" [formGroupName]="i">
+              <div class="create-products__column create-products__column_select">
+                <div class="create-products__title">Products</div>
+                <mat-select class="create-products__select" placeholder="Select product" formControlName="product_id">
+                  <mat-option *ngFor="let product of productsList$ | async" [value]="product.id">
+                    {{ product.name }}
+                  </mat-option>
+                </mat-select>
+              </div>
+              <div class="create-products__column">
+                <div class="create-products__title">Quantity</div>
+                <input class="create-products__input" appOnlyNumbers formControlName="quantity" type="text">
+              </div>
+              <div class="create-products__column">
+                <div class="create-products__title">Price</div>
+                  <input class="create-products__input" readonly appOnlyNumbers formControlName="price" type="text">
+                  <!--{{createInvoicePriceControl.value || 0 | currency}}-->
+              </div>
             </div>
           </div>
         </div>
+
         <div class="create-discount">
           <div class="create-discount__title">Discount %</div>
           <input class="create-discount__percent" appOnlyNumbers formControlName="discount" type="text">
