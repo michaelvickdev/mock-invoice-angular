@@ -139,8 +139,8 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.createInvoiceFormSubscription.unsubscribe();
-    this.productControlSubscription.unsubscribe();
+    // this.createInvoiceFormSubscription.unsubscribe();
+    // this.productControlSubscription.unsubscribe();
     this.createInvoiceSubscription.unsubscribe();
   }
 }
