@@ -1,6 +1,8 @@
 <main class="create-main">
   <div class="create-container">
-    <div class="create-title"> Invoice #{{(invoicesList$ | async)[(invoicesList$ | async).length -1]?.id + 1}}</div>
+    <div class="create-title"> Invoice #{{
+      (invoicesList$ | async) ? (invoicesList$ | async)[(invoicesList$ | async).length -1]?.id + 1 : ''
+      }}</div>
     <form [formGroup]="createInvoiceForm" (ngSubmit)="onSubmit()">
 
       <div class="create-name">
