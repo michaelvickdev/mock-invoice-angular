@@ -31,9 +31,31 @@
     &-products {
       width: 50%;
       display: flex;
+      flex-direction: column;
       justify-content: space-between;
       flex-grow: 1;
       margin-bottom: 20px;
+      &__row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 15px;
+      }
+      &__column {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        flex-basis: 17%;
+        &_select {
+          flex-basis: 60%;
+        }
+      }
+      &__title {
+        font-size: 16px;
+        text-align: center;
+        background-color: #5b91d3;
+        color: #fff;
+        padding: 10px 20px;
+      }
     }
     &-discount {
       width: 50%;

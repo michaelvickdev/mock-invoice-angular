@@ -1,8 +1,10 @@
 <main class="create-main">
   <div class="create-container">
-    <div class="create-title"> Invoice #{{
+    <div class="create-title"> Invoice #
+      {{
       (invoicesList$ | async) ? (invoicesList$ | async)[(invoicesList$ | async).length -1]?.id + 1 : ''
-      }}</div>
+      }}
+    </div>
     <form [formGroup]="createInvoiceForm" (ngSubmit)="onSubmit()">
 
       <div class="create-name">
@@ -14,14 +16,27 @@
       </div>
 
       <div class="create-wrapper">
-        <div class="create-products" formArrayName="items">
-          <ng-container *ngFor="let itemsGroup of createInvoiceArray.controls; let i = index">
-            <app-invoice-items-group
-            [itemsGroup]="itemsGroup"
-            [groupIndex]="i"
-            >
-            </app-invoice-items-group>
-          </ng-container>
+        <div class="create-products">
+          <div class="create-products__row">
+            <div class="create-products__column create-products__column_select">
+              <div class="create-products__title">Products</div>
+            </div>
+            <div class="create-products__column">
+              <div class="create-products__title">Quantity</div>
+            </div>
+            <div class="create-products__column">
+              <div class="create-products__title">Price</div>
+            </div>
+          </div>
+          <div class="" formArrayName="items">
+            <ng-container *ngFor="let itemsGroup of createInvoiceArray.controls; let i = index">
+              <app-invoice-items-group
+              [itemsGroup]="itemsGroup"
+              [groupIndex]="i"
+              >
+              </app-invoice-items-group>
+            </ng-container>
+          </div>
         </div>
 
         <div class="create-discount">
