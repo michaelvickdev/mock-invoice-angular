@@ -39,20 +39,8 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
   ) {
   }
 
-  get createInvoiceNameControl() {
-    return this.createInvoiceForm.get('customer_id');
-  }
-  get createInvoiceProductControl() {
-    return this.createInvoiceForm.get('product_id');
-  }
-  get createInvoiceQuantityControl() {
-    return this.createInvoiceForm.get('quantity');
-  }
   get createInvoiceArray() {
     return this.createInvoiceForm.get('items') as FormArray;
-  }
-  get createInvoicePriceControl() {
-    return this.createInvoiceForm.get('price');
   }
   get createInvoiceDiscountControl() {
     return this.createInvoiceForm.get('discount');

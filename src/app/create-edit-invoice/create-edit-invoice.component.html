@@ -10,29 +10,16 @@
           </mat-option>
         </mat-select>
       </div>
+
       <div class="create-wrapper">
         <div class="create-products" formArrayName="items">
-          <div class="create-products__row" *ngFor="let itemsGroup of createInvoiceArray.controls; let i = index">
-            <div class="create-products__info" [formGroupName]="i">
-              <div class="create-products__column create-products__column_select">
-                <div class="create-products__title">Products</div>
-                <mat-select class="create-products__select" placeholder="Select product" formControlName="product_id">
-                  <mat-option *ngFor="let product of productsList$ | async" [value]="product.id">
-                    {{ product.name }}
-                  </mat-option>
-                </mat-select>
-              </div>
-              <div class="create-products__column">
-                <div class="create-products__title">Quantity</div>
-                <input class="create-products__input" appOnlyNumbers formControlName="quantity" type="text">
-              </div>
-              <div class="create-products__column">
-                <div class="create-products__title">Price</div>
-                  <input class="create-products__input" readonly appOnlyNumbers formControlName="price" type="text">
-                  <!--{{createInvoicePriceControl.value || 0 | currency}}-->
-              </div>
-            </div>
-          </div>
+          <ng-container *ngFor="let itemsGroup of createInvoiceArray.controls; let i = index">
+            <app-invoice-items-group
+            [itemsGroup]="itemsGroup"
+            [groupIndex]="i"
+            >
+            </app-invoice-items-group>
+          </ng-container>
         </div>
 
         <div class="create-discount">
@@ -45,8 +32,7 @@
 
       <div class="create-total">
         <div class="create-total__title">TOTAL</div>
-        <div class="create-total__amount">{{createInvoiceTotalControl.value || 0 | currency}}
-        </div>
+        <div class="create-total__amount">{{createInvoiceTotalControl.value || 0 | currency}}</div>
       </div>
       <button class="create-submit" type="submit" [disabled]="createInvoiceForm.invalid">Save</button>
     </form>

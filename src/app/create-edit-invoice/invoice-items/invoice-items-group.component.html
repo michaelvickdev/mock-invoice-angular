@@ -1,1 +1,20 @@
-<div class="">hello</div>
+<div class="create-products__row" [formGroup]="itemsGroup">
+  <div class="create-products__info">
+    <div class="create-products__column create-products__column_select">
+      <div class="create-products__title">Products</div>
+      <mat-select class="create-products__select" placeholder="Select product" formControlName="product_id">
+        <mat-option *ngFor="let product of productsList$ | async" [value]="product.id">
+          {{ product.name }}
+        </mat-option>
+      </mat-select>
+    </div>
+    <div class="create-products__column">
+      <div class="create-products__title">Quantity</div>
+      <input class="create-products__input" appOnlyNumbers formControlName="quantity" type="text">
+    </div>
+    <div class="create-products__column">
+      <div class="create-products__title">Price</div>
+      <div class="create-products__input">{{createInvoicePriceControl.value || 0 | currency}}</div>
+    </div>
+  </div>
+</div>
