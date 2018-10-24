@@ -67,15 +67,13 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
     });
 
     this.createInvoiceItemsArray.push(this.fillInvoiceArray());
-    this.createInvoiceItemsArray.push(this.fillInvoiceArray());
-    this.createInvoiceItemsArray.push(this.fillInvoiceArray());
 
     this.totalControlSubscription = this.createInvoiceItemsArray.valueChanges.pipe(
-      filter(items => !!items.filter(item => item.price && item.quantity).length),
+      filter(items => !!items.find(item => item.price)),
       map(items => items.filter(item => item.price && item.quantity))
     ).subscribe(items => {
       const totalOfArray = items.reduce((acc, item) => {
-        return acc + item.quantity * item.price;
+        return acc + +item.quantity * +item.price;
       }, 0);
       const total = totalOfArray * (100 - +this.createInvoiceDiscountControl.value) / 100;
       this.arrayAmount.next(totalOfArray);
