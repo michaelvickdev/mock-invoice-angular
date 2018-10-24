@@ -1,8 +1,10 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 
 import * as _ from 'lodash';
 import { Observable } from 'rxjs/Observable';
+import { combineLatest } from 'rxjs/observable/combineLatest';
+
 import { map, switchMap } from 'rxjs/operators';
 
 import { Product } from '../../core/interfaces/product';
@@ -28,13 +30,10 @@ export class InvoiceItemsGroupComponent implements OnInit, OnDestroy {
   }
 
   get createInvoiceProductControl() {
-    return this.itemsGroup.get('product_id');
-  }
-  get createInvoiceQuantityControl() {
-    return this.itemsGroup.get('quantity');
+    return this.itemsGroup.get('product_id') as FormControl;
   }
   get createInvoicePriceControl() {
-    return this.itemsGroup.get('price');
+    return this.itemsGroup.get('price') as FormControl;
   }
 
   ngOnInit() {

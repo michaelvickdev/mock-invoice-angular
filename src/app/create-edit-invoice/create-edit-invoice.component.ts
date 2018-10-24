@@ -14,6 +14,7 @@ import { Invoice } from '../core/interfaces/invoice';
 import { CustomersService } from '../core/services/customers.service';
 import { ProductsService } from '../core/services/products.service';
 import { InvoicesService } from '../core/services/invoices.service';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 
 @Component({
@@ -28,10 +29,11 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
   productsList$: Observable<Product[]>;
   invoicesList$: Observable<Invoice[]>;
   createInvoiceFormSubscription: Subscription;
-  productControlSubscription: Subscription;
+  totalControlSubscription: Subscription;
   createInvoiceSubscription: Subscription;
   passCreateInvoiceRequest$: Subject<any> = new Subject();
-
+  arrayAmount: BehaviorSubject<number> = new BehaviorSubject(0);
+  discountControlSubscription;
   constructor(
     private customerService: CustomersService,
     private productsService: ProductsService,
@@ -39,7 +41,7 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
   ) {
   }
 
-  get createInvoiceArray() {
+  get createInvoiceItemsArray() {
     return this.createInvoiceForm.get('items') as FormArray;
   }
   get createInvoiceDiscountControl() {
@@ -78,7 +80,9 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
       items: new FormArray([]),
     });
 
-    this.createInvoiceArray.push(this.fillInvoiceArray());
+    this.createInvoiceItemsArray.push(this.fillInvoiceArray());
+    this.createInvoiceItemsArray.push(this.fillInvoiceArray());
+    this.createInvoiceItemsArray.push(this.fillInvoiceArray());
 
     // this.createInvoiceFormSubscription = this.createInvoiceForm.valueChanges.pipe(
     //   filter(form =>  form.quantity && form.product_id),
@@ -92,6 +96,25 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
     //     map(products => _.find(products, {'id': productName}).price),
     //   ))
     // ).subscribe(price => this.createInvoicePriceControl.patchValue(price));
+
+    this.totalControlSubscription = this.createInvoiceItemsArray.valueChanges.pipe(
+      filter(items => !!items.filter(item => item.price && item.quantity).length),
+      map(items => items.filter(item => item.price && item.quantity))
+    ).subscribe(items => {
+      const totalOfArray = items.reduce((acc, item) => {
+        return acc + item.quantity * item.price;
+      }, 0);
+      const total = totalOfArray * (100 - +this.createInvoiceDiscountControl.value) / 100;
+      this.arrayAmount.next(totalOfArray);
+      this.createInvoiceTotalControl.patchValue(total);
+    });
+
+    this.discountControlSubscription = this.createInvoiceDiscountControl.valueChanges.pipe(
+      switchMap( discount => this.arrayAmount.pipe(
+        map(totalOfArray => totalOfArray * (100 - +discount) / 100),
+        tap(total => this.createInvoiceTotalControl.patchValue(total))
+      )),
+    ).subscribe();
 
     this.createInvoiceSubscription = this.passCreateInvoiceRequest$.pipe(
       switchMap(data => {
@@ -129,6 +152,8 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     // this.createInvoiceFormSubscription.unsubscribe();
     // this.productControlSubscription.unsubscribe();
+    this.totalControlSubscription.unsubscribe();
+    this.discountControlSubscription.unsubscribe();
     this.createInvoiceSubscription.unsubscribe();
   }
 }

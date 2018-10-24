@@ -29,7 +29,7 @@
             </div>
           </div>
           <div class="" formArrayName="items">
-            <ng-container *ngFor="let itemsGroup of createInvoiceArray.controls; let i = index">
+            <ng-container *ngFor="let itemsGroup of createInvoiceItemsArray.controls; let i = index">
               <app-invoice-items-group
               [itemsGroup]="itemsGroup"
               [groupIndex]="i"
