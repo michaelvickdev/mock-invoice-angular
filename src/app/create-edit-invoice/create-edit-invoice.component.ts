@@ -89,15 +89,16 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
 
     this.createInvoiceSubscription = this.passCreateInvoiceRequest$.pipe(
       switchMap(data => {
-        const invoiceItems = {
-          product_id: data.product_id,
-          quantity: data.quantity,
-        };
+        const invoiceItems = data.items.map(item =>
+          ({
+          product_id: item.product_id,
+          quantity: item.quantity,
+        }));
         const invoice = {
           customer_id: data.customer_id,
           discount: data.discount,
           total: data.total,
-          items: [{...invoiceItems}],
+          items: [...invoiceItems],
         };
         return this.invoicesService.postInvoiceRequest(invoice);
       }),
