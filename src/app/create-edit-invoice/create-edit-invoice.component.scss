@@ -36,6 +36,7 @@
       flex-grow: 1;
       margin-bottom: 20px;
       &__row {
+        position: relative;
         display: flex;
         justify-content: space-between;
         margin-bottom: 15px;

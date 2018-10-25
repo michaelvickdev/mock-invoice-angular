@@ -66,7 +66,7 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
       items: new FormArray([]),
     });
 
-    this.createInvoiceItemsArray.push(this.addItemsGroups());
+    this.addItemsGroup();
 
     this.totalControlSubscription = this.createInvoiceItemsArray.valueChanges.pipe(
       filter(items => !!items.find(item => item.price)),
@@ -108,6 +108,10 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     this.passCreateInvoiceRequest$.next(this.createInvoiceForm.value);
+  }
+
+  addItemsGroup() {
+    this.createInvoiceItemsArray.push(this.addItemsGroups());
   }
 
   addItemsGroups() {

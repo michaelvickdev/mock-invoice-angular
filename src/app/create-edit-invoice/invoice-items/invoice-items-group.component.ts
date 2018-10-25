@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 
 import * as _ from 'lodash';
@@ -19,6 +19,7 @@ import { Subscription } from 'rxjs/Subscription';
 export class InvoiceItemsGroupComponent implements OnInit, OnDestroy {
   @Input('itemsGroup') itemsGroup: FormGroup;
   @Input('groupIndex') groupIndex: number;
+  @Output() addItemsGroup = new EventEmitter();
 
   productsList$: Observable<Product[]>;
   productControlSubscription: Subscription;
@@ -47,5 +48,9 @@ export class InvoiceItemsGroupComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.productControlSubscription.unsubscribe();
+  }
+
+  addGroup() {
+    this.addItemsGroup.emit();
   }
 }
