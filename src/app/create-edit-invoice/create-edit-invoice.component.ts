@@ -33,7 +33,7 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
   createInvoiceSubscription: Subscription;
 
   passCreateInvoiceRequest$: Subject<any> = new Subject();
-  arrayAmount: BehaviorSubject<number> = new BehaviorSubject(0);
+  arrayAmount$: BehaviorSubject<number> = new BehaviorSubject(0);
 
   constructor(
     private customerService: CustomersService,
@@ -66,7 +66,7 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
       items: new FormArray([]),
     });
 
-    this.createInvoiceItemsArray.push(this.fillInvoiceArray());
+    this.createInvoiceItemsArray.push(this.addItemsGroups());
 
     this.totalControlSubscription = this.createInvoiceItemsArray.valueChanges.pipe(
       filter(items => !!items.find(item => item.price)),
@@ -76,12 +76,12 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
         return acc + +item.quantity * +item.price;
       }, 0);
       const total = totalOfArray * (100 - +this.createInvoiceDiscountControl.value) / 100;
-      this.arrayAmount.next(totalOfArray);
+      this.arrayAmount$.next(totalOfArray);
       this.createInvoiceTotalControl.patchValue(total);
     });
 
     this.discountControlSubscription = this.createInvoiceDiscountControl.valueChanges.pipe(
-      switchMap( discount => this.arrayAmount.pipe(
+      switchMap( discount => this.arrayAmount$.pipe(
         map(totalOfArray => totalOfArray * (100 - +discount) / 100),
         tap(total => this.createInvoiceTotalControl.patchValue(total))
       )),
@@ -109,7 +109,7 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
     this.passCreateInvoiceRequest$.next(this.createInvoiceForm.value);
   }
 
-  fillInvoiceArray() {
+  addItemsGroups() {
     return new FormGroup({
       product_id: new FormControl(null, Validators.required),
       quantity: new FormControl(null, {
