@@ -14,7 +14,7 @@
 
       <ng-container matColumnDef="customer_name">
         <mat-header-cell *matHeaderCellDef> Customer Name</mat-header-cell>
-        <mat-cell *matCellDef="let invoice"> {{invoice.customer.name}}</mat-cell>
+        <mat-cell *matCellDef="let invoice"> {{invoice.customer?.name}}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="discount">
