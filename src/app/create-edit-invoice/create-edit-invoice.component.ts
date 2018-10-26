@@ -5,7 +5,6 @@ import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { Subject } from 'rxjs/Subject';
 import { map, filter, switchMap, tap } from 'rxjs/operators';
-import { combineLatest } from 'rxjs/observable/combineLatest';
 
 import { Customer } from '../core/interfaces/customer';
 import { Product } from '../core/interfaces/product';
@@ -14,7 +13,6 @@ import { Invoice } from '../core/interfaces/invoice';
 import { CustomersService } from '../core/services/customers.service';
 import { ProductsService } from '../core/services/products.service';
 import { InvoicesService } from '../core/services/invoices.service';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 
 @Component({
@@ -34,7 +32,6 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
   createInvoiceSubscription: Subscription;
 
   passCreateInvoiceRequest$: Subject<any> = new Subject();
-  arrayAmount$: BehaviorSubject<number> = new BehaviorSubject(0);
 
   constructor(
     private customerService: CustomersService,
@@ -67,6 +64,7 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
       items: new FormArray([]),
     });
     
+    // count the total amount of the invoice based on products and discount
     this.totalControlSubscription = Observable.merge(
       this.createInvoiceItemsArray.valueChanges,
       this.createInvoiceDiscountControl.valueChanges,
@@ -81,25 +79,8 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
     ).subscribe(total => this.createInvoiceTotalControl.patchValue(total));
 
     this.addItemsGroup();
-
-    // this.totalControlSubscription = this.createInvoiceItemsArray.valueChanges.pipe(
-    //   filter(items => !!items.find(item => item.price)),
-    //   map(items => items.filter(item => item.price && item.quantity))
-    // ).subscribe(items => {
-    //   const totalOfArray = items.reduce((acc, item) => {
-    //     return acc + +item.quantity * +item.price;
-    //   }, 0);
-    //   const total = totalOfArray * (100 - +this.createInvoiceDiscountControl.value) / 100;
-    //   this.arrayAmount$.next(totalOfArray);
-    //   this.createInvoiceTotalControl.patchValue(total);
-    // });
-    //
-    // this.discountControlSubscription = this.createInvoiceDiscountControl.valueChanges.pipe(
-    //   switchMap( discount => this.arrayAmount$.pipe(
-    //     map(totalOfArray => totalOfArray * (100 - +discount) / 100),
-    //   )),
-    // ).subscribe(total => this.createInvoiceTotalControl.patchValue(total));
-
+    
+    // prepare data to according format and save new invoice
     this.createInvoiceSubscription = this.passCreateInvoiceRequest$.pipe(
       switchMap(data => {
         const invoiceItems = data.items.map(item =>
