@@ -63,7 +63,9 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
       total: new FormControl(),
       items: new FormArray([]),
     });
-    
+  
+    this.addItemsGroup();
+  
     // count the total amount of the invoice based on products and discount
     this.totalControlSubscription = Observable.merge(
       this.createInvoiceItemsArray.valueChanges,
@@ -77,8 +79,6 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
         return (totalOfArray - totalOfArray * this.createInvoiceDiscountControl.value * 0.01).toFixed(2);
       }),
     ).subscribe(total => this.createInvoiceTotalControl.patchValue(total));
-
-    this.addItemsGroup();
     
     // prepare data to according format and save new invoice
     this.createInvoiceSubscription = this.passCreateInvoiceRequest$.pipe(
@@ -118,7 +118,6 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.totalControlSubscription.unsubscribe();
-    this.discountControlSubscription.unsubscribe();
     this.createInvoiceSubscription.unsubscribe();
   }
 }
