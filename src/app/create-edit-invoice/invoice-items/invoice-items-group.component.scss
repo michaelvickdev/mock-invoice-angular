@@ -22,17 +22,8 @@
     }
     &__button {
       position: absolute;
-      top: 50%;
+      top: 53%;
       right: -50px;
-      transform: translateY(-50%);
-      width: 28px;
-      min-width: 28px;
-      height: 28px;
-      line-height: 28px;
-      font-size: 18px;
-      padding: 0;
-      border: 1px solid grey;
-      border-radius: 50%;
       background-color: red;
     }
   }
