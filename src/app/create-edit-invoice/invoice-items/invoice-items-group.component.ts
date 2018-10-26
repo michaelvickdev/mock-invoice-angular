@@ -19,7 +19,6 @@ import { Subscription } from 'rxjs/Subscription';
 export class InvoiceItemsGroupComponent implements OnInit, OnDestroy {
   @Input('itemsGroup') itemsGroup: FormGroup;
   @Input('groupIndex') groupIndex: number;
-  @Output() addItemsGroup = new EventEmitter();
 
   productsList$: Observable<Product[]>;
   productControlSubscription: Subscription;
@@ -48,9 +47,5 @@ export class InvoiceItemsGroupComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.productControlSubscription.unsubscribe();
-  }
-
-  addGroup() {
-    this.addItemsGroup.emit();
   }
 }
