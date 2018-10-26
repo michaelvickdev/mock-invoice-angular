@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { Subject } from 'rxjs/Subject';
 import { map, filter, switchMap, tap } from 'rxjs/operators';
+import { combineLatest } from 'rxjs/observable/combineLatest';
 
 import { Customer } from '../core/interfaces/customer';
 import { Product } from '../core/interfaces/product';
@@ -65,27 +66,39 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
       total: new FormControl(),
       items: new FormArray([]),
     });
+    
+    this.totalControlSubscription = Observable.merge(
+      this.createInvoiceItemsArray.valueChanges,
+      this.createInvoiceDiscountControl.valueChanges,
+    ).pipe(
+      filter(() => !!this.createInvoiceItemsArray.value.find(item => item.price)),
+      map(() => this.createInvoiceItemsArray.length ?
+        this.createInvoiceItemsArray.value.reduce((acc, item) => acc + +item.quantity * +item.price, 0) : 0
+      ),
+      map(totalOfArray => {
+        return (totalOfArray - totalOfArray * this.createInvoiceDiscountControl.value * 0.01).toFixed(2);
+      }),
+    ).subscribe(total => this.createInvoiceTotalControl.patchValue(total));
 
     this.addItemsGroup();
 
-    this.totalControlSubscription = this.createInvoiceItemsArray.valueChanges.pipe(
-      filter(items => !!items.find(item => item.price)),
-      map(items => items.filter(item => item.price && item.quantity))
-    ).subscribe(items => {
-      const totalOfArray = items.reduce((acc, item) => {
-        return acc + +item.quantity * +item.price;
-      }, 0);
-      const total = totalOfArray * (100 - +this.createInvoiceDiscountControl.value) / 100;
-      this.arrayAmount$.next(totalOfArray);
-      this.createInvoiceTotalControl.patchValue(total);
-    });
-
-    this.discountControlSubscription = this.createInvoiceDiscountControl.valueChanges.pipe(
-      switchMap( discount => this.arrayAmount$.pipe(
-        map(totalOfArray => totalOfArray * (100 - +discount) / 100),
-        tap(total => this.createInvoiceTotalControl.patchValue(total))
-      )),
-    ).subscribe();
+    // this.totalControlSubscription = this.createInvoiceItemsArray.valueChanges.pipe(
+    //   filter(items => !!items.find(item => item.price)),
+    //   map(items => items.filter(item => item.price && item.quantity))
+    // ).subscribe(items => {
+    //   const totalOfArray = items.reduce((acc, item) => {
+    //     return acc + +item.quantity * +item.price;
+    //   }, 0);
+    //   const total = totalOfArray * (100 - +this.createInvoiceDiscountControl.value) / 100;
+    //   this.arrayAmount$.next(totalOfArray);
+    //   this.createInvoiceTotalControl.patchValue(total);
+    // });
+    //
+    // this.discountControlSubscription = this.createInvoiceDiscountControl.valueChanges.pipe(
+    //   switchMap( discount => this.arrayAmount$.pipe(
+    //     map(totalOfArray => totalOfArray * (100 - +discount) / 100),
+    //   )),
+    // ).subscribe(total => this.createInvoiceTotalControl.patchValue(total));
 
     this.createInvoiceSubscription = this.passCreateInvoiceRequest$.pipe(
       switchMap(data => {
@@ -102,8 +115,7 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
         };
         return this.invoicesService.postInvoiceRequest(invoice);
       }),
-      tap(newInvoice => this.invoicesService.addInvoice$.next(newInvoice)),
-    ).subscribe();
+    ).subscribe(newInvoice => this.invoicesService.addInvoice$.next(newInvoice));
   }
 
   onSubmit() {
@@ -111,18 +123,16 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
   }
 
   addItemsGroup() {
-    this.createInvoiceItemsArray.push(this.addItemsGroups());
-  }
-
-  addItemsGroups() {
-    return new FormGroup({
-      product_id: new FormControl(null, Validators.required),
-      quantity: new FormControl(null, {
-        validators: Validators.required,
-        updateOn: 'blur'
-      }),
-      price: new FormControl(null),
-    });
+    this.createInvoiceItemsArray.push(
+       new FormGroup({
+        product_id: new FormControl(null, Validators.required),
+        quantity: new FormControl(null, {
+          validators: Validators.required,
+          updateOn: 'blur'
+        }),
+        price: new FormControl(null),
+      })
+    );
   }
 
   ngOnDestroy() {
