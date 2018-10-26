@@ -12,9 +12,5 @@
   <div class="create-products__column">
     <div class="create-products__input">{{createInvoicePriceControl.value || 0 | currency}}</div>
   </div>
-  <a class="create-products__button create-products__button_add"
-     mat-raised-button
-     (click)="deleteGroup()"
-  >-
-  </a>
+  <button class="create-products__button create-products__button_add" type="button" (click)="deleteGroup()">-</button>
 </div>
