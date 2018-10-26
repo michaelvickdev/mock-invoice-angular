@@ -115,6 +115,10 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
       })
     );
   }
+  
+  deleteItemsGroup(index: number) {
+    this.createInvoiceItemsArray.removeAt(index);
+  }
 
   ngOnDestroy() {
     this.totalControlSubscription.unsubscribe();
