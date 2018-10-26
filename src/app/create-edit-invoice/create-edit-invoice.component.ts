@@ -56,10 +56,8 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
     this.invoicesList$ = this.invoicesService.invoicesCollection$;
 
     this.createInvoiceForm = new FormGroup({
-      customer_id: new FormControl(null),
-      discount: new FormControl(null, {
-        updateOn: 'blur'
-      }),
+      customer_id: new FormControl(null, Validators.required),
+      discount: new FormControl(null),
       total: new FormControl(),
       items: new FormArray([]),
     });
@@ -107,10 +105,7 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
     this.createInvoiceItemsArray.push(
        new FormGroup({
         product_id: new FormControl(null, Validators.required),
-        quantity: new FormControl(null, {
-          validators: Validators.required,
-          updateOn: 'blur'
-        }),
+        quantity: new FormControl(null, Validators.required),
         price: new FormControl(null),
       })
     );

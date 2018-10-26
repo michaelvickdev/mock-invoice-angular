@@ -53,7 +53,7 @@
         <div class="create-total__title">TOTAL</div>
         <div class="create-total__amount">{{createInvoiceTotalControl.value || 0 | currency}}</div>
       </div>
-      <button class="create-submit" type="submit" [disabled]="createInvoiceForm.invalid">Save</button>
+      <button mat-raised-button class="create-submit" type="submit" [disabled]="createInvoiceForm.invalid">Save</button>
     </form>
   </div>
 </main>
