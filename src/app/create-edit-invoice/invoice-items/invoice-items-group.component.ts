@@ -4,7 +4,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import * as _ from 'lodash';
 import { Observable } from 'rxjs/Observable';
 
-import { map, switchMap } from 'rxjs/operators';
+import { filter, map, switchMap } from 'rxjs/operators';
 
 import { Product } from '../../core/interfaces/product';
 
@@ -42,6 +42,7 @@ export class InvoiceItemsGroupComponent implements OnInit, OnDestroy {
     this.productsList$ = this.productsService.productsList$;
 
     this.productControlSubscription = this.createInvoiceProductControl.valueChanges.pipe(
+      filter(res => !!res),
       switchMap( productName => this.productsList$.pipe(
         map(products => _.find(products, {'id': productName}).price),
       ))
