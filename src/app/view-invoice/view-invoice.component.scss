@@ -43,17 +43,20 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    padding-top: 15px;
+    padding-top: 10px;
     &__title {
       background-color: #5b91d3;
       color: #fff;
-      padding: 5px 15px;
-      border: 1px solid black;
-      margin-bottom: 20px;
+      padding: 10px 15px;
+      margin-bottom: 14px;
     }
     &__percent {
-      padding: 5px 47px;
-      border: 1px solid black;
+      width: 108px;
+      height: 36px;
+      font-size: 16px;
+      text-align: center;
+      padding: 7px 10px;
+      border: 1px solid #5b91d3;
     }
   }
   &-string {
