@@ -37,7 +37,7 @@
           </button>
           <button mat-raised-button color="accent"
             (click)="hideInkBar()"
-            routerLink="/edit-invoice">
+            [routerLink]="['/edit-invoice', invoice.id]">
             Edit
           </button>
           <button mat-raised-button color="warn" (click)="deleteInvoice(invoice.id)">Delete</button>
