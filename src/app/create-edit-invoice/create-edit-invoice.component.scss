@@ -72,6 +72,7 @@
         border: 1px solid grey;
         border-radius: 50%;
         background-color: #5b91d3;
+        cursor: pointer;
       }
     }
     &-discount {
@@ -85,14 +86,14 @@
         background-color: #5b91d3;
         color: #fff;
         padding: 10px 15px;
-        margin-bottom: 20px;
+        margin-bottom: 14px;
       }
       &__percent {
         width: 108px;
         height: 36px;
         font-size: 16px;
         text-align: center;
-        padding: 0 5px;
+        padding: 0 10px;
         border: 1px solid #5b91d3;
       }
     }
@@ -121,7 +122,7 @@
       }
     }
     &-submit {
-      padding: 10px 25px;
+      padding: 5px 55px;
       background-color: #5b91d3;
       color: #ffffff;
       border: 1px solid black;
