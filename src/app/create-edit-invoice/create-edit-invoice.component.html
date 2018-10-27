@@ -33,12 +33,13 @@
               <app-invoice-items-group
               [itemsGroup]="itemsGroup"
               [groupIndex]="i"
+              [arrayLength]="createInvoiceItemsArray.length"
               (deleteItemsGroup)="deleteItemsGroup(i)"
               >
               </app-invoice-items-group>
             </ng-container>
           </div>
-          <button class="create-products__button" type="button" (click)="addItemsGroup()">+</button>
+          <button [hidden]="createInvoiceItemsArray.invalid" class="create-products__button" type="button" (click)="addItemsGroup()">+</button>
         </div>
 
         <div class="create-discount">

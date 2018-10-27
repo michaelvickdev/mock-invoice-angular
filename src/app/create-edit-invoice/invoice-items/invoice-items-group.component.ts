@@ -17,8 +17,10 @@ import { Subscription } from 'rxjs/Subscription';
   styleUrls: ['./invoice-items-group.component.scss']
 })
 export class InvoiceItemsGroupComponent implements OnInit, OnDestroy {
+  
   @Input('itemsGroup') itemsGroup: FormGroup;
   @Input('groupIndex') groupIndex: number;
+  @Input('arrayLength') arrayLength: number;
   @Output() deleteItemsGroup = new EventEmitter();
   
   productsList$: Observable<Product[]>;

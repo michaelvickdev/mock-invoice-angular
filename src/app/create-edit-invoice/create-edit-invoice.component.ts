@@ -28,7 +28,6 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
   invoicesList$: Observable<Invoice[]>;
 
   totalControlSubscription: Subscription;
-  discountControlSubscription: Subscription;
   createInvoiceSubscription: Subscription;
 
   passCreateInvoiceRequest$: Subject<any> = new Subject();
