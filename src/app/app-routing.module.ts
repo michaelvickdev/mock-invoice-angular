@@ -25,7 +25,7 @@ const appRoutes: Routes = [
       },
       { path: 'create-invoice',
         loadChildren: './create-edit-invoice/create-edit-invoice.module#CreateEditInvoiceModule',
-        resolve: [ InvoicesResolver, CustomersResolver, ProductsResolver ],
+        resolve: [ InvoicesResolver, CustomersResolver, ProductsResolver, ViewInvoiceResolver ],
         data: {type: 'create'},
       },
       { path: 'view-invoice/:id',
