@@ -25,7 +25,8 @@ const appRoutes: Routes = [
       },
       { path: 'create-invoice',
         loadChildren: './create-edit-invoice/create-edit-invoice.module#CreateEditInvoiceModule',
-        resolve: [ InvoicesResolver, CustomersResolver, ProductsResolver ]
+        resolve: [ InvoicesResolver, CustomersResolver, ProductsResolver ],
+        data: {type: 'create'},
       },
       { path: 'view-invoice/:id',
         loadChildren: './view-invoice/view-invoice.module#ViewInvoiceModule',
@@ -33,7 +34,8 @@ const appRoutes: Routes = [
       },
       { path: 'edit-invoice/:id',
         loadChildren: './create-edit-invoice/create-edit-invoice.module#CreateEditInvoiceModule',
-        resolve: [ InvoicesResolver, CustomersResolver, ProductsResolver, ViewInvoiceResolver]
+        resolve: [ InvoicesResolver, CustomersResolver, ProductsResolver, ViewInvoiceResolver],
+        data: {type: 'edit'},
       },
     ],
   },
