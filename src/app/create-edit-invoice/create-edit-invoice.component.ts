@@ -83,11 +83,12 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
       this.createInvoiceDiscountControl.valueChanges,
     ).pipe(
       filter(() => !!this.createInvoiceItemsArray.value.find(item => item.price)),
-      map(() => this.createInvoiceItemsArray.length ?
-        this.createInvoiceItemsArray.value.reduce((acc, item) => acc + +item.quantity * +item.price, 0) : 0
-      ),
-      map(totalOfArray => {
-        return (totalOfArray - totalOfArray * this.createInvoiceDiscountControl.value * 0.01).toFixed(2);
+      map(() => {
+        if (this.createInvoiceItemsArray.length) {
+          const totalOfArray = this.createInvoiceItemsArray.value.reduce((acc, item) => acc + item.quantity * item.price, 0);
+          return (totalOfArray - totalOfArray * this.createInvoiceDiscountControl.value * 0.01).toFixed(2);
+        }
+        return 0;
       }),
     ).subscribe(total => this.createInvoiceTotalControl.patchValue(total));
     
