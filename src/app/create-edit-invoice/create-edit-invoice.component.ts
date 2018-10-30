@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { Subject } from 'rxjs/Subject';
+import { combineLatest } from 'rxjs/observable/combineLatest';
 import { map, filter, switchMap, tap, debounceTime, take } from 'rxjs/operators';
 
 import { Customer } from '../core/interfaces/customer';
@@ -35,7 +36,6 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
   editInvoiceSubscription: Subscription;
   
   passCreateInvoiceRequest$: Subject<any> = new Subject();
-  routeDataType: string;
   
   constructor(
     private customerService: CustomersService,
@@ -56,8 +56,6 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.routeDataType = this.route.snapshot.data['type'];
-
     this.createInvoiceForm = new FormGroup({
       customer_id: new FormControl(null, Validators.required),
       discount: new FormControl(null),
@@ -75,11 +73,14 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
       map(invoices => invoices[invoices.length - 1].id + 1)
     );
   
-    this.editInvoiceSubscription = this.invoicesService.viewInvoice$.pipe(
+    this.editInvoiceSubscription = combineLatest(
+      this.route.data,
+      this.invoicesService.viewInvoice$,
+    ).pipe(
       debounceTime(100),
-      take(1)
-    ).subscribe(invoice => {
-      if (this.routeDataType === 'create') {
+      take(1),
+    ).subscribe(([data, invoice ]) => {
+      if (data['type'] === 'create') {
         return this.addItemGroup();
       }
       this.createInvoiceForm.patchValue(invoice);
