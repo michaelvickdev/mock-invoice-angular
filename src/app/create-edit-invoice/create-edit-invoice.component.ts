@@ -4,7 +4,7 @@ import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { Subject } from 'rxjs/Subject';
-import { map, filter, switchMap, tap, debounceTime, take } from 'rxjs/operators';
+import { map, filter, switchMap, tap, debounceTime, take, skip, startWith } from 'rxjs/operators';
 
 import { Customer } from '../core/interfaces/customer';
 import { Product } from '../core/interfaces/product';
@@ -28,12 +28,14 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
   customersList$: Observable<Customer[]>;
   productsList$: Observable<Product[]>;
   invoicesList$: Observable<Invoice[]>;
+  viewInvoice$: Observable<Invoice>;
 
   totalControlSubscription: Subscription;
   createInvoiceSubscription: Subscription;
   editInvoiceSubscription: Subscription;
   
   passCreateInvoiceRequest$: Subject<any> = new Subject();
+  routeDataType: string;
   
   constructor(
     private customerService: CustomersService,
@@ -57,6 +59,9 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
     this.customersList$ = this.customerService.customersList$;
     this.productsList$ = this.productsService.productsList$;
     this.invoicesList$ = this.invoicesService.invoicesCollection$;
+    this.viewInvoice$ = this.invoicesService.viewInvoice$;
+    
+    this.routeDataType = this.route.snapshot.data['type'];
 
     this.createInvoiceForm = new FormGroup({
       customer_id: new FormControl(null, Validators.required),
@@ -69,12 +74,11 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
       debounceTime(100),
       take(1)
     ).subscribe(invoice => {
-      if (this.route.snapshot.data['type'] === 'create') {
-        this.createInvoiceItemsArray.push(this.addItemsGroup());
-      } else {
-        this.createInvoiceForm.patchValue(invoice);
-        invoice.items.forEach(val =>  this.createInvoiceItemsArray.push(this.addItemsGroup(val)));
+      if (this.routeDataType === 'create') {
+        return this.addItemGroup();
       }
+      this.createInvoiceForm.patchValue(invoice);
+      invoice.items.forEach(item =>  this.addItemGroup(item));
     });
   
     // count the total amount of the invoice based on products and discount
@@ -114,8 +118,12 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
   onSubmit() {
     this.passCreateInvoiceRequest$.next(this.createInvoiceForm.value);
   }
+  
+  addItemGroup(item = new InvoiceItemModel()) {
+    this.createInvoiceItemsArray.push(this.addItemGroups(item));
+  }
 
-  addItemsGroup(item = new InvoiceItemModel()) {
+  addItemGroups(item) {
     return new FormGroup({
       product_id: new FormControl(item.product_id, Validators.required),
       quantity: new FormControl(item.quantity, Validators.required),
