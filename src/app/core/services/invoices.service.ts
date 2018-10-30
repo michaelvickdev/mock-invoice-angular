@@ -25,6 +25,7 @@ import { InvoiceItem } from '../interfaces/invoice-item';
 import { CustomersService } from './customers.service';
 import { ProductsService } from './products.service';
 import { ModalBoxService } from './modal-box.service';
+import { Subscription } from 'rxjs/Subscription';
 
 @Injectable()
 export class InvoicesService {
@@ -39,7 +40,10 @@ export class InvoicesService {
   currentInvoice$: ConnectableObservable<Invoice>;
 
   viewInvoice$: Observable<Invoice>;
-
+  
+  passCreateInvoiceRequest$: Subject<any> = new Subject();
+  createInvoice$: Observable<Invoice>;
+  
   addInvoice$: Subject<{}> = new Subject();
   addInvoiceCollection$: Observable<any>;
 
@@ -105,6 +109,24 @@ export class InvoicesService {
           customer: customers.find(customer => invoice.customer_id === customer.id),
         }))
       ),
+    );
+  
+    // prepare data to according format and save new invoice
+    this.createInvoice$ = this.passCreateInvoiceRequest$.pipe(
+      switchMap(data => {
+        const invoiceItems = data.items.map(item =>
+          ({
+            product_id: item.product_id,
+            quantity: item.quantity,
+          }));
+        const invoice = {
+          customer_id: data.customer_id,
+          discount: data.discount,
+          total: data.total,
+          items: [...invoiceItems],
+        };
+        return this.postInvoiceRequest(invoice);
+      }),
     );
 
     // add a new invoice to a collection

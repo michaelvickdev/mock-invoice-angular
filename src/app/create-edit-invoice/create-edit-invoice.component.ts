@@ -102,27 +102,12 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
       }),
     ).subscribe(total => this.createInvoiceTotalControl.patchValue(total));
     
-    // prepare data to according format and save new invoice
-    this.createInvoiceSubscription = this.passCreateInvoiceRequest$.pipe(
-      switchMap(data => {
-        const invoiceItems = data.items.map(item =>
-          ({
-          product_id: item.product_id,
-          quantity: item.quantity,
-        }));
-        const invoice = {
-          customer_id: data.customer_id,
-          discount: data.discount,
-          total: data.total,
-          items: [...invoiceItems],
-        };
-        return this.invoicesService.postInvoiceRequest(invoice);
-      }),
-    ).subscribe(newInvoice => this.invoicesService.addInvoice$.next(newInvoice));
+    this.createInvoiceSubscription = this.invoicesService.createInvoice$
+      .subscribe(newInvoice => this.invoicesService.addInvoice$.next(newInvoice));
   }
 
   onSubmit() {
-    this.passCreateInvoiceRequest$.next(this.createInvoiceForm.value);
+    this.invoicesService.passCreateInvoiceRequest$.next(this.createInvoiceForm.value);
   }
   
   addItemGroup(item = new InvoiceItemModel()) {
