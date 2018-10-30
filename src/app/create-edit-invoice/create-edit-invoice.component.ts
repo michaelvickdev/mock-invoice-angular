@@ -1,20 +1,20 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { Subject } from 'rxjs/Subject';
-import { map, filter, switchMap, tap, debounceTime, take, skip, startWith } from 'rxjs/operators';
+import { map, filter, switchMap, tap, debounceTime, take } from 'rxjs/operators';
 
 import { Customer } from '../core/interfaces/customer';
 import { Product } from '../core/interfaces/product';
 import { Invoice } from '../core/interfaces/invoice';
+import { InvoiceItemModel } from '../core/models/invoice-item-model';
 
 import { CustomersService } from '../core/services/customers.service';
 import { ProductsService } from '../core/services/products.service';
 import { InvoicesService } from '../core/services/invoices.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { InvoiceItemModel } from '../core/models/invoice-item-model';
 
 
 @Component({
@@ -27,9 +27,9 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
   createInvoiceForm: FormGroup;
   customersList$: Observable<Customer[]>;
   productsList$: Observable<Product[]>;
-  invoicesList$: Observable<Invoice[]>;
   viewInvoice$: Observable<Invoice>;
-
+  newInvoiceId$: Observable<number>;
+  
   totalControlSubscription: Subscription;
   createInvoiceSubscription: Subscription;
   editInvoiceSubscription: Subscription;
@@ -56,11 +56,6 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.customersList$ = this.customerService.customersList$;
-    this.productsList$ = this.productsService.productsList$;
-    this.invoicesList$ = this.invoicesService.invoicesCollection$;
-    this.viewInvoice$ = this.invoicesService.viewInvoice$;
-    
     this.routeDataType = this.route.snapshot.data['type'];
 
     this.createInvoiceForm = new FormGroup({
@@ -69,6 +64,16 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
       total: new FormControl(),
       items: new FormArray([]),
     });
+  
+    this.customersList$ = this.customerService.customersList$;
+    this.productsList$ = this.productsService.productsList$;
+    this.viewInvoice$ = this.invoicesService.viewInvoice$;
+  
+    this.newInvoiceId$ = this.route.data.pipe(
+      switchMap(data => data['type'] === 'create' ? this.invoicesService.invoicesList$ : Observable.of(null)),
+      filter(value => !!value),
+      map(invoices => invoices[invoices.length - 1].id + 1)
+    );
   
     this.editInvoiceSubscription = this.invoicesService.viewInvoice$.pipe(
       debounceTime(100),
