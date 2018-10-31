@@ -28,13 +28,13 @@ import { ModalBoxService } from './modal-box.service';
 
 @Injectable()
 export class InvoicesService {
-
-  passRequest: Subject<Observable<Invoice[]>> = new Subject();
+  
+  passInvoiceRequest: Subject<Observable<Invoice[]>> = new Subject();
   invoicesList$: ConnectableObservable<Invoice[]>;
   invoicesListCombined$: Observable<Invoice[]>;
   invoicesCollection$: ConnectableObservable<Invoice[]>;
 
-  passItemsRequest: Subject<number> = new Subject();
+  passItemsRequest$: Subject<number> = new Subject();
   invoicesItemsList$: ConnectableObservable<InvoiceItem[]>;
   currentInvoice$: ConnectableObservable<Invoice>;
 
@@ -59,20 +59,20 @@ export class InvoicesService {
 
   ) {
     // getting initial invoices collection
-    this.invoicesList$ = this.passRequest.pipe(
+    this.invoicesList$ = this.passInvoiceRequest.pipe(
       mergeScan(acc => acc ? Observable.of(acc) : this.getInvoicesRequest(), null),
     ).publishReplay(1);
     this.invoicesList$.connect();
 
     // getting initial invoice-items collection
-    this.invoicesItemsList$ = this.passItemsRequest.pipe(
+    this.invoicesItemsList$ = this.passItemsRequest$.pipe(
       distinctUntilChanged(),
       switchMap(id => id ? this.getInvoiceItemsRequest(id) : Observable.of(null)),
     ).publishReplay(1);
     this.invoicesItemsList$.connect();
 
     // getting current invoice for the view page
-    this.currentInvoice$ = this.passItemsRequest.pipe(
+    this.currentInvoice$ = this.passItemsRequest$.pipe(
       distinctUntilChanged(),
       switchMap(id => this.invoicesCollection$.pipe(
         map(invoices => invoices.find(invoice => invoice.id === id)))
@@ -181,12 +181,12 @@ export class InvoicesService {
   }
 
   getInvoices() {
-    this.passRequest.next();
+    this.passInvoiceRequest.next();
     return this.invoicesList$;
   }
 
   getInvoiceItems(id: number) {
-    this.passItemsRequest.next(id);
+    this.passItemsRequest$.next(id);
     return this.invoicesItemsList$;
   }
 
