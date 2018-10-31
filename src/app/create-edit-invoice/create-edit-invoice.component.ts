@@ -4,7 +4,6 @@ import { ActivatedRoute } from '@angular/router';
 
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { Subject } from 'rxjs/Subject';
 import { combineLatest } from 'rxjs/observable/combineLatest';
 import { map, filter, switchMap, tap, debounceTime, take } from 'rxjs/operators';
 
@@ -26,16 +25,15 @@ import { InvoicesService } from '../core/services/invoices.service';
 export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
 
   createInvoiceForm: FormGroup;
+  
   customersList$: Observable<Customer[]>;
   productsList$: Observable<Product[]>;
   viewInvoice$: Observable<Invoice>;
   newInvoiceId$: Observable<number>;
   
-  totalControlSubscription: Subscription;
   createInvoiceSubscription: Subscription;
   editInvoiceSubscription: Subscription;
-  
-  passCreateInvoiceRequest$: Subject<any> = new Subject();
+  totalControlSubscription: Subscription;
   
   constructor(
     private customerService: CustomersService,
@@ -76,10 +74,7 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
     this.editInvoiceSubscription = combineLatest(
       this.route.data,
       this.invoicesService.viewInvoice$,
-    ).pipe(
-      debounceTime(100),
-      take(1),
-    ).subscribe(([data, invoice ]) => {
+    ).subscribe(([data, invoice]) => {
       if (data['type'] === 'create') {
         return this.addItemGroup();
       }
@@ -114,7 +109,7 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
     this.createInvoiceItemsArray.push(this.addItemGroups(item));
   }
 
-  addItemGroups(item) {
+  addItemGroups(item: InvoiceItemModel) {
     return new FormGroup({
       product_id: new FormControl(item.product_id, Validators.required),
       quantity: new FormControl(item.quantity, Validators.required),

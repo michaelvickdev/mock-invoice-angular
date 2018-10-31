@@ -25,7 +25,6 @@ import { InvoiceItem } from '../interfaces/invoice-item';
 import { CustomersService } from './customers.service';
 import { ProductsService } from './products.service';
 import { ModalBoxService } from './modal-box.service';
-import { Subscription } from 'rxjs/Subscription';
 
 @Injectable()
 export class InvoicesService {
@@ -68,12 +67,13 @@ export class InvoicesService {
     // getting initial invoice-items collection
     this.invoicesItemsList$ = this.passItemsRequest.pipe(
       distinctUntilChanged(),
-      switchMap(id => this.getInvoiceItemsRequest(id)),
+      switchMap(id => id ? this.getInvoiceItemsRequest(id) : Observable.of(null)),
     ).publishReplay(1);
     this.invoicesItemsList$.connect();
 
     // getting current invoice for the view page
     this.currentInvoice$ = this.passItemsRequest.pipe(
+      distinctUntilChanged(),
       switchMap(id => this.invoicesCollection$.pipe(
         map(invoices => invoices.find(invoice => invoice.id === id)))
       )
@@ -85,6 +85,7 @@ export class InvoicesService {
       this.invoicesItemsList$,
       this.currentInvoice$,
     ).pipe(
+      filter(([products, invoiceItems, currentInvoice]) => invoiceItems ? invoiceItems[0].invoice_id === currentInvoice.id : true),
       map(([products, invoiceItems, currentInvoice]) => {
         const items = _.map(invoiceItems, item =>
           ({
