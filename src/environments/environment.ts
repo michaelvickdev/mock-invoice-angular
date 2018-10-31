@@ -5,5 +5,5 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://api.invoice-app.2muchcoffee.com/api/'
+  apiUrl: 'https://api.invoice-app.2muchcoffee.com/api/'
 };
