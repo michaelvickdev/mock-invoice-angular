@@ -9,9 +9,9 @@ import { combineLatest } from 'rxjs/observable/combineLatest';
 import {
   distinctUntilChanged, filter,
   map, mapTo, mergeMap,
-  mergeScan,
+  mergeScan, publish, publishReplay, refCount,
   switchMap,
-  take,
+  take, takeLast,
   tap,
   withLatestFrom
 } from 'rxjs/operators';
@@ -25,6 +25,7 @@ import { InvoiceItem } from '../interfaces/invoice-item';
 import { CustomersService } from './customers.service';
 import { ProductsService } from './products.service';
 import { ModalBoxService } from './modal-box.service';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Injectable()
 export class InvoicesService {
@@ -34,7 +35,8 @@ export class InvoicesService {
   invoicesListCombined$: Observable<Invoice[]>;
   invoicesCollection$: ConnectableObservable<Invoice[]>;
 
-  passItemsRequest$: Subject<number> = new Subject();
+  passItemsRequest$: BehaviorSubject<number> = new BehaviorSubject(null);
+  passItemsRequest2$: Subject<number> = new Subject();
   invoicesItemsList$: ConnectableObservable<InvoiceItem[]>;
   currentInvoice$: ConnectableObservable<Invoice>;
 
@@ -50,53 +52,77 @@ export class InvoicesService {
   deleteInvoiceOpenModal$: Subject<number> = new Subject();
   deleteInvoiceCollection$: Observable<Invoice[]>;
   deleteInvoiceModal$: ConnectableObservable<Invoice>;
-
+  
   constructor(
     private httpClient: HttpClient,
     private customersService: CustomersService,
     private productsService: ProductsService,
     private modalBoxService: ModalBoxService,
-
   ) {
     // getting initial invoices collection
     this.invoicesList$ = this.passInvoiceRequest.pipe(
       mergeScan(acc => acc ? Observable.of(acc) : this.getInvoicesRequest(), null),
     ).publishReplay(1);
     this.invoicesList$.connect();
-
+    
     // getting initial invoice-items collection
-    this.invoicesItemsList$ = this.passItemsRequest$.pipe(
-      distinctUntilChanged(),
-      switchMap(id => id ? this.getInvoiceItemsRequest(id) : Observable.of(null)),
-    ).publishReplay(1);
-    this.invoicesItemsList$.connect();
+    // this.invoicesItemsList$ = this.passItemsRequest$.pipe(
+    //   distinctUntilChanged(),
+    //   switchMap(id => id ? this.getInvoiceItemsRequest(id) : Observable.of(null)),
+    //   tap((res) => console.error('async', res )),
+    // ).publishReplay(1);
+    // this.invoicesItemsList$.connect();
 
     // getting current invoice for the view page
-    this.currentInvoice$ = this.passItemsRequest$.pipe(
+    this.currentInvoice$ = this.passItemsRequest2$.pipe(
       distinctUntilChanged(),
       switchMap(id => this.invoicesCollection$.pipe(
         map(invoices => invoices.find(invoice => invoice.id === id)))
-      )
+      ),
+      tap((res) => console.error('sync', res)),
     ).publishReplay(1);
     this.currentInvoice$.connect();
 
-    this.viewInvoice$ = combineLatest(
-      this.productsService.productsList$,
-      this.invoicesItemsList$,
-      this.currentInvoice$,
-    ).pipe(
-      filter(([products, invoiceItems, currentInvoice]) => invoiceItems ? invoiceItems[0].invoice_id === currentInvoice.id : true),
-      map(([products, invoiceItems, currentInvoice]) => {
-        const items = _.map(invoiceItems, item =>
+    // this.viewInvoice$ = combineLatest(
+    //   this.productsService.productsList$,
+    //   this.invoicesItemsList$,
+    //   this.currentInvoice$,
+    // ).pipe(
+    //   filter(([products, invoiceItems, currentInvoice]) => invoiceItems ? invoiceItems[0].invoice_id === currentInvoice.id : true),
+    //   map(([products, invoiceItems, currentInvoice]) => {
+    //     const items = _.map(invoiceItems, item =>
+    //       ({
+    //         ...item,
+    //         product: products.find(product => item.product_id === product.id),
+    //       }));
+    //     return {
+    //       ...currentInvoice,
+    //       items: [...items],
+    //     };
+    //   }),
+    // );
+  
+    this.viewInvoice$ = this.passItemsRequest$.pipe(
+      switchMap(id => id ? this.getInvoiceItemsRequest(id) : Observable.of(null)),
+      switchMap(invoiceItems => this.productsService.productsList$.pipe(
+        map(products => {
+          return _.map(invoiceItems, item =>
+            ({
+              ...item,
+              product: products.find(product => item.product_id === product.id),
+            }));
+        })
+      )),
+      switchMap(items => this.currentInvoice$.pipe(
+        map(currentInvoice =>
           ({
-            ...item,
-            product: products.find(product => item.product_id === product.id),
-          }));
-        return {
-          ...currentInvoice,
-          items: [...items],
-        };
-      }),
+            ...currentInvoice,
+            items: [...items],
+          }))
+      )),
+      tap((res) => console.error('view', res)),
+      publish(),
+      refCount()
     );
 
     // adding customer info to initial invoices collection
@@ -186,8 +212,9 @@ export class InvoicesService {
   }
 
   getInvoiceItems(id: number) {
+    this.passItemsRequest2$.next(id);
     this.passItemsRequest$.next(id);
-    return this.invoicesItemsList$;
+    return this.viewInvoice$;
   }
 
   postInvoiceRequest(invoice) {
