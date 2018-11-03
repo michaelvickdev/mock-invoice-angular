@@ -4,8 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { combineLatest } from 'rxjs/observable/combineLatest';
-import { map, filter, switchMap, tap, debounceTime, take } from 'rxjs/operators';
+import { map, filter, switchMap } from 'rxjs/operators';
 
 import { Customer } from '../core/interfaces/customer';
 import { Product } from '../core/interfaces/product';
@@ -31,8 +30,8 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
   viewInvoice$: Observable<Invoice>;
   newInvoiceId$: Observable<number>;
   
-  createInvoiceSubscription: Subscription;
-  editInvoiceSubscription: Subscription;
+  saveInvoiceSubscription: Subscription;
+  createEditInvoiceSubscription: Subscription;
   totalControlSubscription: Subscription;
   
   constructor(
@@ -60,6 +59,13 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
       total: new FormControl(),
       items: new FormArray([]),
     });
+    
+    // main stream for creating form with values for both create & edit mode
+    this.createEditInvoiceSubscription = this.invoicesService.viewInvoice$
+      .subscribe((invoice: Invoice) => {
+        this.createInvoiceForm.patchValue(invoice);
+        invoice.items.forEach(item =>  this.addItemGroup(item));
+      });
   
     this.customersList$ = this.customerService.customersList$;
     this.productsList$ = this.productsService.productsList$;
@@ -70,17 +76,6 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
       filter(value => !!value),
       map(invoices => invoices[invoices.length - 1].id + 1)
     );
-  
-    this.editInvoiceSubscription = combineLatest(
-      this.route.data,
-      this.invoicesService.viewInvoice$,
-    ).subscribe(([data, invoice]) => {
-      if (data['type'] === 'create') {
-        return this.addItemGroup();
-      }
-      this.createInvoiceForm.patchValue(invoice);
-      invoice.items.forEach(item =>  this.addItemGroup(item));
-    });
   
     // count the total amount of the invoice based on products and discount
     this.totalControlSubscription = Observable.merge(
@@ -97,7 +92,7 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
       }),
     ).subscribe(total => this.createInvoiceTotalControl.patchValue(total));
     
-    this.createInvoiceSubscription = this.invoicesService.createInvoice$
+    this.saveInvoiceSubscription = this.invoicesService.createInvoice$
       .subscribe(newInvoice => this.invoicesService.addInvoice$.next(newInvoice));
   }
 
@@ -123,7 +118,7 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.totalControlSubscription.unsubscribe();
-    this.createInvoiceSubscription.unsubscribe();
-    this.editInvoiceSubscription.unsubscribe();
+    this.saveInvoiceSubscription.unsubscribe();
+    this.createEditInvoiceSubscription.unsubscribe();
   }
 }
