@@ -1,11 +1,12 @@
 import { InvoiceItem } from '../interfaces/invoice-item';
 import { Customer } from '../interfaces/customer';
+import { CustomerModel } from './customer-model';
 
 export class InvoiceModel {
   
   id: number;
   customer_id: number = null;
-  customer?: Customer = null;
+  customer?: Customer = new CustomerModel();
   discount: number = null;
   total: number = null;
   items: InvoiceItem[] = [];
