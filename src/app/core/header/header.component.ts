@@ -1,18 +1,11 @@
-import {
-  AfterViewInit,
-  Component,
-  OnInit,
-  QueryList,
-  ViewChildren,
-} from '@angular/core';
+import { Component, OnInit, QueryList, ViewChildren, } from '@angular/core';
 
 import { MatTabLink } from '@angular/material';
-
-import { InvoicesService } from '../services/invoices.service';
-import { HeaderService } from '../services/header.service';
 import { Observable } from 'rxjs/Observable';
 
 import { Invoice } from '../interfaces/invoice';
+
+import { InvoicesService } from '../services/invoices.service';
 
 
 @Component({
@@ -20,36 +13,27 @@ import { Invoice } from '../interfaces/invoice';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent implements OnInit, AfterViewInit {
-
-  invoicesAmount$: Observable<Invoice[]>;
-  navItems: {
-    path: string,
-    label: string,
-  }[];
+export class HeaderComponent implements OnInit {
+  
   @ViewChildren(MatTabLink) inkBar: QueryList<any>;
+  
+  invoicesAmount$: Observable<Invoice[]>;
+  navItems: { path: string, label: string }[] = [
+    { path: '/products', label: 'Products' },
+    { path: '/customers', label: 'Customers'},
+    { path: '/invoices', label: 'Invoices'},
+  ];
 
   constructor(
     private invoicesService: InvoicesService,
-    private headerService: HeaderService,
   ) {
   }
 
   ngOnInit() {
-    this.navItems = [
-      { path: '/products', label: 'Products' },
-      { path: '/customers', label: 'Customers'},
-      { path: '/invoices', label: 'Invoices'},
-    ];
-
     this.invoicesAmount$ = this.invoicesService.invoicesCollection$;
   }
 
-  ngAfterViewInit() {
-    this.headerService.inkBar = this.inkBar;
-  }
-
   hideInkBar() {
-    this.headerService.hideInkBar();
+    this.inkBar.last._elementRef.nativeElement.nextElementSibling.style.visibility = 'hidden' ;
   }
 }
