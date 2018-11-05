@@ -5,8 +5,6 @@ import { Observable } from 'rxjs/Observable';
 import { Invoice } from '../core/interfaces/invoice';
 
 import { InvoicesService } from '../core/services/invoices.service';
-import { CustomersService } from '../core/services/customers.service';
-import { HeaderService } from '../core/services/header.service';
 
 
 @Component({
@@ -21,8 +19,6 @@ export class InvoicesComponent implements OnInit {
 
   constructor(
     private invoicesService: InvoicesService,
-    private customersService: CustomersService,
-    private headerService: HeaderService,
   ) {
   }
 
@@ -33,7 +29,7 @@ export class InvoicesComponent implements OnInit {
   }
 
   hideInkBar() {
-    this.headerService.hideInkBar();
+  
   }
 
   deleteInvoice(id) {
