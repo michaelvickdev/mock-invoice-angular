@@ -13,15 +13,14 @@ import { Customer } from '../interfaces/customer';
 
 @Injectable()
 export class CustomersService {
-
+  
+  passCustomersRequest: Subject<any> = new Subject();
   customersList$: ConnectableObservable<Customer[]>;
-  passRequest: Subject<Observable<Customer[]>>;
 
   constructor(
     private httpClient: HttpClient,
   ) {
-    this.passRequest = new Subject();
-    this.customersList$ = this.passRequest.pipe(
+    this.customersList$ = this.passCustomersRequest.pipe(
       mergeScan((acc) => acc ? Observable.of(acc) : this.getCustomersRequest(), null)
     ).publishReplay(1);
     this.customersList$.connect();
@@ -32,7 +31,7 @@ export class CustomersService {
   }
 
   getCustomers() {
-    this.passRequest.next();
+    this.passCustomersRequest.next();
     return this.customersList$;
   }
 }

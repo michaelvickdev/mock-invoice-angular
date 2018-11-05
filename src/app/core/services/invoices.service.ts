@@ -29,12 +29,12 @@ import { ModalBoxService } from './modal-box.service';
 @Injectable()
 export class InvoicesService {
   
-  passInvoiceRequest: Subject<Observable<Invoice[]>> = new Subject();
+  passInvoicesRequest: Subject<any> = new Subject();
   invoicesList$: ConnectableObservable<Invoice[]>;
   invoicesListCombined$: Observable<Invoice[]>;
   invoicesCollection$: ConnectableObservable<Invoice[]>;
   
-  addInvoice$: Subject<{}> = new Subject();
+  addInvoice$: Subject<Invoice> = new Subject();
   addInvoiceCollection$: Observable<any>;
 
   deleteInvoice$: Subject<number> = new Subject();
@@ -51,7 +51,7 @@ export class InvoicesService {
     private modalBoxService: ModalBoxService,
   ) {
     // getting initial invoices collection
-    this.invoicesList$ = this.passInvoiceRequest.pipe(
+    this.invoicesList$ = this.passInvoicesRequest.pipe(
       mergeScan(acc => acc ? Observable.of(acc) : this.getInvoicesRequest(), null),
     ).publishReplay(1);
     this.invoicesList$.connect();
@@ -116,7 +116,7 @@ export class InvoicesService {
   }
 
   getInvoices() {
-    this.passInvoiceRequest.next();
+    this.passInvoicesRequest.next();
     return this.invoicesList$;
   }
 
