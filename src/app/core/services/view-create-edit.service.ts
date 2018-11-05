@@ -7,7 +7,14 @@ import { Observable } from 'rxjs/Observable';
 import { ConnectableObservable } from 'rxjs/observable/ConnectableObservable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
-import { distinctUntilChanged, map, publish, refCount, switchMap, tap } from 'rxjs/operators';
+import {
+  distinctUntilChanged,
+  map,
+  publish,
+  refCount,
+  switchMap,
+  tap,
+} from 'rxjs/operators';
 
 import { Invoice } from '../interfaces/invoice';
 import { InvoiceItem } from '../interfaces/invoice-item';
@@ -27,8 +34,8 @@ export class ViewCreateEditService {
   
   passItemsRequest$: BehaviorSubject<number> = new BehaviorSubject(null);
   passViewEditCreateInvoice: Subject<Invoice> = new Subject();
-  currentInvoice$: ConnectableObservable<Invoice>;
   
+  currentInvoice$: ConnectableObservable<Invoice>;
   invoiceWithItems$: Observable<Invoice>;
   viewCreateEditInvoice$: ConnectableObservable<Invoice>;
   
@@ -46,10 +53,8 @@ export class ViewCreateEditService {
     ).publishReplay(1);
     this.currentInvoice$.connect();
   
-    // main view invoice stream
+    // creating new invoice within invoice-items
     this.invoiceWithItems$ = this.passItemsRequest$.pipe(
-      tap(res => console.error('inside view', res)),
-      distinctUntilChanged(),
       switchMap(id => id ? this.getInvoiceItemsRequest(id) : Observable.of([new InvoiceItemModel()])),
       switchMap(invoiceItems => this.productsService.productsList$.pipe(
         map(products => _.map(invoiceItems, item =>
@@ -65,12 +70,13 @@ export class ViewCreateEditService {
             ...currentInvoice,
             items: [...items],
           })),
-        tap(invoice => this.passViewEditCreateInvoice.next(invoice))
+        tap(invoiceWithItems => this.passViewEditCreateInvoice.next(invoiceWithItems))
       )),
       publish(),
       refCount()
     );
-  
+    
+    // main view-create-edit invoice stream
     this.viewCreateEditInvoice$ = this.passViewEditCreateInvoice
       .publishReplay(1);
     this.viewCreateEditInvoice$.connect();

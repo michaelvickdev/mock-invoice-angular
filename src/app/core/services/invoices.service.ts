@@ -7,7 +7,9 @@ import { Subject } from 'rxjs/Subject';
 import { combineLatest } from 'rxjs/observable/combineLatest';
 import {
   filter,
-  map, mapTo, mergeMap,
+  map,
+  mapTo,
+  mergeMap,
   mergeScan,
   switchMap,
   take,
