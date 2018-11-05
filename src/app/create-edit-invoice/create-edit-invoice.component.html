@@ -1,6 +1,6 @@
 <main class="create-main">
   <div class="create-container">
-    <div class="create-title"> Invoice #{{ (newInvoiceId$ | async) || (viewCreateEditInvoice$ | async)?.id }}</div>
+    <div class="create-title"> Invoice #{{ (invoiceId$ | async) }}</div>
     <form [formGroup]="createInvoiceForm" (ngSubmit)="onSubmit()">
 
       <div class="create-name">

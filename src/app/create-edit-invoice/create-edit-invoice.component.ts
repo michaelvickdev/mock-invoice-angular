@@ -4,7 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { map, filter, switchMap, tap } from 'rxjs/operators';
+import { map, filter, switchMap } from 'rxjs/operators';
+import { combineLatest } from 'rxjs/observable/combineLatest';
 
 import { Customer } from '../core/interfaces/customer';
 import { Product } from '../core/interfaces/product';
@@ -28,7 +29,7 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
   customersList$: Observable<Customer[]>;
   productsList$: Observable<Product[]>;
   viewCreateEditInvoice$: Observable<Invoice>;
-  newInvoiceId$: Observable<number>;
+  invoiceId$: Observable<number>;
   
   saveInvoiceSubscription: Subscription;
   createEditInvoiceSubscription: Subscription;
@@ -71,12 +72,14 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
     this.productsList$ = this.productsService.productsList$;
     this.viewCreateEditInvoice$ = this.invoicesService.viewCreateEditInvoice$;
   
-    this.newInvoiceId$ = this.route.data.pipe(
-      switchMap(data => data['type'] === 'create' ? this.invoicesService.invoicesList$ : Observable.of(null)),
-      filter(value => !!value),
-      map(invoices => invoices[invoices.length - 1].id + 1)
+    this.invoiceId$ = combineLatest(
+      this.route.data,
+      this.invoicesService.invoicesList$,
+      this.viewCreateEditInvoice$
+    ).pipe(
+      map(([data, invoices, invoice]) => data['type'] === 'create' ? invoices[invoices.length - 1].id + 1 : invoice.id)
     );
-  
+    
     // count the total amount of the invoice based on products and discount
     this.totalControlSubscription = Observable.merge(
       this.createInvoiceItemsArray.valueChanges,
