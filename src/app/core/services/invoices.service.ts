@@ -5,6 +5,7 @@ import * as _ from 'lodash';
 import { Observable } from 'rxjs/Observable';
 import { ConnectableObservable } from 'rxjs/observable/ConnectableObservable';
 import { Subject } from 'rxjs/Subject';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { combineLatest } from 'rxjs/observable/combineLatest';
 import {
   distinctUntilChanged, filter,
@@ -27,7 +28,6 @@ import { ProductModel } from '../models/product-model';
 import { CustomersService } from './customers.service';
 import { ProductsService } from './products.service';
 import { ModalBoxService } from './modal-box.service';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { InvoiceModel } from '../models/invoice-model';
 
 
@@ -40,9 +40,11 @@ export class InvoicesService {
   invoicesCollection$: ConnectableObservable<Invoice[]>;
 
   passItemsRequest$: BehaviorSubject<number> = new BehaviorSubject(null);
+  passViewEditCreateInvoice: Subject<Invoice> = new Subject();
   currentInvoice$: ConnectableObservable<Invoice>;
-
-  viewInvoice$: Observable<Invoice>;
+  
+  invoiceWithItems$: Observable<Invoice>;
+  viewCreateEditInvoice$: ConnectableObservable<Invoice>;
   
   passCreateInvoiceRequest$: Subject<any> = new Subject();
   createInvoice$: Observable<Invoice>;
@@ -141,7 +143,6 @@ export class InvoicesService {
   
     // getting current invoice for the view page
     this.currentInvoice$ = this.passItemsRequest$.pipe(
-      // filter(res => !!res),
       distinctUntilChanged(),
       switchMap(id => this.invoicesCollection$.pipe(
         map(invoices => invoices.find(invoice => invoice.id === id)))
@@ -150,7 +151,9 @@ export class InvoicesService {
     this.currentInvoice$.connect();
     
     // main view invoice stream
-    this.viewInvoice$ = this.passItemsRequest$.pipe(
+    this.invoiceWithItems$ = this.passItemsRequest$.pipe(
+      tap(res => console.error('inside view', res)),
+      distinctUntilChanged(),
       switchMap(id => id ? this.getInvoiceItemsRequest(id) : Observable.of([new InvoiceItemModel()])),
       switchMap(invoiceItems => this.productsService.productsList$.pipe(
         map(products => _.map(invoiceItems, item =>
@@ -165,11 +168,16 @@ export class InvoicesService {
           ({
             ...currentInvoice,
             items: [...items],
-          }))
+          })),
+        tap(invoice => this.passViewEditCreateInvoice.next(invoice))
       )),
       publish(),
       refCount()
     );
+  
+    this.viewCreateEditInvoice$ = this.passViewEditCreateInvoice
+      .publishReplay(1);
+    this.viewCreateEditInvoice$.connect();
   }
 
   getInvoicesRequest() {
@@ -187,7 +195,7 @@ export class InvoicesService {
 
   getInvoiceItems(id: number) {
     this.passItemsRequest$.next(id);
-    return this.viewInvoice$;
+    return this.invoiceWithItems$;
   }
 
   postInvoiceRequest(invoice) {

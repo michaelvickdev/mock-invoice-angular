@@ -24,6 +24,6 @@ export class ViewInvoiceComponent implements OnInit {
   ngOnInit() {
     this.columnsToDisplay = ['number', 'product_name', 'quantity', 'price'];
 
-    this.viewInvoice$ = this.invoicesService.viewInvoice$;
+    this.viewInvoice$ = this.invoicesService.viewCreateEditInvoice$;
   }
 }

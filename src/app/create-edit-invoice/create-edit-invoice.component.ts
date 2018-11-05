@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { map, filter, switchMap } from 'rxjs/operators';
+import { map, filter, switchMap, tap } from 'rxjs/operators';
 
 import { Customer } from '../core/interfaces/customer';
 import { Product } from '../core/interfaces/product';
@@ -27,7 +27,7 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
   
   customersList$: Observable<Customer[]>;
   productsList$: Observable<Product[]>;
-  viewInvoice$: Observable<Invoice>;
+  viewCreateEditInvoice$: Observable<Invoice>;
   newInvoiceId$: Observable<number>;
   
   saveInvoiceSubscription: Subscription;
@@ -61,7 +61,7 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
     });
     
     // main stream for creating form with values for both create & edit mode
-    this.createEditInvoiceSubscription = this.invoicesService.viewInvoice$
+    this.createEditInvoiceSubscription = this.invoicesService.viewCreateEditInvoice$
       .subscribe((invoice: Invoice) => {
         this.createInvoiceForm.patchValue(invoice);
         invoice.items.forEach(item =>  this.addItemGroup(item));
@@ -69,7 +69,7 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
   
     this.customersList$ = this.customerService.customersList$;
     this.productsList$ = this.productsService.productsList$;
-    this.viewInvoice$ = this.invoicesService.viewInvoice$;
+    this.viewCreateEditInvoice$ = this.invoicesService.viewCreateEditInvoice$;
   
     this.newInvoiceId$ = this.route.data.pipe(
       switchMap(data => data['type'] === 'create' ? this.invoicesService.invoicesList$ : Observable.of(null)),
