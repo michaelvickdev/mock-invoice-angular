@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { map, filter, switchMap } from 'rxjs/operators';
+import { map, filter } from 'rxjs/operators';
 import { combineLatest } from 'rxjs/observable/combineLatest';
 
 import { Customer } from '../core/interfaces/customer';
@@ -15,6 +15,7 @@ import { InvoiceItemModel } from '../core/models/invoice-item-model';
 import { CustomersService } from '../core/services/customers.service';
 import { ProductsService } from '../core/services/products.service';
 import { InvoicesService } from '../core/services/invoices.service';
+import { ViewCreateEditService } from '../core/services/view-create-edit.service';
 
 
 @Component({
@@ -39,6 +40,7 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
     private customerService: CustomersService,
     private productsService: ProductsService,
     private invoicesService: InvoicesService,
+    private viewCreateEditService: ViewCreateEditService,
     private route: ActivatedRoute,
   ) {
   }
@@ -62,7 +64,7 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
     });
     
     // main stream for creating form with values for both create & edit mode
-    this.createEditInvoiceSubscription = this.invoicesService.viewCreateEditInvoice$
+    this.createEditInvoiceSubscription = this.viewCreateEditService.viewCreateEditInvoice$
       .subscribe((invoice: Invoice) => {
         this.createInvoiceForm.patchValue(invoice);
         invoice.items.forEach(item =>  this.addItemGroup(item));
@@ -70,7 +72,7 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
   
     this.customersList$ = this.customerService.customersList$;
     this.productsList$ = this.productsService.productsList$;
-    this.viewCreateEditInvoice$ = this.invoicesService.viewCreateEditInvoice$;
+    this.viewCreateEditInvoice$ = this.viewCreateEditService.viewCreateEditInvoice$;
   
     this.invoiceId$ = combineLatest(
       this.route.data,
@@ -95,12 +97,12 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
       }),
     ).subscribe(total => this.createInvoiceTotalControl.patchValue(total));
     
-    this.saveInvoiceSubscription = this.invoicesService.createInvoice$
+    this.saveInvoiceSubscription = this.viewCreateEditService.createInvoice$
       .subscribe(newInvoice => this.invoicesService.addInvoice$.next(newInvoice));
   }
 
   onSubmit() {
-    this.invoicesService.passCreateInvoiceRequest$.next(this.createInvoiceForm.value);
+    this.viewCreateEditService.passCreateInvoiceRequest$.next(this.createInvoiceForm.value);
   }
   
   addItemGroup(item = new InvoiceItemModel()) {

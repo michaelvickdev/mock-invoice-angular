@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 
 import { Invoice } from '../core/interfaces/invoice';
 
-import { InvoicesService } from '../core/services/invoices.service';
+import { ViewCreateEditService } from '../core/services/view-create-edit.service';
 
 @Component({
   selector: 'app-view-invoice',
@@ -17,13 +17,13 @@ export class ViewInvoiceComponent implements OnInit {
   viewInvoice$: Observable<Invoice>;
 
   constructor(
-    private invoicesService: InvoicesService,
+    private viewCreateEditService: ViewCreateEditService,
   ) {
   }
 
   ngOnInit() {
     this.columnsToDisplay = ['number', 'product_name', 'quantity', 'price'];
 
-    this.viewInvoice$ = this.invoicesService.viewCreateEditInvoice$;
+    this.viewInvoice$ = this.viewCreateEditService.viewCreateEditInvoice$;
   }
 }
