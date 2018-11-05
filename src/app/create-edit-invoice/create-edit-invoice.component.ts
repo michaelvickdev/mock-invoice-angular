@@ -29,11 +29,10 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
   
   customersList$: Observable<Customer[]>;
   productsList$: Observable<Product[]>;
-  viewCreateEditInvoice$: Observable<Invoice>;
   invoiceId$: Observable<number>;
   
+  viewCreateEditInvoiceSubscription: Subscription;
   saveInvoiceSubscription: Subscription;
-  createEditInvoiceSubscription: Subscription;
   totalControlSubscription: Subscription;
   
   constructor(
@@ -64,7 +63,7 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
     });
     
     // main stream for creating form with values for both create & edit mode
-    this.createEditInvoiceSubscription = this.viewCreateEditService.viewCreateEditInvoice$
+    this.viewCreateEditInvoiceSubscription = this.viewCreateEditService.viewCreateEditInvoice$
       .subscribe((invoice: Invoice) => {
         this.createInvoiceForm.patchValue(invoice);
         invoice.items.forEach(item =>  this.addItemGroup(item));
@@ -72,12 +71,11 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
   
     this.customersList$ = this.customerService.customersList$;
     this.productsList$ = this.productsService.productsList$;
-    this.viewCreateEditInvoice$ = this.viewCreateEditService.viewCreateEditInvoice$;
   
     this.invoiceId$ = combineLatest(
       this.route.data,
       this.invoicesService.invoicesList$,
-      this.viewCreateEditInvoice$
+      this.viewCreateEditService.viewCreateEditInvoice$,
     ).pipe(
       map(([data, invoices, invoice]) => data['type'] === 'create' ? invoices[invoices.length - 1].id + 1 : invoice.id)
     );
@@ -122,8 +120,8 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.totalControlSubscription.unsubscribe();
+    this.viewCreateEditInvoiceSubscription.unsubscribe();
     this.saveInvoiceSubscription.unsubscribe();
-    this.createEditInvoiceSubscription.unsubscribe();
+    this.totalControlSubscription.unsubscribe();
   }
 }
