@@ -29,7 +29,7 @@ export class InvoicesComponent implements OnInit {
   }
 
   hideInkBar() {
-  
+    this.invoicesService.hideNavInkBar$.next();
   }
 
   deleteInvoice(id) {

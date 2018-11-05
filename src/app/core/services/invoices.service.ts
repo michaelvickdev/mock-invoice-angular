@@ -42,6 +42,8 @@ export class InvoicesService {
   deleteInvoiceCollection$: Observable<Invoice[]>;
   deleteInvoiceModal$: ConnectableObservable<Invoice>;
   
+  hideNavInkBar$: Subject<any> = new Subject();
+  
   constructor(
     private httpClient: HttpClient,
     private customersService: CustomersService,
