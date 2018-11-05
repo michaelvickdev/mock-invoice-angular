@@ -16,7 +16,7 @@ export class ViewInvoiceResolver implements Resolve<InvoiceItem[]> {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<any>|Promise<any>|any {
-      this.invoicesService.getInvoiceItems(+route.paramMap.get('id')).pipe(
+      return this.invoicesService.getInvoiceItems(+route.paramMap.get('id')).pipe(
         take(1)
       );
   }
