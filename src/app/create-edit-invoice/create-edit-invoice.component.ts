@@ -29,7 +29,7 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
   
   customersList$: Observable<Customer[]>;
   productsList$: Observable<Product[]>;
-  invoiceId$: Observable<number>;
+  invoiceId$: Observable<string>;
   
   viewCreateEditInvoiceSubscription: Subscription;
   saveInvoiceSubscription: Subscription;
@@ -77,7 +77,7 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
       this.invoicesService.invoicesList$,
       this.viewCreateEditService.viewCreateEditInvoice$,
     ).pipe(
-      map(([data, invoices, invoice]) => data['type'] === 'create' ? invoices[invoices.length - 1].id + 1 : invoice.id)
+      map(([data, invoices, invoice]) => data['type'] === 'create' ? invoices[invoices.length - 1]._id + 1 : invoice._id)
     );
     
     // count the total amount of the invoice based on products and discount
@@ -93,7 +93,7 @@ export class CreateEditInvoiceComponent implements OnInit, OnDestroy {
         }
         return 0;
       }),
-    ).subscribe(total => this.createInvoiceTotalControl.patchValue(total));
+    ).subscribe(total => this.createInvoiceTotalControl.patchValue(+total));
     
     this.saveInvoiceSubscription = this.viewCreateEditService.createInvoice$
       .subscribe(newInvoice => this.invoicesService.addInvoice$.next(newInvoice));

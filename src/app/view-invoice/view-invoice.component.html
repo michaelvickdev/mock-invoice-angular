@@ -1,6 +1,6 @@
 <main class="view-main">
   <div class="view-container">
-    <div class="view-title"> Invoice #{{ (viewInvoice$ | async)?.id}}</div>
+    <div class="view-title"> Invoice #{{ (viewInvoice$ | async)?._id}}</div>
     <div class="view-name" routerLink="/customers">{{ (viewInvoice$ | async)?.customer.name }}</div>
     <div class="view-products">
       <mat-table [dataSource]='(viewInvoice$ | async)?.items'>
@@ -41,3 +41,4 @@
     </div>
   </div>
 </main>
+<div class="">{{ (viewInvoice$ | async) | json}}</div>

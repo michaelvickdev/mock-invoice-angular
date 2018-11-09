@@ -19,7 +19,7 @@ export class CustomersComponent implements OnInit {
   customersList$: Observable<Customer[]>;
 
   constructor(
-    private customersServices: CustomersService
+    private customersServices: CustomersService,
   ) {
   }
 

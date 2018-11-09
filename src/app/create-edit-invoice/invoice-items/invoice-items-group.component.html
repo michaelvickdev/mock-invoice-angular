@@ -1,7 +1,7 @@
 <div class="create-products__row" [formGroup]="itemsGroup">
   <div class="create-products__column create-products__column_select">
     <mat-select class="create-products__select" placeholder="Select product" formControlName="product_id">
-      <mat-option *ngFor="let product of productsList$ | async" [value]="product.id">
+      <mat-option *ngFor="let product of productsList$ | async" [value]="product._id">
         {{ product.name }}
       </mat-option>
     </mat-select>

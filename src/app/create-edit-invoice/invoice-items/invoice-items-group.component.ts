@@ -44,7 +44,7 @@ export class InvoiceItemsGroupComponent implements OnInit, OnDestroy {
     this.productControlSubscription = this.createInvoiceProductControl.valueChanges.pipe(
       filter(res => !!res),
       switchMap( productName => this.productsList$.pipe(
-        map(products => _.find(products, {'id': productName}).price),
+        map(products => _.find(products, {'_id': productName}).price),
       ))
     ).subscribe(price => this.createInvoicePriceControl.patchValue(price));
   }

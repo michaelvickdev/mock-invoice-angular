@@ -9,7 +9,7 @@
 
       <ng-container matColumnDef="id">
         <mat-header-cell *matHeaderCellDef> InvoiceID</mat-header-cell>
-        <mat-cell *matCellDef="let invoice">{{invoice.id}}</mat-cell>
+        <mat-cell *matCellDef="let invoice">{{invoice._id}}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="customer_name">
@@ -32,15 +32,15 @@
         <mat-cell class="actions" *matCellDef="let invoice">
           <button mat-raised-button color="primary"
             (click)="hideInkBar()"
-            [routerLink]="['/view-invoice', invoice.id]">
+            [routerLink]="['/view-invoice', invoice._id]">
             View
           </button>
           <button mat-raised-button color="accent"
             (click)="hideInkBar()"
-            [routerLink]="['/edit-invoice', invoice.id]">
+            [routerLink]="['/edit-invoice', invoice._id]">
             Edit
           </button>
-          <button mat-raised-button color="warn" (click)="deleteInvoice(invoice.id)">Delete</button>
+          <button mat-raised-button color="warn" (click)="deleteInvoice(invoice._id)">Delete</button>
         </mat-cell>
       </ng-container>
 

@@ -19,7 +19,7 @@ export class ViewInvoiceResolver implements Resolve<InvoiceItem[]> {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<any>|Promise<any>|any {
-      return this.viewCreateEditService.getInvoiceItems(+route.paramMap.get('id')).pipe(
+      return this.viewCreateEditService.getInvoiceItems(route.paramMap.get('id')).pipe(
         take(1)
       );
   }

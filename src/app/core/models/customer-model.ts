@@ -1,5 +1,5 @@
 export class CustomerModel {
-  id: number = null;
+  _id: string = null;
   name: string = null;
   address: string = null;
   phone: string = null;

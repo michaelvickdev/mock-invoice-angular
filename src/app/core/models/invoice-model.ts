@@ -4,8 +4,8 @@ import { CustomerModel } from './customer-model';
 
 export class InvoiceModel {
   
-  id: number = null;
-  customer_id: number = null;
+  _id: string = null;
+  customer_id: string = null;
   customer?: Customer = new CustomerModel();
   discount: number = null;
   total: number = null;

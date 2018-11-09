@@ -1,9 +1,9 @@
 import { ProductModel } from './product-model';
 
 export class InvoiceItemModel {
-  id: number = null;
-  invoice_id: number = null;
-  product_id: number = null;
+  _id: string = null;
+  invoice_id: string = null;
+  product_id: string = null;
   product?: ProductModel = new ProductModel();
   quantity: number = null;
   

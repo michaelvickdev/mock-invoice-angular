@@ -1,9 +1,9 @@
 import { Product } from './product';
 
 export interface InvoiceItem {
-  id: number;
-  invoice_id: number;
-  product_id: number;
+  _id: string;
+  invoice_id: string;
+  product_id: string;
   product?: Product;
   quantity: number;
 }

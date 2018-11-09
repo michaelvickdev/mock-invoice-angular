@@ -32,7 +32,7 @@ export class ViewCreateEditService {
   passCreateInvoiceRequest$: Subject<any> = new Subject();
   createInvoice$: Observable<Invoice>;
   
-  passItemsRequest$: BehaviorSubject<number> = new BehaviorSubject(null);
+  passItemsRequest$: BehaviorSubject<string> = new BehaviorSubject(null);
   passViewEditCreateInvoice: Subject<Invoice> = new Subject();
   
   currentInvoice$: ConnectableObservable<Invoice>;
@@ -48,7 +48,7 @@ export class ViewCreateEditService {
     this.currentInvoice$ = this.passItemsRequest$.pipe(
       distinctUntilChanged(),
       switchMap(id => this.invoicesService.invoicesCollection$.pipe(
-        map(invoices => invoices.find(invoice => invoice.id === id)))
+        map(invoices => invoices.find(invoice => invoice._id === id)))
       ),
     ).publishReplay(1);
     this.currentInvoice$.connect();
@@ -60,7 +60,7 @@ export class ViewCreateEditService {
         map(products => _.map(invoiceItems, item =>
           ({
             ...item,
-            product: products.find(product => item.product_id === product.id) || new ProductModel(),
+            product: products.find(product => item.product_id === product._id) || new ProductModel(),
           }))
         )
       )),
@@ -90,18 +90,19 @@ export class ViewCreateEditService {
             quantity: item.quantity,
           }));
         const invoice = {
-          id: data.id,
+          _id: data._id,
           customer_id: data.customer_id,
-          discount: data.discount,
-          total: data.total,
+          discount: +data.discount,
+          total: +data.total,
           items: [...invoiceItems],
         };
-        return invoice.id ? this.putInvoiceRequest(invoice) : this.postInvoiceRequest(invoice);
+        return invoice._id ? this.putInvoiceRequest(invoice) : this.postInvoiceRequest(invoice);
       }),
     );
   }
   
-  getInvoiceItems(id: number) {
+  getInvoiceItems(id: string) {
+    console.log(id);
     this.passItemsRequest$.next(id);
     return this.invoiceWithItems$;
   }
@@ -111,7 +112,7 @@ export class ViewCreateEditService {
   }
   
   putInvoiceRequest(invoice) {
-    return this.httpClient.put<Invoice>(`invoices/${invoice.id}`, invoice);
+    return this.httpClient.put<Invoice>(`invoices/${invoice._id}`, invoice);
   }
   
   postInvoiceRequest(invoice) {

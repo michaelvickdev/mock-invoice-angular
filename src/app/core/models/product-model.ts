@@ -1,5 +1,5 @@
 export class ProductModel {
-  id: number = null;
+  _id: string = null;
   name: string = null;
   price: number = null;
   

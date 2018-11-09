@@ -37,8 +37,8 @@ export class InvoicesService {
   addInvoice$: Subject<Invoice> = new Subject();
   addInvoiceCollection$: Observable<any>;
 
-  deleteInvoice$: Subject<number> = new Subject();
-  deleteInvoiceOpenModal$: Subject<number> = new Subject();
+  deleteInvoice$: Subject<string> = new Subject();
+  deleteInvoiceOpenModal$: Subject<string> = new Subject();
   deleteInvoiceCollection$: Observable<Invoice[]>;
   deleteInvoiceModal$: ConnectableObservable<Invoice>;
   
@@ -64,7 +64,7 @@ export class InvoicesService {
       map(([invoices, customers]) => invoices.map(invoice =>
         ({
           ...invoice,
-          customer: customers.find(customer => invoice.customer_id === customer.id),
+          customer: customers.find(customer => invoice.customer_id === customer._id),
         }))
       ),
     );
@@ -77,7 +77,7 @@ export class InvoicesService {
         map(([invoices, customers]) =>
           [
             ...invoices,
-            {...newInvoice, customer: customers.find(customer => newInvoice['customer_id'] === customer.id)},
+            {...newInvoice, customer: customers.find(customer => newInvoice['customer_id'] === customer._id)},
           ]
         ),
       ))
@@ -87,7 +87,7 @@ export class InvoicesService {
     this.deleteInvoiceCollection$ = this.deleteInvoice$.pipe(
       switchMap(id => this.invoicesCollection$.pipe(
         take(1),
-        map(invoices => invoices.filter(invoice => invoice.id !== id))
+        map(invoices => invoices.filter(invoice => invoice._id !== id))
       ))
     );
 
@@ -97,8 +97,9 @@ export class InvoicesService {
         filter(choice => !!choice),
         mapTo(id)
       )),
+      tap(id => console.error(id)),
       switchMap(id => this.deleteInvoiceRequest(id)),
-      tap(invoices => this.modalBoxService.confirmModal(`Invoice number ${invoices.id} has been deleted`, false)),
+      tap(invoices => this.modalBoxService.confirmModal(`Invoice number ${invoices._id} has been deleted`, false)),
     ).publishReplay(1);
     this.deleteInvoiceModal$.connect();
 
@@ -122,7 +123,7 @@ export class InvoicesService {
 
   deleteInvoiceRequest(id) {
     return this.httpClient.delete<Invoice>(`invoices/${id}`).pipe(
-      tap(deletedInvoice => this.deleteInvoice$.next(deletedInvoice.id))
+      tap(deletedInvoice => this.deleteInvoice$.next(deletedInvoice._id))
     );
   }
 }
