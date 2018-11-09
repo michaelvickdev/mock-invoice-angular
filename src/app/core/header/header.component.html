@@ -10,7 +10,7 @@
            [active]="rla.isActive"
            [routerLinkActiveOptions]="{ exact: true }">
           {{navItem.label}}
-          <span *ngIf="navItem.label === 'Invoices'"> {{ (invoicesAmount$ | async) === null ? '' : '(' + (invoicesAmount$ | async).length + ')' }} </span>
+          <span *ngIf="navItem.label === 'Invoices'">{{ invoicesAmount$ | async }}</span>
         </a>
       </nav>
     </nav>

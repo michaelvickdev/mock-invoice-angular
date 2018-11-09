@@ -3,8 +3,7 @@ import { Component, OnDestroy, OnInit, QueryList, ViewChildren, } from '@angular
 import { MatTabLink } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-
-import { Invoice } from '../interfaces/invoice';
+import { map } from 'rxjs/operators';
 
 import { InvoicesService } from '../services/invoices.service';
 
@@ -17,7 +16,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   
   @ViewChildren(MatTabLink) inkBar: QueryList<any>;
   
-  invoicesAmount$: Observable<Invoice[]>;
+  invoicesAmount$: Observable<string>;
   hideNavInkBarSubscription: Subscription;
   
   navItems: { path: string, label: string }[] = [
@@ -32,7 +31,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.invoicesAmount$ = this.invoicesService.invoicesCollection$;
+    this.invoicesAmount$ = this.invoicesService.invoicesCollection$.pipe(
+      map(invoices => invoices ? `(${invoices.length})` : '')
+    );
     
     this.hideNavInkBarSubscription = this.invoicesService.hideNavInkBar$
       .subscribe(() => this.hideInkBar());
