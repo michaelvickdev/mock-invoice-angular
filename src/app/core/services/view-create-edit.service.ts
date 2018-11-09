@@ -90,12 +90,13 @@ export class ViewCreateEditService {
             quantity: item.quantity,
           }));
         const invoice = {
+          id: data.id,
           customer_id: data.customer_id,
           discount: data.discount,
           total: data.total,
           items: [...invoiceItems],
         };
-        return this.postInvoiceRequest(invoice);
+        return invoice.id ? this.putInvoiceRequest(invoice) : this.postInvoiceRequest(invoice);
       }),
     );
   }
@@ -107,6 +108,10 @@ export class ViewCreateEditService {
   
   getInvoiceItemsRequest(id) {
     return this.httpClient.get<InvoiceItem[]>(`invoices/${id}/items`);
+  }
+  
+  putInvoiceRequest(invoice) {
+    return this.httpClient.put<Invoice>(`invoices/${invoice.id}`, invoice);
   }
   
   postInvoiceRequest(invoice) {
